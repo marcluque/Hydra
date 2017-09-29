@@ -22,7 +22,7 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext context, Packet packet) throws Exception {
-        // Use packetListener from
+        //protocol.callListener(packet)
     }
 
     public void send(Packet packet) {
