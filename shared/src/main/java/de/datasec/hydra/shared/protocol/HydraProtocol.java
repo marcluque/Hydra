@@ -1,6 +1,5 @@
 package de.datasec.hydra.shared.protocol;
 
-import de.datasec.hydra.shared.protocol.packets.ListenerId;
 import de.datasec.hydra.shared.protocol.packets.Packet;
 import de.datasec.hydra.shared.protocol.packets.PacketId;
 import de.datasec.hydra.shared.protocol.packets.PacketListener;
@@ -17,7 +16,7 @@ public class HydraProtocol {
 
     private Map<Class<? extends Packet>, Byte> packetBytes = new HashMap<>();
 
-    private Map<Byte, Class<? extends PacketListener>> packetListeners = new HashMap<>();
+    private PacketListener packetListener = null;
 
     public void registerPacket(Class<? extends Packet> clazz) {
         if(clazz == null) {
@@ -48,17 +47,19 @@ public class HydraProtocol {
         return packetBytes.get(packet.getClass());
     }
 
-    public void registerListener(Class<? extends PacketListener> clazz) {
-        if (clazz == null) {
+    public void registerListener(PacketListener packetListener) {
+        if (packetListener == null) {
             throw new IllegalArgumentException("packetListener can't be null.");
         }
 
-        byte id = clazz.getAnnotation(ListenerId.class).value();
+        this.packetListener = packetListener;
+    }
 
-        if (packetListeners.containsKey(id)) {
-            throw new IllegalArgumentException("PacketListener with id " + id + " is already registered!");
+    public void callListener(Packet packet) {
+        if (packetListener == null) {
+            throw new NullPointerException("packetListener can't be null. Might not be registered in protocol.");
         }
 
-        packetListeners.put(id, clazz);
+        packetListener.onPacket(packet);
     }
 }

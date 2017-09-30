@@ -17,6 +17,8 @@ public class HydraChannelInitializer extends ChannelInitializer<SocketChannel> {
 
     private HydraProtocol protocol;
 
+    private HydraSession session;
+
     public HydraChannelInitializer(HydraProtocol protocol) {
         this.protocol = protocol;
     }
@@ -33,6 +35,10 @@ public class HydraChannelInitializer extends ChannelInitializer<SocketChannel> {
         pipeline.addLast(new LengthFieldPrepender(4));
         pipeline.addLast(new PacketEncoder(protocol));
 
-        pipeline.addLast(new HydraSession(channel, protocol));
+        pipeline.addLast(session = new HydraSession(channel, protocol));
+    }
+
+    public HydraSession getSession() {
+        return session;
     }
 }
