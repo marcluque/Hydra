@@ -1,5 +1,6 @@
 package de.datasec.hydra.shared.protocol;
 
+import de.datasec.hydra.shared.handler.HydraSession;
 import de.datasec.hydra.shared.protocol.packets.Packet;
 import de.datasec.hydra.shared.protocol.packets.PacketId;
 import de.datasec.hydra.shared.protocol.packets.PacketListener;
@@ -17,6 +18,8 @@ public class HydraProtocol {
     private Map<Class<? extends Packet>, Byte> packetBytes = new HashMap<>();
 
     private PacketListener packetListener = null;
+
+    private HydraSession session;
 
     public void registerPacket(Class<? extends Packet> clazz) {
         if(clazz == null) {
@@ -60,6 +63,10 @@ public class HydraProtocol {
             throw new NullPointerException("packetListener can't be null. Might not be registered in protocol.");
         }
 
-        packetListener.onPacket(packet);
+        packetListener.onPacket(packet, session);
+    }
+
+    public void setSession(HydraSession session) {
+        this.session = session;
     }
 }

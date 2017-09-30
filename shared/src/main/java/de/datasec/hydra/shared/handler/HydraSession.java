@@ -20,6 +20,7 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> {
     public HydraSession(Channel channel, HydraProtocol protocol) {
         this.channel = channel;
         this.protocol = protocol;
+        protocol.setSession(this);
     }
 
     @Override
