@@ -1,8 +1,8 @@
-package src.client;
+package de.datasec.hydra.example.client;
 
 import de.datasec.hydra.client.HydraClient;
+import de.datasec.hydra.example.SimplePacket;
 import de.datasec.hydra.shared.handler.HydraSession;
-import src.SimplePacket;
 
 import java.net.StandardSocketOptions;
 

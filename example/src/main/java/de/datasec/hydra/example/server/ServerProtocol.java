@@ -1,7 +1,7 @@
-package src.server;
+package de.datasec.hydra.example.server;
 
+import de.datasec.hydra.example.SimplePacket;
 import de.datasec.hydra.shared.protocol.HydraProtocol;
-import src.SimplePacket;
 
 /**
  * Created by DataSec on 30.09.2017.

@@ -1,4 +1,4 @@
-package src;
+package de.datasec.hydra.example;
 
 import de.datasec.hydra.shared.protocol.packets.Packet;
 import de.datasec.hydra.shared.protocol.packets.PacketId;

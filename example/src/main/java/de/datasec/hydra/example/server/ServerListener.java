@@ -1,9 +1,9 @@
-package src.server;
+package de.datasec.hydra.example.server;
 
+import de.datasec.hydra.example.SimplePacket;
 import de.datasec.hydra.shared.handler.HydraSession;
 import de.datasec.hydra.shared.protocol.packets.Packet;
 import de.datasec.hydra.shared.protocol.packets.PacketListener;
-import src.SimplePacket;
 
 /**
  * Created by DataSec on 30.09.2017.

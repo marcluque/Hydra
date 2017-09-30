@@ -13,6 +13,7 @@
         <module>src.client</module>
         <module>shared</module>
         <module>src.server</module>
+        <module>example</module>
     </modules>
 
     <name>Hydra</name>
