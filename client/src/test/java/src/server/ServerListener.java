@@ -12,7 +12,7 @@ public class ServerListener implements PacketListener {
 
     @Override
     public void onPacket(Packet packet, HydraSession session) {
-        System.out.println("RECEIVED: " + ((SimplePacket) packet).getObject());
+        System.out.println("RECEIVED: " + ((SimplePacket) packet).getString());
         session.send(new SimplePacket("WOOOOW"));
     }
 }

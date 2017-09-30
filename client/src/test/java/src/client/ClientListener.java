@@ -12,6 +12,6 @@ public class ClientListener implements PacketListener {
 
     @Override
     public void onPacket(Packet packet, HydraSession session) {
-        System.out.println("From SERVER: " + ((SimplePacket) packet).getObject());
+        System.out.println("From SERVER: " + ((SimplePacket) packet).getString());
     }
 }

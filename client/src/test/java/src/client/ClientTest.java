@@ -17,6 +17,6 @@ public class ClientTest {
                 .option(StandardSocketOptions.TCP_NODELAY, true)
                 .build();
 
-        session.send(new SimplePacket());
+        session.send(new SimplePacket("asdf"));
     }
 }

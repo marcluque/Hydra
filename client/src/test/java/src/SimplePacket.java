@@ -11,33 +11,35 @@ import java.io.IOException;
 @PacketId(1)
 public class SimplePacket extends Packet {
 
-    private Object object;
+    private Object string;
 
     public SimplePacket() {}
 
-    public SimplePacket(Object object) {
-        this.object = object;
+    public SimplePacket(String string) {
+        this.string = string;
     }
 
     @Override
     public void read() {
+
         try {
-            object = readObject();
+            string = readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
     public void write() {
         try {
-            writeObject("HAY");
+            writeObject(string);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public Object getObject() {
-        return object;
+    public Object getString() {
+        return string;
     }
 }

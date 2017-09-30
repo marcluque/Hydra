@@ -3,7 +3,6 @@ package de.datasec.hydra.shared.protocol.packets;
 import io.netty.buffer.ByteBuf;
 
 import java.io.*;
-import java.nio.charset.Charset;
 
 /**
  * Created by DataSec on 29.09.2017.
@@ -60,14 +59,16 @@ public abstract class Packet {
         return byteBuf.readLong();
     }
 
-    // TODO: TEST OUT THESE 2 METHODS
-    protected void writeString(String string) {
+    protected void writeString(String string) throws UnsupportedEncodingException {
         byteBuf.writeInt(string.length());
-        byteBuf.writeCharSequence(string, Charset.defaultCharset());
+        byteBuf.writeBytes(string.getBytes("UTF-8"));
     }
 
-    protected String readString() {
-        return byteBuf.readCharSequence(byteBuf.readInt(), Charset.defaultCharset()).toString();
+    protected String readString() throws UnsupportedEncodingException {
+        byte[] bytes = new byte[byteBuf.readInt()];
+        byteBuf.readBytes(bytes);
+
+        return new String(bytes, "UTF-8");
     }
 
     protected void writeObject(Object object) throws IOException {
