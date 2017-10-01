@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hydra-src.client</artifactId>
+    <artifactId>hydra-client</artifactId>
 
     <dependencies>
         <!-- Hydra shared -->

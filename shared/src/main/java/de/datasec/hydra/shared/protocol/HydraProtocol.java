@@ -1,10 +1,13 @@
 package de.datasec.hydra.shared.protocol;
 
 import de.datasec.hydra.shared.handler.HydraSession;
+import de.datasec.hydra.shared.protocol.packets.HydraPacketListener;
 import de.datasec.hydra.shared.protocol.packets.Packet;
+import de.datasec.hydra.shared.protocol.packets.PacketHandler;
 import de.datasec.hydra.shared.protocol.packets.PacketId;
-import de.datasec.hydra.shared.protocol.packets.PacketListener;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,19 +20,25 @@ public class HydraProtocol {
 
     private Map<Class<? extends Packet>, Byte> packetBytes = new HashMap<>();
 
-    private PacketListener packetListener = null;
+    private Map<Class<?>, Method> packetListenerMethods = new HashMap<>();
 
     private HydraSession session;
 
     public void registerPacket(Class<? extends Packet> clazz) {
         if(clazz == null) {
-            throw new IllegalArgumentException("clazz can't be null.");
+            throw new IllegalArgumentException("clazz can't be null!");
         }
 
-        byte id = clazz.getAnnotation(PacketId.class).value();
+        PacketId packetId = clazz.getAnnotation(PacketId.class);
+
+        if (packetId == null) {
+            throw new NullPointerException(String.format("Annotation of packet %s.class not found. Annotation might not be defined!", clazz.getSimpleName()));
+        }
+
+        byte id = packetId.value();
 
         if (packets.containsKey(id)) {
-            throw new IllegalArgumentException("Packet with id " + id + " is already registered!");
+            throw new IllegalArgumentException(String.format("Packet with id %s is already registered!", id));
         }
 
         packets.put(id, clazz);
@@ -40,6 +49,7 @@ public class HydraProtocol {
         try {
             return packets.get(id).newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
+            System.err.printf("Packet %s.class might hasn't got an empty constructor!%n\n", packets.get(id).getSimpleName());
             e.printStackTrace();
         }
 
@@ -50,20 +60,39 @@ public class HydraProtocol {
         return packetBytes.get(packet.getClass());
     }
 
-    public void registerListener(PacketListener packetListener) {
-        if (packetListener == null) {
-            throw new IllegalArgumentException("packetListener can't be null.");
+    public void registerListener(HydraPacketListener hydraPacketListener) {
+        if (hydraPacketListener == null) {
+            throw new IllegalArgumentException("hydraPacketListener can't be null.");
         }
 
-        this.packetListener = packetListener;
+        for (Method method : hydraPacketListener.getClass().getMethods()) {
+            if (method.isAnnotationPresent(PacketHandler.class)) {
+                if (method.getParameterCount() == 2) {
+                    Class clazz = method.getParameterTypes()[0];
+                    if (Packet.class.isAssignableFrom(clazz)) {
+                        if (!packetListenerMethods.containsKey(clazz)) {
+                            packetListenerMethods.put(clazz, method);
+                        } else {
+                            throw new IllegalArgumentException(String.format("It's not possible to assign multiple PacketHandler methods for packet %s.class", clazz.getSimpleName()));
+                        }
+                    } else {
+                        throw new IllegalArgumentException(String.format("%s is not a deriving class of Packet.class. Make sure the first argument is a deriving class of Packet.class. And the first argument of the PacketHandler method is the packet itself!", clazz.getSimpleName()));
+                    }
+                } else {
+                    throw new IllegalArgumentException("There are just 2 arguments allowed for a PacketHandler method!");
+                }
+            }
+        }
     }
 
     public void callListener(Packet packet) {
-        if (packetListener == null) {
-            throw new NullPointerException("packetListener can't be null. Might not be registered in protocol.");
+        try {
+            System.out.println(packet.getClass().cast(packet));
+            System.out.println(packetListenerMethods.get(packet.getClass()));
+            packetListenerMethods.get(packet.getClass()).invoke(packet.getClass().cast(packet), session);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
         }
-
-        packetListener.onPacket(packet, session);
     }
 
     public void setSession(HydraSession session) {

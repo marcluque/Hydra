@@ -19,17 +19,17 @@
             <version>4.1.5.Final</version>
         </dependency>
 
-        <!-- Hydra src.client -->
+        <!-- Hydra client -->
         <dependency>
             <groupId>de.datasec</groupId>
-            <artifactId>hydra-src.client</artifactId>
+            <artifactId>hydra-client</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
 
-        <!-- Hydra src.server -->
+        <!-- Hydra server -->
         <dependency>
             <groupId>de.datasec</groupId>
-            <artifactId>hydra-src.server</artifactId>
+            <artifactId>hydra-server</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

@@ -1,8 +1,8 @@
-package de.datasec.hydra.example.client;
+package client;
 
 import de.datasec.hydra.client.HydraClient;
-import de.datasec.hydra.example.SimplePacket;
 import de.datasec.hydra.shared.handler.HydraSession;
+import shared.GetPacket;
 
 import java.net.StandardSocketOptions;
 
@@ -17,6 +17,6 @@ public class ClientTest {
                 .option(StandardSocketOptions.TCP_NODELAY, true)
                 .build();
 
-        session.send(new SimplePacket("asdf"));
+        session.send(new GetPacket("asdf"));
     }
 }

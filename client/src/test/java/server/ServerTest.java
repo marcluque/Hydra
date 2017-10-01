@@ -1,4 +1,5 @@
-package de.datasec.hydra.example.server;
+package server;
+
 
 import de.datasec.hydra.server.HydraServer;
 

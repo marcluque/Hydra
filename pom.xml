@@ -10,10 +10,9 @@
     <version>0.1-SNAPSHOT</version>
     
     <modules>
-        <module>src.client</module>
+        <module>client</module>
         <module>shared</module>
-        <module>src.server</module>
-        <module>example</module>
+        <module>server</module>
     </modules>
 
     <name>Hydra</name>
