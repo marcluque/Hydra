@@ -14,11 +14,11 @@ public class ServerListener implements HydraPacketListener {
     @PacketHandler
     public void onSimplePacket(SimplePacket simplePacket, HydraSession session) {
         System.out.println("RECEIVED FROM CLIENT: " + simplePacket.getString());
-        //session.send(new SimplePacket("ANSWER FROM SERVER"));
+        session.send(new SimplePacket("ANSWER FROM SERVER"));
     }
 
     @PacketHandler
-    public void onGetPacket(HydraSession session, GetPacket getPacket) {
+    public void onGetPacket(GetPacket getPacket, HydraSession session) {
         System.out.println("SOMETHING NICE");
     }
 }

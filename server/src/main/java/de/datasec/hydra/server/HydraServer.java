@@ -1,6 +1,6 @@
 package de.datasec.hydra.server;
 
-import de.datasec.hydra.shared.handler.HydraSession;
+import de.datasec.hydra.shared.handler.Session;
 import de.datasec.hydra.shared.initializer.HydraChannelInitializer;
 import de.datasec.hydra.shared.protocol.HydraProtocol;
 import io.netty.bootstrap.ServerBootstrap;
@@ -26,6 +26,10 @@ public class HydraServer {
         private int workerThreads = 2;
 
         private int bossThreads = 1;
+
+        private NioEventLoopGroup workerGroup;
+
+        private NioEventLoopGroup bossGroup;
 
         private Map<SocketOption, Object> options = new HashMap<>();
 
@@ -59,20 +63,19 @@ public class HydraServer {
             return this;
         }
 
-        public HydraSession build() {
+        public Session build() {
             return setUpClient();
         }
 
-        private HydraSession setUpClient() {
-            HydraChannelInitializer initializer = new HydraChannelInitializer(protocol);
+        private Session setUpClient() {
+            HydraChannelInitializer initializer = new HydraChannelInitializer(protocol, new NioEventLoopGroup[]{bossGroup = new NioEventLoopGroup(bossThreads), workerGroup = new NioEventLoopGroup(workerThreads)});
 
             try {
                 ServerBootstrap serverBootstrap = new ServerBootstrap()
-                        .group(new NioEventLoopGroup(bossThreads), new NioEventLoopGroup(workerThreads))
+                        .group(bossGroup, workerGroup)
                         .channel(NioServerSocketChannel.class)
                         .childHandler(initializer);
 
-                // TODO: SEE CLIENT TODO
                 options.forEach((option, value) -> serverBootstrap.option(ChannelOption.valueOf(option.name()), value));
                 childOptions.forEach((option, value) -> serverBootstrap.childOption(ChannelOption.valueOf(option.name()), value));
 

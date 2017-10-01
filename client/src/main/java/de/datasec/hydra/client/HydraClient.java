@@ -1,6 +1,6 @@
 package de.datasec.hydra.client;
 
-import de.datasec.hydra.shared.handler.HydraSession;
+import de.datasec.hydra.shared.handler.Session;
 import de.datasec.hydra.shared.initializer.HydraChannelInitializer;
 import de.datasec.hydra.shared.protocol.HydraProtocol;
 import io.netty.bootstrap.Bootstrap;
@@ -25,6 +25,8 @@ public class HydraClient {
 
         private int workerThreads = 2;
 
+        private NioEventLoopGroup workerGroup;
+
         private Map<SocketOption, Object> options = new HashMap<>();
 
         private HydraProtocol protocol;
@@ -45,16 +47,16 @@ public class HydraClient {
             return this;
         }
 
-        public HydraSession build() {
+        public Session build() {
             return setUpClient();
         }
 
-        private HydraSession setUpClient() {
-            HydraChannelInitializer initializer = new HydraChannelInitializer(protocol);
+        private Session setUpClient() {
+            HydraChannelInitializer initializer = new HydraChannelInitializer(protocol, new NioEventLoopGroup[]{workerGroup = new NioEventLoopGroup(workerThreads)});
 
             try {
                 Bootstrap bootstrap = new Bootstrap()
-                        .group(new NioEventLoopGroup(workerThreads))
+                        .group(workerGroup)
                         .channel(NioSocketChannel.class)
                         .remoteAddress(host, port)
                         .handler(initializer);

@@ -22,6 +22,8 @@ public class HydraProtocol {
 
     private Map<Class<?>, Method> packetListenerMethods = new HashMap<>();
 
+    private HydraPacketListener packetListener;
+
     private HydraSession session;
 
     public void registerPacket(Class<? extends Packet> clazz) {
@@ -60,12 +62,14 @@ public class HydraProtocol {
         return packetBytes.get(packet.getClass());
     }
 
-    public void registerListener(HydraPacketListener hydraPacketListener) {
-        if (hydraPacketListener == null) {
-            throw new IllegalArgumentException("hydraPacketListener can't be null.");
+    public void registerListener(HydraPacketListener packetListener) {
+        if (packetListener == null) {
+            throw new IllegalArgumentException("packetListener can't be null!");
         }
 
-        for (Method method : hydraPacketListener.getClass().getMethods()) {
+        this.packetListener = packetListener;
+
+        for (Method method : packetListener.getClass().getMethods()) {
             if (method.isAnnotationPresent(PacketHandler.class)) {
                 if (method.getParameterCount() == 2) {
                     Class clazz = method.getParameterTypes()[0];
@@ -87,9 +91,7 @@ public class HydraProtocol {
 
     public void callListener(Packet packet) {
         try {
-            System.out.println(packet.getClass().cast(packet));
-            System.out.println(packetListenerMethods.get(packet.getClass()));
-            packetListenerMethods.get(packet.getClass()).invoke(packet.getClass().cast(packet), session);
+            packetListenerMethods.get(packet.getClass()).invoke(packetListener, packet.getClass().cast(packet), session);
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
