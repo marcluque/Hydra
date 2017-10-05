@@ -16,9 +16,9 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> implements
 
     private Channel channel;
 
-    private NioEventLoopGroup[] loopGroups;
-
     private HydraProtocol protocol;
+
+    private NioEventLoopGroup[] loopGroups;
 
     public HydraSession(Channel channel, HydraProtocol protocol, NioEventLoopGroup[] loopGroups) {
         this.channel = channel;
@@ -62,7 +62,7 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> implements
     }
 
     @Override
-    public SocketAddress getRemoteAdress() {
+    public SocketAddress getRemoteAddress() {
         return channel.remoteAddress();
     }
 }

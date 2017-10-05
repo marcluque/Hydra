@@ -18,5 +18,5 @@ public interface Session {
 
     HydraProtocol getProtocol();
 
-    SocketAddress getRemoteAdress();
+    SocketAddress getRemoteAddress();
 }

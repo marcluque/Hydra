@@ -7,7 +7,7 @@
     <groupId>de.datasec</groupId>
     <artifactId>hydra</artifactId>
     <packaging>pom</packaging>
-    <version>0.1-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
     
     <modules>
         <module>client</module>
@@ -15,7 +15,7 @@
         <module>server</module>
     </modules>
 
-    <name>Hydra</name>
+    <name>hydra</name>
     <description>Hydra is a network framework built upon Netty</description>
     <inceptionYear>2017</inceptionYear>
 
@@ -26,4 +26,36 @@
         </developer>
     </developers>
 
+    <build>
+        <plugins>
+            <!-- Compiler -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+
+            <!-- Shade JAR -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
