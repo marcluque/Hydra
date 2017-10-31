@@ -15,6 +15,13 @@
         <module>server</module>
     </modules>
 
+    <licenses>
+        <license>
+            <name>GNU General Public License (GPL)</name>
+            <url>http://www.gnu.org/licenses/gpl.txt</url>
+        </license>
+    </licenses>
+
     <name>hydra</name>
     <description>Hydra is a network framework built upon Netty</description>
     <inceptionYear>2017</inceptionYear>
@@ -22,7 +29,7 @@
     <developers>
         <developer>
             <id>DataSec</id>
-            <email>datasec@outlook.de</email>
+            <email>datasecs@outlook.de</email>
         </developer>
     </developers>
 
