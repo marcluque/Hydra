@@ -16,7 +16,7 @@ Convince yourself by taking a look at the [client](https://github.com/DataSecs/H
  * Clone/Download this repo
  * Install it with: mvn clean install
 
-## Maven local dependency
+### Maven local dependency
 
 ```xml
 <dependency>
@@ -26,9 +26,9 @@ Convince yourself by taking a look at the [client](https://github.com/DataSecs/H
 </dependency>
 ```
 
-## Maven central
+### Maven central
 
-__It iss planned to push this project into the maven central.__
+__It is planned to push this project into the maven central.__
 
 
 _If you don't use maven you can download a release version and include it in your project._
