@@ -6,9 +6,9 @@ Hydra is a network framework built upon Netty.
 
 Hydra is built upon Netty. It is supposed to simplify the process of socket setup in Java. Netty allows high performances and good maintainability.
 And here comes Hydra in. Hydra uses the builder-pattern in order to make the process of socket setup even simpler. Hydra comes with a handy packet system
-that allows you to easily create your own packets and send them via the session Hydra creates for you. Furthermore you have the ability to create packet
-listener that just need simple annotation and will be invoked by Hydra when a packet is received.
-Convince yourself by taking a look at the [client]() and [server]() examples.
+that allows you to easily create your own packets and send them via the session Hydra creates for you. Furthermore you have the ability to create packets and
+listeners that just need simple annotation and will be invoked by Hydra when a packet is received.
+Convince yourself by taking a look at the [client](https://github.com/DataSecs/Hydra/tree/master/client/src/test/java/client) and [server](https://github.com/DataSecs/Hydra/tree/master/server/src/test/java/server) examples.
 
 # Installing
 
@@ -46,7 +46,7 @@ Session session = new HydraClient.Builder("localhost", 8888, new SampleProtocol(
 
 This is an easy to understand example of how to create a client socket.
 In order to make the packet system work, you have to register your created packets and listeners.
-For detailed information on how to do that and examples see the [client example]().
+For detailed information on how to do that and examples see the [client example](https://github.com/DataSecs/Hydra/tree/master/client/src/test/java/client).
 
 ## Server
 
@@ -60,7 +60,7 @@ Session session = new HydraServer.Builder("localhost", 8888, new SampleProtocol(
 
 This here is an example of how to create a server socket.
 In order to make the packet system work, you have to register your created packets and listeners.
-For detailed information on how to do that and examples see the [server example]().
+For detailed information on how to do that and examples see the [server example](https://github.com/DataSecs/Hydra/tree/master/server/src/test/java/server).
 
 # License
 
