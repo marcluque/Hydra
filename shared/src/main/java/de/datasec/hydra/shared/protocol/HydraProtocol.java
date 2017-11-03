@@ -1,6 +1,7 @@
 package de.datasec.hydra.shared.protocol;
 
 import de.datasec.hydra.shared.handler.HydraSession;
+import de.datasec.hydra.shared.handler.Session;
 import de.datasec.hydra.shared.protocol.packets.HydraPacketListener;
 import de.datasec.hydra.shared.protocol.packets.Packet;
 import de.datasec.hydra.shared.protocol.packets.PacketHandler;
@@ -24,7 +25,7 @@ public class HydraProtocol {
 
     private HydraPacketListener packetListener;
 
-    private HydraSession session;
+    private Session session;
 
     public void registerPacket(Class<? extends Packet> clazz) {
         if(clazz == null) {
