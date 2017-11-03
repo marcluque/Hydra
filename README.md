@@ -8,7 +8,7 @@ Hydra is built upon Netty. It is supposed to simplify the process of socket setu
 And here comes Hydra in. Hydra uses the builder-pattern in order to make the process of socket setup even simpler. Hydra comes with a handy packet system
 that allows you to easily create your own packets and send them via the session Hydra creates for you. Furthermore you have the ability to create packet
 listener that just need simple annotation and will be invoked by Hydra when a packet is received.
-Convince yourself by taking a look at the [client]() and [server]() examples.
+Convince yourself by taking a look at the [client](client/src/test/client) and [server]() examples.
 
 # Installing
 
@@ -28,7 +28,7 @@ Convince yourself by taking a look at the [client]() and [server]() examples.
 
 ## Maven central
 
-__It's planned to push this project into the maven central.__
+__It iss planned to push this project into the maven central.__
 
 
 _If you don't use maven you can download a release version and include it in your project._
