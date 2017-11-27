@@ -1,9 +1,11 @@
 package de.datasec.hydra.server;
 
+import de.datasec.hydra.shared.handler.HydraSession;
 import de.datasec.hydra.shared.handler.Session;
 import de.datasec.hydra.shared.initializer.HydraChannelInitializer;
 import de.datasec.hydra.shared.protocol.HydraProtocol;
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -68,23 +70,26 @@ public class HydraServer {
         }
 
         private Session setUpClient() {
-            HydraChannelInitializer initializer = new HydraChannelInitializer(protocol, new NioEventLoopGroup[]{bossGroup = new NioEventLoopGroup(bossThreads), workerGroup = new NioEventLoopGroup(workerThreads)});
+            NioEventLoopGroup[] loopGroups = new NioEventLoopGroup[]{bossGroup = new NioEventLoopGroup(bossThreads), workerGroup = new NioEventLoopGroup(workerThreads)};
+            Channel channel = null;
+
+            ServerBootstrap serverBootstrap = new ServerBootstrap()
+                    .group(bossGroup, workerGroup)
+                    .channel(NioServerSocketChannel.class)
+                    .childHandler(new HydraChannelInitializer(protocol, loopGroups));
+
+            options.forEach((option, value) -> serverBootstrap.option(ChannelOption.valueOf(option.name()), value));
+            childOptions.forEach((option, value) -> serverBootstrap.childOption(ChannelOption.valueOf(option.name()), value));
 
             try {
-                ServerBootstrap serverBootstrap = new ServerBootstrap()
-                        .group(bossGroup, workerGroup)
-                        .channel(NioServerSocketChannel.class)
-                        .childHandler(initializer);
-
-                options.forEach((option, value) -> serverBootstrap.option(ChannelOption.valueOf(option.name()), value));
-                childOptions.forEach((option, value) -> serverBootstrap.childOption(ChannelOption.valueOf(option.name()), value));
-
-                serverBootstrap.bind(host, port).sync().channel().closeFuture().sync();
-            } catch (Exception e) {
+                channel = serverBootstrap.bind(host, port).sync().channel();
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-            return initializer.getSession();
+            // Needs to be created here already and overridden in the channel initializer,
+            // as the channel is not immediately initialized
+            return new HydraSession(channel, protocol, loopGroups);
         }
     }
 }

@@ -54,18 +54,17 @@ public class HydraClient {
         private Session setUpClient() {
             HydraChannelInitializer initializer = new HydraChannelInitializer(protocol, new NioEventLoopGroup[]{workerGroup = new NioEventLoopGroup(workerThreads)});
 
+            Bootstrap bootstrap = new Bootstrap()
+                    .group(workerGroup)
+                    .channel(NioSocketChannel.class)
+                    .remoteAddress(host, port)
+                    .handler(initializer);
+
+            options.forEach((option, value) -> bootstrap.option(ChannelOption.valueOf(option.name()), value));
+
             try {
-                Bootstrap bootstrap = new Bootstrap()
-                        .group(workerGroup)
-                        .channel(NioSocketChannel.class)
-                        .remoteAddress(host, port)
-                        .handler(initializer);
-
-                // TODO: THINK OF DIFFERENT SOLUTION FOR CHANNELOPTION
-                options.forEach((option, value) -> bootstrap.option(ChannelOption.valueOf(option.name()), value));
-
                 bootstrap.connect().sync();
-            } catch (Exception e) {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 

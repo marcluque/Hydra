@@ -6,8 +6,10 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.util.concurrent.AbstractEventExecutorGroup;
 
 import java.net.SocketAddress;
+import java.util.Arrays;
 
 /**
  * Created by DataSec on 29.09.2017.
@@ -39,16 +41,14 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> implements
 
     @Override
     public void send(Packet packet) {
+        // TODO: Implement custom class serialization
         channel.writeAndFlush(packet);
     }
 
     @Override
     public void close() {
         channel.disconnect();
-
-        for (NioEventLoopGroup group : loopGroups) {
-            group.shutdownGracefully();
-        }
+        Arrays.stream(loopGroups).forEach(AbstractEventExecutorGroup::shutdownGracefully);
     }
 
     @Override
@@ -63,6 +63,7 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> implements
 
     @Override
     public SocketAddress getRemoteAddress() {
-        return channel.remoteAddress();
+        SocketAddress address = channel.remoteAddress();
+        return address == null ? channel.localAddress() : address;
     }
 }
