@@ -1,95 +1,46 @@
 package de.datasec.hydra.server;
 
-import de.datasec.hydra.shared.handler.HydraSession;
 import de.datasec.hydra.shared.handler.Session;
-import de.datasec.hydra.shared.initializer.HydraChannelInitializer;
 import de.datasec.hydra.shared.protocol.HydraProtocol;
-import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.util.concurrent.AbstractEventExecutorGroup;
 
-import java.net.SocketOption;
-import java.util.HashMap;
-import java.util.Map;
+import java.net.SocketAddress;
+import java.util.Arrays;
+import java.util.Set;
 
 /**
  * Created by DataSec on 30.09.2017.
  */
 public class HydraServer {
 
-    public static class Builder {
+    private Channel channel;
 
-        private String host;
+    private HydraProtocol protocol;
 
-        private int port;
+    private NioEventLoopGroup[] loopGroups;
 
-        private int workerThreads = 2;
+    public HydraServer(Channel channel, HydraProtocol protocol, NioEventLoopGroup[] loopGroups) {
+        this.channel = channel;
+        this.protocol = protocol;
+        this.loopGroups = loopGroups;
+    }
 
-        private int bossThreads = 1;
+    public void close() {
+        channel.close();
+        Arrays.stream(loopGroups).forEach(AbstractEventExecutorGroup::shutdownGracefully);
+    }
 
-        private NioEventLoopGroup workerGroup;
+    public boolean isActive() {
+        return channel.isActive();
+    }
 
-        private NioEventLoopGroup bossGroup;
+    public SocketAddress getLocalAdress() {
+        return channel.localAddress();
+    }
 
-        private Map<SocketOption, Object> options = new HashMap<>();
-
-        private Map<SocketOption, Object> childOptions = new HashMap<>();
-
-        private HydraProtocol protocol;
-
-        public Builder(String host, int port, HydraProtocol protocol) {
-            this.host = host;
-            this.port = port;
-            this.protocol = protocol;
-        }
-
-        public Builder workerThreads(int workerThreads) {
-            this.workerThreads = workerThreads;
-            return this;
-        }
-
-        public Builder bossThreads(int bossThreads) {
-            this.bossThreads = bossThreads;
-            return this;
-        }
-
-        public <T> Builder option(SocketOption<T> socketOption, T value) {
-            options.put(socketOption, value);
-            return this;
-        }
-
-        public <T> Builder childOption(SocketOption<T> socketOption, T value) {
-            childOptions.put(socketOption, value);
-            return this;
-        }
-
-        public Session build() {
-            return setUpClient();
-        }
-
-        private Session setUpClient() {
-            NioEventLoopGroup[] loopGroups = new NioEventLoopGroup[]{bossGroup = new NioEventLoopGroup(bossThreads), workerGroup = new NioEventLoopGroup(workerThreads)};
-            Channel channel = null;
-
-            ServerBootstrap serverBootstrap = new ServerBootstrap()
-                    .group(bossGroup, workerGroup)
-                    .channel(NioServerSocketChannel.class)
-                    .childHandler(new HydraChannelInitializer(protocol, loopGroups));
-
-            options.forEach((option, value) -> serverBootstrap.option(ChannelOption.valueOf(option.name()), value));
-            childOptions.forEach((option, value) -> serverBootstrap.childOption(ChannelOption.valueOf(option.name()), value));
-
-            try {
-                channel = serverBootstrap.bind(host, port).sync().channel();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            // Needs to be created here already and overridden in the channel initializer,
-            // as the channel is not immediately initialized
-            return new HydraSession(channel, protocol, loopGroups);
-        }
+    public Set<Session> getSessions() {
+        return protocol.getSessions();
     }
 }

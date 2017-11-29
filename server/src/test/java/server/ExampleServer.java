@@ -1,7 +1,7 @@
 package server;
 
 import de.datasec.hydra.server.HydraServer;
-import de.datasec.hydra.shared.handler.Session;
+import de.datasec.hydra.server.Server;
 
 import java.net.StandardSocketOptions;
 
@@ -11,8 +11,8 @@ import java.net.StandardSocketOptions;
 public class ExampleServer {
 
     public static void main(String[] args) {
-        // The builder returns a session which you can use for several things
-        Session session = new HydraServer.Builder("localhost", 8888, new SampleProtocol())
+        // The builder returns a server which you can use for several things
+        HydraServer server = new Server.Builder("localhost", 8888, new SampleProtocol())
                 .bossThreads(2)
                 .workerThreads(4)
                 .option(StandardSocketOptions.TCP_NODELAY, true)
@@ -21,10 +21,18 @@ public class ExampleServer {
                 .childOption(StandardSocketOptions.SO_KEEPALIVE, true)
                 .build();
 
-        // Example for some things you can get from the session
-        if (session.isConnected()) {
+        // Check if server is actively running
+        if (server.isActive()) {
             System.out.println("Server is online!");
-            System.out.printf("Socket address: %s%n", session.getRemoteAddress());
+            // Returns the local address of the server that was set in the constructor
+            System.out.printf("Socket address: %s", server.getLocalAdress());
         }
+
+        // As soon as a channel with a client is initialized it is added to the set
+        // If no clients are connected the set is empty
+        System.out.println("Session: " + server.getSessions());
+
+        // Closes the server and releases the occupied resources
+        server.close();
     }
 }

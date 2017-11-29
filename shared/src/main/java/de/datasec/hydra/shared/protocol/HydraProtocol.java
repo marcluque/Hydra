@@ -1,6 +1,5 @@
 package de.datasec.hydra.shared.protocol;
 
-import de.datasec.hydra.shared.handler.HydraSession;
 import de.datasec.hydra.shared.handler.Session;
 import de.datasec.hydra.shared.protocol.packets.HydraPacketListener;
 import de.datasec.hydra.shared.protocol.packets.Packet;
@@ -9,8 +8,7 @@ import de.datasec.hydra.shared.protocol.packets.PacketId;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by DataSec on 29.09.2017.
@@ -25,7 +23,7 @@ public class HydraProtocol {
 
     private HydraPacketListener packetListener;
 
-    private Session session;
+    private Set<Session> sessions = new HashSet<>();
 
     public void registerPacket(Class<? extends Packet> clazz) {
         if(clazz == null) {
@@ -70,27 +68,27 @@ public class HydraProtocol {
 
         this.packetListener = packetListener;
 
-        for (Method method : packetListener.getClass().getMethods()) {
-            if (method.isAnnotationPresent(PacketHandler.class)) {
-                if (method.getParameterCount() == 2) {
-                    Class clazz = method.getParameterTypes()[0];
-                    if (Packet.class.isAssignableFrom(clazz)) {
-                        if (!packetListenerMethods.containsKey(clazz)) {
-                            packetListenerMethods.put(clazz, method);
+        Arrays.stream(packetListener.getClass().getMethods())
+                .filter(method -> method.isAnnotationPresent(PacketHandler.class))
+                .forEach(method -> {
+                    if (method.getParameterCount() == 2) {
+                        Class clazz = method.getParameterTypes()[0];
+                        if (Packet.class.isAssignableFrom(clazz)) {
+                            if (!packetListenerMethods.containsKey(clazz)) {
+                                packetListenerMethods.put(clazz, method);
+                            } else {
+                                throw new IllegalArgumentException(String.format("It's not possible to assign multiple PacketHandler methods for packet %s.class", clazz.getSimpleName()));
+                            }
                         } else {
-                            throw new IllegalArgumentException(String.format("It's not possible to assign multiple PacketHandler methods for packet %s.class", clazz.getSimpleName()));
+                            throw new IllegalArgumentException(String.format("%s is not a deriving class of Packet.class. Make sure the first argument is a deriving class of Packet.class. And the first argument of the PacketHandler method is the packet itself!", clazz.getSimpleName()));
                         }
                     } else {
-                        throw new IllegalArgumentException(String.format("%s is not a deriving class of Packet.class. Make sure the first argument is a deriving class of Packet.class. And the first argument of the PacketHandler method is the packet itself!", clazz.getSimpleName()));
+                        throw new IllegalArgumentException("There are just 2 arguments allowed for a PacketHandler method!");
                     }
-                } else {
-                    throw new IllegalArgumentException("There are just 2 arguments allowed for a PacketHandler method!");
-                }
-            }
-        }
+                });
     }
 
-    public void callListener(Packet packet) {
+    public void callListener(Packet packet, Session session) {
         try {
             packetListenerMethods.get(packet.getClass()).invoke(packetListener, packet.getClass().cast(packet), session);
         } catch (IllegalAccessException | InvocationTargetException e) {
@@ -98,7 +96,7 @@ public class HydraProtocol {
         }
     }
 
-    public void setSession(HydraSession session) {
-        this.session = session;
+    public Set<Session> getSessions() {
+        return sessions;
     }
 }

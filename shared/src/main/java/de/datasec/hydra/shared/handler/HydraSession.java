@@ -5,11 +5,8 @@ import de.datasec.hydra.shared.protocol.packets.Packet;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.util.concurrent.AbstractEventExecutorGroup;
 
 import java.net.SocketAddress;
-import java.util.Arrays;
 
 /**
  * Created by DataSec on 29.09.2017.
@@ -20,18 +17,14 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> implements
 
     private HydraProtocol protocol;
 
-    private NioEventLoopGroup[] loopGroups;
-
-    public HydraSession(Channel channel, HydraProtocol protocol, NioEventLoopGroup[] loopGroups) {
+    public HydraSession(Channel channel, HydraProtocol protocol) {
         this.channel = channel;
         this.protocol = protocol;
-        protocol.setSession(this);
-        this.loopGroups = loopGroups;
     }
 
     @Override
     protected void channelRead0(ChannelHandlerContext context, Packet packet) throws Exception {
-        protocol.callListener(packet);
+        protocol.callListener(packet, this);
     }
 
     @Override
@@ -48,7 +41,6 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> implements
     @Override
     public void close() {
         channel.disconnect();
-        Arrays.stream(loopGroups).forEach(AbstractEventExecutorGroup::shutdownGracefully);
     }
 
     @Override
@@ -57,12 +49,7 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> implements
     }
 
     @Override
-    public HydraProtocol getProtocol() {
-        return protocol;
-    }
-
-    @Override
-    public SocketAddress getRemoteAddress() {
+    public SocketAddress getAddress() {
         SocketAddress address = channel.remoteAddress();
         return address == null ? channel.localAddress() : address;
     }

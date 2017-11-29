@@ -1,6 +1,5 @@
 package de.datasec.hydra.shared.handler;
 
-import de.datasec.hydra.shared.protocol.HydraProtocol;
 import de.datasec.hydra.shared.protocol.packets.Packet;
 
 import java.net.SocketAddress;
@@ -16,7 +15,5 @@ public interface Session {
 
     boolean isConnected();
 
-    HydraProtocol getProtocol();
-
-    SocketAddress getRemoteAddress();
+    SocketAddress getAddress();
 }

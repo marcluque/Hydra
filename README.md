@@ -22,7 +22,7 @@ Convince yourself by taking a look at the [client](https://github.com/DataSecs/H
 <dependency>
     <groupId>de.datasec</groupId>
     <artifactId>hydra</artifactId>
-    <version>1.1.2-SNAPSHOT</version>
+    <version>1.3.0-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -51,7 +51,7 @@ For detailed information on how to do that and examples see the [client example]
 ## Server
 
 ```java
-Session session = new HydraServer.Builder("localhost", 8888, new SampleProtocol())
+HydraServer server = new Server.Builder("localhost", 8888, new SampleProtocol())
                 .bossThreads(2)
                 .workerThreads(4)
                 .option(StandardSocketOptions.TCP_NODELAY, true)

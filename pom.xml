@@ -7,7 +7,7 @@
     <groupId>de.datasec</groupId>
     <artifactId>hydra</artifactId>
     <packaging>pom</packaging>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.3-SNAPSHOT</version>
     
     <modules>
         <module>client</module>
@@ -28,8 +28,9 @@
 
     <developers>
         <developer>
-            <id>DataSec</id>
+            <id>DataSecs</id>
             <email>datasecs@outlook.de</email>
+            <url>https://github.com/DataSecs</url>
         </developer>
     </developers>
 

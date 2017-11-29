@@ -23,5 +23,17 @@ public class SamplePacketListener implements HydraPacketListener {
 
         // Send response
         session.send(new SamplePacket("This is a response"));
+
+        // Returns if the session is active
+        System.out.println("Is session active?: " + session.isConnected());
+
+        // Returns the local or remote address, depending if it's the server or the client
+        System.out.println("Local or remote address: " + session.getAddress());
+
+        // Closes the session, this does not stop the server. It just closes the channel
+        session.close();
+
+        // Check again if session is active
+        System.out.println("Is session active?: " + session.isConnected());
     }
 }
