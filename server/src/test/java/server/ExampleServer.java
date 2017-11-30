@@ -6,7 +6,7 @@ import de.datasec.hydra.server.Server;
 import java.net.StandardSocketOptions;
 
 /**
- * Created by DataSec on 02.11.2017.
+ * Created with love by DataSec on 02.11.2017.
  */
 public class ExampleServer {
 
@@ -25,14 +25,14 @@ public class ExampleServer {
         if (server.isActive()) {
             System.out.println("Server is online!");
             // Returns the local address of the server that was set in the constructor
-            System.out.printf("Socket address: %s", server.getLocalAdress());
+            System.out.printf("Socket address: %s%n", server.getLocalAdress());
         }
 
         // As soon as a channel with a client is initialized it is added to the set
         // If no clients are connected the set is empty
-        System.out.println("Session: " + server.getSessions());
+        System.out.println("Sessions: " + server.getSessions());
 
         // Closes the server and releases the occupied resources
-        server.close();
+        //server.close();
     }
 }

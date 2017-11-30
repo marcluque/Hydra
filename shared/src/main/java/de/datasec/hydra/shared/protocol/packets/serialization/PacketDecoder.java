@@ -9,7 +9,7 @@ import io.netty.handler.codec.MessageToMessageDecoder;
 import java.util.List;
 
 /**
- * Created by DataSec on 29.09.2017.
+ * Created with love by DataSec on 29.09.2017.
  */
 public class PacketDecoder extends MessageToMessageDecoder<ByteBuf> {
 

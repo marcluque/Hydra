@@ -68,25 +68,24 @@ public class Server {
         }
 
         private HydraServer setUpServer() {
-            Channel channel = null;
+            NioEventLoopGroup[] loopGroups = new NioEventLoopGroup[]{bossGroup = new NioEventLoopGroup(bossThreads), workerGroup = new NioEventLoopGroup(workerThreads)};
 
             ServerBootstrap serverBootstrap = new ServerBootstrap()
                     .group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
-                    .childHandler(new HydraChannelInitializer(protocol));
+                    .childHandler(new HydraChannelInitializer(protocol, true));
 
             options.forEach((option, value) -> serverBootstrap.option(ChannelOption.valueOf(option.name()), value));
             childOptions.forEach((option, value) -> serverBootstrap.childOption(ChannelOption.valueOf(option.name()), value));
 
+            Channel channel = null;
             try {
                 channel = serverBootstrap.bind(host, port).sync().channel();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-            // Needs to be created here already and overridden in the channel initializer,
-            // as the channel is not immediately initialized
-            return new HydraServer(channel, protocol, new NioEventLoopGroup[]{bossGroup = new NioEventLoopGroup(bossThreads), workerGroup = new NioEventLoopGroup(workerThreads)});
+            return new HydraServer(channel, protocol, loopGroups);
         }
     }
 }

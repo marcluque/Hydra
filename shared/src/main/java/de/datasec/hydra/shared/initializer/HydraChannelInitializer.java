@@ -11,14 +11,17 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 
 /**
- * Created by DataSec on 29.09.2017.
+ * Created with love by DataSec on 29.09.2017.
  */
 public class HydraChannelInitializer extends ChannelInitializer<SocketChannel> {
 
     private HydraProtocol protocol;
 
-    public HydraChannelInitializer(HydraProtocol protocol) {
+    private boolean isServer;
+
+    public HydraChannelInitializer(HydraProtocol protocol, boolean isServer) {
         this.protocol = protocol;
+        this.isServer = isServer;
     }
 
     @Override
@@ -33,6 +36,13 @@ public class HydraChannelInitializer extends ChannelInitializer<SocketChannel> {
         pipeline.addLast(new LengthFieldPrepender(4));
         pipeline.addLast(new PacketEncoder(protocol));
 
-        pipeline.addLast(new HydraSession(channel, protocol));
+        HydraSession session = new HydraSession(channel, protocol);
+        pipeline.addLast(session);
+
+        if (isServer) {
+            protocol.addSession(session);
+        } else {
+            protocol.setClientSession(session);
+        }
     }
 }

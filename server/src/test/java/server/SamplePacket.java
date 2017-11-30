@@ -6,7 +6,7 @@ import de.datasec.hydra.shared.protocol.packets.PacketId;
 import java.io.IOException;
 
 /**
- * Created by DataSec on 03.11.2017.
+ * Created with love by DataSec on 03.11.2017.
  */
 /* This is a simple example for a packet class.
  * Just the empty, public constructor and the read, write methods are obligatory.

@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 /**
- * Created by DataSec on 29.09.2017.
+ * Created with love by DataSec on 29.09.2017.
  */
 public class HydraProtocol {
 
@@ -21,12 +21,14 @@ public class HydraProtocol {
 
     private Map<Class<?>, Method> packetListenerMethods = new HashMap<>();
 
-    private HydraPacketListener packetListener;
-
     private Set<Session> sessions = new HashSet<>();
 
+    private Session clientSession;
+
+    private HydraPacketListener packetListener;
+
     public void registerPacket(Class<? extends Packet> clazz) {
-        if(clazz == null) {
+        if (clazz == null) {
             throw new IllegalArgumentException("clazz can't be null!");
         }
 
@@ -94,6 +96,18 @@ public class HydraProtocol {
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setClientSession(Session clientSession) {
+        this.clientSession = clientSession;
+    }
+
+    public Session getClientSession() {
+        return clientSession;
+    }
+
+    public void addSession(Session session) {
+        sessions.add(session);
     }
 
     public Set<Session> getSessions() {

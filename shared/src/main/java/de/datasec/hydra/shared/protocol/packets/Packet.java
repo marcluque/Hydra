@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 import java.io.*;
 
 /**
- * Created by DataSec on 29.09.2017.
+ * Created with love by DataSec on 29.09.2017.
  */
 public abstract class Packet {
 

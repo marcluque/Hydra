@@ -3,7 +3,7 @@ package server;
 import de.datasec.hydra.shared.protocol.HydraProtocol;
 
 /**
- * Created by DataSec on 03.11.2017.
+ * Created with love by DataSec on 03.11.2017.
  */
 public class SampleProtocol extends HydraProtocol {
 

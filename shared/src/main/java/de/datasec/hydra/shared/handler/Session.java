@@ -5,7 +5,7 @@ import de.datasec.hydra.shared.protocol.packets.Packet;
 import java.net.SocketAddress;
 
 /**
- * Created by DataSec on 01.10.2017.
+ * Created with love by DataSec on 01.10.2017.
  */
 public interface Session {
 

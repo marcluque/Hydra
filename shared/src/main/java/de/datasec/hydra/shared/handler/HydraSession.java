@@ -9,7 +9,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import java.net.SocketAddress;
 
 /**
- * Created by DataSec on 29.09.2017.
+ * Created with love by DataSec on 29.09.2017.
  */
 public class HydraSession extends SimpleChannelInboundHandler<Packet> implements Session {
 
@@ -45,7 +45,7 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> implements
 
     @Override
     public boolean isConnected() {
-        return channel.isActive();
+        return channel.isWritable();
     }
 
     @Override
