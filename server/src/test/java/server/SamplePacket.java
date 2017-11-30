@@ -3,8 +3,6 @@ package server;
 import de.datasec.hydra.shared.protocol.packets.Packet;
 import de.datasec.hydra.shared.protocol.packets.PacketId;
 
-import java.io.IOException;
-
 /**
  * Created with love by DataSec on 03.11.2017.
  */
@@ -19,35 +17,36 @@ public class SamplePacket extends Packet {
 
     private Object sampleObject;
 
+    private String[] sampleStringArray;
+
     public SamplePacket() {
         // Empty constructor is always necessary!
     }
 
     // This constructor is not obligatory! Just the empty one.
-    public SamplePacket(Object sampleObject) {
+    public SamplePacket(Object sampleObject, String[] sampleStringArray) {
         this.sampleObject = sampleObject;
+        this.sampleStringArray = sampleStringArray;
     }
 
     @Override
     public void read() {
-        try {
-            sampleObject = readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        sampleObject = readObject();
+        sampleStringArray = readArray();
     }
 
     @Override
     public void write() {
-        try {
-            writeObject(sampleObject);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        writeObject(sampleObject);
+        writeArray(sampleStringArray);
     }
 
     public Object getSampleObject() {
         return sampleObject;
+    }
+
+    public String[] getSampleStringArray() {
+        return sampleStringArray;
     }
 
     @Override

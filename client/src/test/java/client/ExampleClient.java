@@ -5,6 +5,7 @@ import de.datasec.hydra.client.HydraClient;
 import de.datasec.hydra.shared.handler.Session;
 
 import java.net.StandardSocketOptions;
+import java.util.Arrays;
 
 /**
  * Created with love by DataSec on 02.11.2017.
@@ -30,8 +31,11 @@ public class ExampleClient {
             System.out.printf("Socket address: %s%n", session.getAddress());
         }
 
-        // Send a packet to the server via the session the client has saved
-        session.send(new SamplePacket("Message for the server from the client"));
+        /* Send a packet to the server via the session the client has saved */
+        // Sends a String, that is converted to a Object and an array, the type of the array is defined in SamplePacket.class
+        session.send(new SamplePacket("This is a message", new String[]{"This", "is", "a", "message"}));
+        // Sends a list, that is converted to a Object and the array, like above
+        session.send(new SamplePacket(Arrays.asList("This", "is", "a", "message", "2"), new String[]{"This", "is", "a", "message", "2"}));
 
         // Closes the connection and releases all occupied resources
         //client.close();

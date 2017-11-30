@@ -59,19 +59,30 @@ public abstract class Packet {
         return byteBuf.readLong();
     }
 
-    protected void writeString(String string) throws UnsupportedEncodingException {
+    protected void writeString(String string) {
         byteBuf.writeInt(string.length());
-        byteBuf.writeBytes(string.getBytes("UTF-8"));
+
+        try {
+            byteBuf.writeBytes(string.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
-    protected String readString() throws UnsupportedEncodingException {
+    protected String readString() {
         byte[] bytes = new byte[byteBuf.readInt()];
         byteBuf.readBytes(bytes);
 
-        return new String(bytes, "UTF-8");
+        try {
+            return new String(bytes, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
-    protected void writeObject(Object object) throws IOException {
+    protected void writeObject(Object object) {
         if (object == null) {
             throw new IllegalArgumentException("object cannot be null");
         }
@@ -81,12 +92,12 @@ public abstract class Packet {
             byte[] bytes = byteArrayOutputStream.toByteArray();
             byteBuf.writeInt(bytes.length);
             byteBuf.writeBytes(bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    protected Object readObject() throws IOException, ClassNotFoundException {
-        Object object;
-
+    protected Object readObject() {
         int length = byteBuf.readInt();
         if (length > byteBuf.readableBytes()) {
             throw new IllegalStateException("length cannot be larger than the readable bytes");
@@ -96,9 +107,45 @@ public abstract class Packet {
         byteBuf.readBytes(bytes);
 
         try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes); ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
-            object = objectInputStream.readObject();
+            return objectInputStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
 
-        return object;
+        return null;
+    }
+
+    // TODO: Custom class serialization for arrays
+    protected void writeArray(Object[] array) {
+        if (array == null) {
+            throw new IllegalArgumentException("array cannot be null");
+        }
+
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(); ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream)) {
+            objectOutputStream.writeObject(array);
+            byte[] bytes = byteArrayOutputStream.toByteArray();
+            byteBuf.writeInt(bytes.length);
+            byteBuf.writeBytes(bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected <T> T[] readArray() {
+        int length = byteBuf.readInt();
+        if (length > byteBuf.readableBytes()) {
+            throw new IllegalStateException("length cannot be larger than the readable bytes");
+        }
+
+        byte[] bytes = new byte[length];
+        byteBuf.readBytes(bytes);
+
+        try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes); ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
+            return (T[]) objectInputStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
