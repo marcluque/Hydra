@@ -3,8 +3,8 @@ package de.datasec.hydra.server;
 import de.datasec.hydra.shared.handler.Session;
 import de.datasec.hydra.shared.protocol.HydraProtocol;
 import io.netty.channel.Channel;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.util.concurrent.AbstractEventExecutorGroup;
+import io.netty.channel.EventLoopGroup;
+import io.netty.util.concurrent.EventExecutorGroup;
 
 import java.net.SocketAddress;
 import java.util.Arrays;
@@ -19,9 +19,9 @@ public class HydraServer {
 
     private HydraProtocol protocol;
 
-    private NioEventLoopGroup[] loopGroups;
+    private EventLoopGroup[] loopGroups;
 
-    public HydraServer(Channel channel, HydraProtocol protocol, NioEventLoopGroup[] loopGroups) {
+    public HydraServer(Channel channel, HydraProtocol protocol, EventLoopGroup[] loopGroups) {
         this.channel = channel;
         this.protocol = protocol;
         this.loopGroups = loopGroups;
@@ -29,7 +29,7 @@ public class HydraServer {
 
     public void close() {
         channel.close();
-        Arrays.stream(loopGroups).forEach(AbstractEventExecutorGroup::shutdownGracefully);
+        Arrays.stream(loopGroups).forEach(EventExecutorGroup::shutdownGracefully);
     }
 
     public boolean isActive() {

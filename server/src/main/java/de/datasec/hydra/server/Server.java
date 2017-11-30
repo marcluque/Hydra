@@ -5,6 +5,10 @@ import de.datasec.hydra.shared.protocol.HydraProtocol;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.epoll.Epoll;
+import io.netty.channel.epoll.EpollEventLoopGroup;
+import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
@@ -26,10 +30,6 @@ public class Server {
         private int workerThreads = 2;
 
         private int bossThreads = 1;
-
-        private NioEventLoopGroup workerGroup;
-
-        private NioEventLoopGroup bossGroup;
 
         private Map<SocketOption, Object> options = new HashMap<>();
 
@@ -68,11 +68,15 @@ public class Server {
         }
 
         private HydraServer setUpServer() {
-            NioEventLoopGroup[] loopGroups = new NioEventLoopGroup[]{bossGroup = new NioEventLoopGroup(bossThreads), workerGroup = new NioEventLoopGroup(workerThreads)};
+            boolean epoll = Epoll.isAvailable();
+            EventLoopGroup workerGroup, bossGroup;
+
+            EventLoopGroup[] loopGroups = new EventLoopGroup[]{bossGroup = epoll ? new EpollEventLoopGroup(bossThreads) : new NioEventLoopGroup(bossThreads),
+                    workerGroup = epoll ? new EpollEventLoopGroup(workerThreads) : new NioEventLoopGroup(workerThreads)};
 
             ServerBootstrap serverBootstrap = new ServerBootstrap()
                     .group(bossGroup, workerGroup)
-                    .channel(NioServerSocketChannel.class)
+                    .channel(epoll ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
                     .childHandler(new HydraChannelInitializer(protocol, true));
 
             options.forEach((option, value) -> serverBootstrap.option(ChannelOption.valueOf(option.name()), value));

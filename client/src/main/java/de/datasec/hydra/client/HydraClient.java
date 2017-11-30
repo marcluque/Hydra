@@ -3,7 +3,7 @@ package de.datasec.hydra.client;
 import de.datasec.hydra.shared.handler.Session;
 import de.datasec.hydra.shared.protocol.HydraProtocol;
 import io.netty.channel.Channel;
-import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.EventLoopGroup;
 
 import java.net.SocketAddress;
 
@@ -16,9 +16,9 @@ public class HydraClient {
 
     private HydraProtocol protocol;
 
-    private NioEventLoopGroup workerGroup;
+    private EventLoopGroup workerGroup;
 
-    public HydraClient(Channel channel, HydraProtocol protocol, NioEventLoopGroup workerGroup) {
+    public HydraClient(Channel channel, HydraProtocol protocol, EventLoopGroup workerGroup) {
         this.channel = channel;
         this.protocol = protocol;
         this.workerGroup = workerGroup;
