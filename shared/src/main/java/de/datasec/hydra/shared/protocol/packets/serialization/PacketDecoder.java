@@ -26,6 +26,7 @@ public class PacketDecoder extends MessageToMessageDecoder<ByteBuf> {
         Packet packet = protocol.createPacket(in.readByte());
         packet.setByteBuf(in);
         packet.read();
+
         out.add(packet);
     }
 }

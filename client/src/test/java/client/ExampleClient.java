@@ -22,8 +22,9 @@ public class ExampleClient {
                 .build();
 
 
-        // Example for some things you can get from the session
+        // Checks if the client is connected to its remote host
         if (client.isConnected()) {
+            // Returns the session that was created for the client and its remote host
             session = client.getSession();
             System.out.println("Client is online!");
             System.out.printf("Socket address: %s%n", session.getAddress());

@@ -52,10 +52,8 @@ public class Client {
         }
 
         private HydraClient setUpClient() {
-            workerGroup = new NioEventLoopGroup(workerThreads);
-
             Bootstrap bootstrap = new Bootstrap()
-                    .group(workerGroup)
+                    .group(workerGroup = new NioEventLoopGroup(workerThreads))
                     .channel(NioSocketChannel.class)
                     .remoteAddress(host, port)
                     .handler(new HydraChannelInitializer(protocol, false));

@@ -27,7 +27,22 @@ public class HydraProtocol {
 
     private HydraPacketListener packetListener;
 
-    public void registerPacket(Class<? extends Packet> clazz) {
+    public Packet createPacket(byte id) {
+        try {
+            return packets.get(id).newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            System.err.printf("Packet %s.class might hasn't got an empty constructor!%n\n", packets.get(id).getSimpleName());
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public byte getPacketId(Packet packet) {
+        return packetBytes.get(packet.getClass());
+    }
+
+    protected void registerPacket(Class<? extends Packet> clazz) {
         if (clazz == null) {
             throw new IllegalArgumentException("clazz can't be null!");
         }
@@ -48,22 +63,7 @@ public class HydraProtocol {
         packetBytes.put(clazz, id);
     }
 
-    public Packet createPacket(byte id) {
-        try {
-            return packets.get(id).newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            System.err.printf("Packet %s.class might hasn't got an empty constructor!%n\n", packets.get(id).getSimpleName());
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    public byte getPacketId(Packet packet) {
-        return packetBytes.get(packet.getClass());
-    }
-
-    public void registerListener(HydraPacketListener packetListener) {
+    protected void registerListener(HydraPacketListener packetListener) {
         if (packetListener == null) {
             throw new IllegalArgumentException("packetListener can't be null!");
         }

@@ -23,8 +23,10 @@ public class PacketEncoder extends MessageToMessageEncoder<Packet> {
     protected void encode(ChannelHandlerContext context, Packet packet, List<Object> out) throws Exception {
         ByteBuf byteBuf = context.alloc().buffer();
         byteBuf.writeByte(protocol.getPacketId(packet));
+
         packet.setByteBuf(byteBuf);
         packet.write();
+
         out.add(byteBuf);
     }
 }
