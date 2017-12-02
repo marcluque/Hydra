@@ -39,10 +39,14 @@ public class HydraChannelInitializer extends ChannelInitializer<SocketChannel> {
         HydraSession session = new HydraSession(channel, protocol);
         pipeline.addLast(session);
 
+        // Add sessions to protocol, to keep track of them
         if (isServer) {
             protocol.addSession(session);
         } else {
             protocol.setClientSession(session);
         }
+
+        // Inform SessionListener about new session
+        protocol.callSessionListener(true);
     }
 }

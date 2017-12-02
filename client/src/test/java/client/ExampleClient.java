@@ -3,6 +3,7 @@ package client;
 import de.datasec.hydra.client.Client;
 import de.datasec.hydra.client.HydraClient;
 import de.datasec.hydra.shared.handler.Session;
+import de.datasec.hydra.shared.handler.listener.HydraSessionListener;
 
 import java.net.StandardSocketOptions;
 import java.util.Arrays;
@@ -15,19 +16,38 @@ public class ExampleClient {
     private static Session session;
 
     public static void main(String[] args) {
+        /*
+         * The session listener is optional, that's why it's a method that can be called in the builder.
+         * It adds a listener to the client and is supposed to be called when
+         * a session is created (in this case, when the client connects to a server). For demonstration purposes
+         * this is done via a direct instantiation. It's advised to do this in a separate class
+         * for clearness, especially when there are other methods than just the two small from the
+         * SessionListener interface.
+         */
+
         // The builder returns a session which you can use for several things
         HydraClient client = new Client.Builder("localhost", 8888, new SampleProtocol())
                 .workerThreads(4)
                 .option(StandardSocketOptions.TCP_NODELAY, true)
                 .option(StandardSocketOptions.SO_KEEPALIVE, true)
-                .build();
+                .addSessionListener(new HydraSessionListener() {
+                    @Override
+                    public void onConnected() {
+                        System.out.println("Connected to server!");
+                    }
 
+                    @Override
+                    public void onDisconnected() {
+                        System.out.println("\nDisconnected from server!");
+                    }
+                })
+                .build();
 
         // Checks if the client is connected to its remote host
         if (client.isConnected()) {
             // Returns the session that was created for the client and its remote host
             session = client.getSession();
-            System.out.println("Client is online!");
+            System.out.println("\nClient is online!");
             System.out.printf("Socket address: %s%n", session.getAddress());
         }
 

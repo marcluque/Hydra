@@ -2,6 +2,7 @@ package server;
 
 import de.datasec.hydra.server.HydraServer;
 import de.datasec.hydra.server.Server;
+import de.datasec.hydra.shared.handler.listener.HydraSessionListener;
 
 import java.net.StandardSocketOptions;
 
@@ -11,6 +12,14 @@ import java.net.StandardSocketOptions;
 public class ExampleServer {
 
     public static void main(String[] args) {
+        /*
+         * The session listener adds a listener to the server that is supposed to be called when
+         * a session is created (in this case, when a client connects). For demonstration purposes
+         * this is done via a direct instantiation. It is advised to do this in a separate class
+         * for clearness, especially when there are other methods than just the two small from the
+         * SessionListener interface.
+         */
+
         // The builder returns a server which you can use for several things
         HydraServer server = new Server.Builder("localhost", 8888, new SampleProtocol())
                 .bossThreads(2)
@@ -19,6 +28,17 @@ public class ExampleServer {
                 .option(StandardSocketOptions.SO_KEEPALIVE, true)
                 .childOption(StandardSocketOptions.TCP_NODELAY, true)
                 .childOption(StandardSocketOptions.SO_KEEPALIVE, true)
+                .addListener(new HydraSessionListener() {
+                    @Override
+                    public void onConnected() {
+                        System.out.println("\nClient connected!");
+                    }
+
+                    @Override
+                    public void onDisconnected() {
+                        System.out.println("\nClient disconnected!");
+                    }
+                })
                 .build();
 
         // Check if server is actively running

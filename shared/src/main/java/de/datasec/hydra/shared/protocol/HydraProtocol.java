@@ -1,6 +1,7 @@
 package de.datasec.hydra.shared.protocol;
 
 import de.datasec.hydra.shared.handler.Session;
+import de.datasec.hydra.shared.handler.listener.HydraSessionListener;
 import de.datasec.hydra.shared.protocol.packets.HydraPacketListener;
 import de.datasec.hydra.shared.protocol.packets.Packet;
 import de.datasec.hydra.shared.protocol.packets.PacketHandler;
@@ -26,6 +27,8 @@ public class HydraProtocol {
     private Session clientSession;
 
     private HydraPacketListener packetListener;
+
+    private HydraSessionListener sessionListener;
 
     public Packet createPacket(byte id) {
         try {
@@ -90,11 +93,23 @@ public class HydraProtocol {
                 });
     }
 
-    public void callListener(Packet packet, Session session) {
+    public void callPacketListener(Packet packet, Session session) {
         try {
             packetListenerMethods.get(packet.getClass()).invoke(packetListener, packet.getClass().cast(packet), session);
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void addSessionListner(HydraSessionListener sessionListener) {
+        this.sessionListener = sessionListener;
+    }
+
+    public void callSessionListener(boolean connected) {
+        if (connected) {
+            sessionListener.onConnected();
+        } else {
+            sessionListener.onDisconnected();
         }
     }
 
@@ -108,6 +123,10 @@ public class HydraProtocol {
 
     public void addSession(Session session) {
         sessions.add(session);
+    }
+
+    public void removeSession(Session session) {
+        sessions.remove(session);
     }
 
     public Set<Session> getSessions() {

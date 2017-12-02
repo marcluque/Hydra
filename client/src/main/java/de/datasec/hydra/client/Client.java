@@ -1,5 +1,6 @@
 package de.datasec.hydra.client;
 
+import de.datasec.hydra.shared.handler.listener.HydraSessionListener;
 import de.datasec.hydra.shared.initializer.HydraChannelInitializer;
 import de.datasec.hydra.shared.protocol.HydraProtocol;
 import io.netty.bootstrap.Bootstrap;
@@ -49,14 +50,18 @@ public class Client {
             return this;
         }
 
+        public Builder addSessionListener(HydraSessionListener sessionListener) {
+            protocol.addSessionListner(sessionListener);
+            return this;
+        }
+
         public HydraClient build() {
             return setUpClient();
         }
 
         private HydraClient setUpClient() {
-            boolean epoll = Epoll.isAvailable();
-
             EventLoopGroup workerGroup;
+            boolean epoll = Epoll.isAvailable();
 
             Bootstrap bootstrap = new Bootstrap()
                     .group(workerGroup = epoll ? new EpollEventLoopGroup(workerThreads) : new NioEventLoopGroup(workerThreads))
