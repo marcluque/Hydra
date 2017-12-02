@@ -29,7 +29,7 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> implements
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-        protocol.callSessionListener(false);
+        protocol.callSessionListener(false, this);
         protocol.removeSession(this);
     }
 

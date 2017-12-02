@@ -51,7 +51,7 @@ public class Client {
         }
 
         public Builder addSessionListener(HydraSessionListener sessionListener) {
-            protocol.addSessionListner(sessionListener);
+            protocol.addSessionListener(sessionListener);
             return this;
         }
 

@@ -1,8 +1,8 @@
 package server;
 
 import de.datasec.hydra.shared.handler.Session;
-import de.datasec.hydra.shared.protocol.packets.HydraPacketListener;
-import de.datasec.hydra.shared.protocol.packets.PacketHandler;
+import de.datasec.hydra.shared.protocol.packets.listener.HydraPacketListener;
+import de.datasec.hydra.shared.protocol.packets.listener.PacketHandler;
 
 import java.util.Arrays;
 

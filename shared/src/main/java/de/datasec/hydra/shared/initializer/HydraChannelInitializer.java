@@ -47,6 +47,6 @@ public class HydraChannelInitializer extends ChannelInitializer<SocketChannel> {
         }
 
         // Inform SessionListener about new session
-        protocol.callSessionListener(true);
+        protocol.callSessionListener(true, session);
     }
 }

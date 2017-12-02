@@ -1,12 +1,15 @@
-package de.datasec.hydra.shared.handler.listener;
+package de.datasec.hydra.shared.protocol.packets.listener;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Created with love by DataSec on 01.10.2017.
+ */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SessionHandler {
+public @interface PacketHandler {
 
 }

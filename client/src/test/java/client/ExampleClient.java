@@ -20,7 +20,7 @@ public class ExampleClient {
          * The session listener is optional, that's why it's a method that can be called in the builder.
          * It adds a listener to the client and is supposed to be called when
          * a session is created (in this case, when the client connects to a server). For demonstration purposes
-         * this is done via a direct instantiation. It's advised to do this in a separate class
+         * this is done via a direct instantiation (anonymous class). It's advised to do this in a separate class
          * for clearness, especially when there are other methods than just the two small from the
          * SessionListener interface.
          */
@@ -32,12 +32,12 @@ public class ExampleClient {
                 .option(StandardSocketOptions.SO_KEEPALIVE, true)
                 .addSessionListener(new HydraSessionListener() {
                     @Override
-                    public void onConnected() {
+                    public void onConnected(Session session) {
                         System.out.println("Connected to server!");
                     }
 
                     @Override
-                    public void onDisconnected() {
+                    public void onDisconnected(Session session) {
                         System.out.println("\nDisconnected from server!");
                     }
                 })

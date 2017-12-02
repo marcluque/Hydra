@@ -2,10 +2,10 @@ package de.datasec.hydra.shared.protocol;
 
 import de.datasec.hydra.shared.handler.Session;
 import de.datasec.hydra.shared.handler.listener.HydraSessionListener;
-import de.datasec.hydra.shared.protocol.packets.HydraPacketListener;
 import de.datasec.hydra.shared.protocol.packets.Packet;
-import de.datasec.hydra.shared.protocol.packets.PacketHandler;
 import de.datasec.hydra.shared.protocol.packets.PacketId;
+import de.datasec.hydra.shared.protocol.packets.listener.HydraPacketListener;
+import de.datasec.hydra.shared.protocol.packets.listener.PacketHandler;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -101,15 +101,15 @@ public class HydraProtocol {
         }
     }
 
-    public void addSessionListner(HydraSessionListener sessionListener) {
+    public void addSessionListener(HydraSessionListener sessionListener) {
         this.sessionListener = sessionListener;
     }
 
-    public void callSessionListener(boolean connected) {
+    public void callSessionListener(boolean connected, Session session) {
         if (connected) {
-            sessionListener.onConnected();
+            sessionListener.onConnected(session);
         } else {
-            sessionListener.onDisconnected();
+            sessionListener.onDisconnected(session);
         }
     }
 
