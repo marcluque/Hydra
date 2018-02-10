@@ -4,8 +4,8 @@ import de.datasec.hydra.client.Client;
 import de.datasec.hydra.client.HydraClient;
 import de.datasec.hydra.shared.handler.Session;
 import de.datasec.hydra.shared.handler.listener.HydraSessionListener;
+import io.netty.channel.ChannelOption;
 
-import java.net.StandardSocketOptions;
 import java.util.Arrays;
 
 /**
@@ -17,7 +17,7 @@ public class ExampleClient {
 
     public static void main(String[] args) {
         /*
-         * The session listener is optional, that's why it's a method that can be called in the builder.
+         * The session listener is optional, that's why it's a method that may be called in the builder.
          * It adds a listener to the client and is supposed to be called when
          * a session is created (in this case, when the client connects to a server). For demonstration purposes
          * this is done via a direct instantiation (anonymous class). It's advised to do this in a separate class
@@ -26,10 +26,10 @@ public class ExampleClient {
          */
 
         // The builder returns a session which you can use for several things
-        HydraClient client = new Client.Builder("localhost", 8888, new SampleProtocol())
+        HydraClient client = new Client.Builder("188.68.54.85", 8888, new SampleProtocol())
                 .workerThreads(4)
-                .option(StandardSocketOptions.TCP_NODELAY, true)
-                .option(StandardSocketOptions.SO_KEEPALIVE, true)
+                .option(ChannelOption.TCP_NODELAY, true)
+                .option(ChannelOption.SO_KEEPALIVE, true)
                 .addSessionListener(new HydraSessionListener() {
                     @Override
                     public void onConnected(Session session) {

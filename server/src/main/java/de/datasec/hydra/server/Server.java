@@ -13,7 +13,6 @@ import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
-import java.net.SocketOption;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,9 +31,11 @@ public class Server {
 
         private int bossThreads = 1;
 
-        private Map<SocketOption, Object> options = new HashMap<>();
+        private Map<ChannelOption, Object> options = new HashMap<>();
 
-        private Map<SocketOption, Object> childOptions = new HashMap<>();
+        private Map<ChannelOption, Object> childOptions = new HashMap<>();
+
+        private boolean useEpoll;
 
         private HydraProtocol protocol;
 
@@ -54,13 +55,18 @@ public class Server {
             return this;
         }
 
-        public <T> Builder option(SocketOption<T> socketOption, T value) {
-            options.put(socketOption, value);
+        public <T> Builder option(ChannelOption<T> channelOption, T value) {
+            options.put(channelOption, value);
             return this;
         }
 
-        public <T> Builder childOption(SocketOption<T> socketOption, T value) {
-            childOptions.put(socketOption, value);
+        public <T> Builder childOption(ChannelOption<T> channelOption, T value) {
+            childOptions.put(channelOption, value);
+            return this;
+        }
+
+        public Builder useEpoll(boolean useEpoll) {
+            this.useEpoll = useEpoll;
             return this;
         }
 
@@ -75,7 +81,7 @@ public class Server {
 
         private HydraServer setUpServer() {
             EventLoopGroup workerGroup, bossGroup;
-            boolean epoll = Epoll.isAvailable();
+            boolean epoll = useEpoll && Epoll.isAvailable();
 
             EventLoopGroup[] loopGroups = new EventLoopGroup[]{bossGroup = epoll ? new EpollEventLoopGroup(bossThreads) : new NioEventLoopGroup(bossThreads),
                     workerGroup = epoll ? new EpollEventLoopGroup(workerThreads) : new NioEventLoopGroup(workerThreads)};
@@ -85,8 +91,8 @@ public class Server {
                     .channel(epoll ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
                     .childHandler(new HydraChannelInitializer(protocol, true));
 
-            options.forEach((option, value) -> serverBootstrap.option(ChannelOption.valueOf(option.name()), value));
-            childOptions.forEach((option, value) -> serverBootstrap.childOption(ChannelOption.valueOf(option.name()), value));
+            options.forEach(serverBootstrap::option);
+            childOptions.forEach(serverBootstrap::childOption);
 
             Channel channel = null;
             try {

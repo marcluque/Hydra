@@ -4,8 +4,7 @@ import de.datasec.hydra.server.HydraServer;
 import de.datasec.hydra.server.Server;
 import de.datasec.hydra.shared.handler.Session;
 import de.datasec.hydra.shared.handler.listener.HydraSessionListener;
-
-import java.net.StandardSocketOptions;
+import io.netty.channel.ChannelOption;
 
 /**
  * Created with love by DataSec on 02.11.2017.
@@ -25,10 +24,10 @@ public class ExampleServer {
         HydraServer server = new Server.Builder("localhost", 8888, new SampleProtocol())
                 .bossThreads(2)
                 .workerThreads(4)
-                .option(StandardSocketOptions.TCP_NODELAY, true)
-                .option(StandardSocketOptions.SO_KEEPALIVE, true)
-                .childOption(StandardSocketOptions.TCP_NODELAY, true)
-                .childOption(StandardSocketOptions.SO_KEEPALIVE, true)
+                .option(ChannelOption.TCP_NODELAY, true)
+                .option(ChannelOption.SO_KEEPALIVE, true)
+                .childOption(ChannelOption.TCP_NODELAY, true)
+                .childOption(ChannelOption.SO_KEEPALIVE, true)
                 .addListener(new HydraSessionListener() {
                     @Override
                     public void onConnected(Session session) {

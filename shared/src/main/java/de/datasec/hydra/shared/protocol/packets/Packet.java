@@ -82,7 +82,7 @@ public abstract class Packet {
         return null;
     }
 
-    protected void writeObject(Object object) {
+    protected <T> void writeObject(T object) {
         if (object == null) {
             throw new IllegalArgumentException("object cannot be null");
         }

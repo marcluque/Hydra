@@ -13,7 +13,6 @@ import io.netty.channel.epoll.EpollSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
-import java.net.SocketOption;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,7 +29,9 @@ public class Client {
 
         private int workerThreads = 2;
 
-        private Map<SocketOption, Object> options = new HashMap<>();
+        private Map<ChannelOption, Object> options = new HashMap<>();
+
+        private boolean useEpoll;
 
         private HydraProtocol protocol;
 
@@ -45,8 +46,13 @@ public class Client {
             return this;
         }
 
-        public <T> Builder option(SocketOption<T> socketOption, T value) {
-            options.put(socketOption, value);
+        public <T> Builder option(ChannelOption<T> channelOption, T value) {
+            options.put(channelOption, value);
+            return this;
+        }
+
+        public Builder useEpoll(boolean useEpoll) {
+            this.useEpoll = useEpoll;
             return this;
         }
 
@@ -61,7 +67,7 @@ public class Client {
 
         private HydraClient setUpClient() {
             EventLoopGroup workerGroup;
-            boolean epoll = Epoll.isAvailable();
+            boolean epoll = useEpoll && Epoll.isAvailable();
 
             Bootstrap bootstrap = new Bootstrap()
                     .group(workerGroup = epoll ? new EpollEventLoopGroup(workerThreads) : new NioEventLoopGroup(workerThreads))
@@ -69,7 +75,7 @@ public class Client {
                     .remoteAddress(host, port)
                     .handler(new HydraChannelInitializer(protocol, false));
 
-            options.forEach((option, value) -> bootstrap.option(ChannelOption.valueOf(option.name()), value));
+            options.forEach(bootstrap::option);
 
             Channel channel = null;
             try {
