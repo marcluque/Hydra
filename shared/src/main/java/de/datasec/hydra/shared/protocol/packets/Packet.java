@@ -3,6 +3,11 @@ package de.datasec.hydra.shared.protocol.packets;
 import io.netty.buffer.ByteBuf;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created with love by DataSec on 29.09.2017.
@@ -10,6 +15,10 @@ import java.io.*;
 public abstract class Packet {
 
     private ByteBuf byteBuf;
+
+    private Object objectToSerialize;
+
+    private Map<Object, Object> fieldsToSerialize = new ConcurrentHashMap<>();
 
     public void setByteBuf(ByteBuf byteBuf) {
         this.byteBuf = byteBuf;
@@ -106,7 +115,8 @@ public abstract class Packet {
         byte[] bytes = new byte[length];
         byteBuf.readBytes(bytes);
 
-        try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes); ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
+        try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+             ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
             return objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -115,20 +125,83 @@ public abstract class Packet {
         return null;
     }
 
-    // TODO: Custom class serialization for arrays
-    protected void writeArray(Object[] array) {
-        if (array == null) {
-            throw new IllegalArgumentException("array cannot be null");
-        }
+    protected <T> void writeCustomObject(T customObject) {
+        writeObject(customObject.getClass());
+        serializeClass(customObject, fieldsToSerialize);
+        writeObject(fieldsToSerialize);
+    }
 
-        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(); ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream)) {
-            objectOutputStream.writeObject(array);
-            byte[] bytes = byteArrayOutputStream.toByteArray();
-            byteBuf.writeInt(bytes.length);
-            byteBuf.writeBytes(bytes);
-        } catch (IOException e) {
+    private <T> void serializeClass(T customClass, Map<Object, Object> objects) {
+        Arrays.stream(customClass.getClass().getDeclaredFields()).filter(field -> {
+            try {
+                field.setAccessible(true);
+                if (!Modifier.isTransient(field.getModifiers())) {
+                    objectToSerialize = field.get(customClass);
+                }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+
+            return objectToSerialize != null;
+        }).forEach(field -> {
+            if (!(objectToSerialize instanceof Serializable)) {
+                Map<Object, Object> subFields = new ConcurrentHashMap<>();
+                Object originalObject = objectToSerialize;
+                serializeClass(objectToSerialize, subFields);
+                objects.put(originalObject.getClass(), subFields);
+            } else {
+                objects.put(objectToSerialize.getClass(), objectToSerialize);
+            }
+        });
+    }
+
+    protected <T> T readCustomObject(T customObject) {
+        try {
+            Class<?> customObjectClass = (Class<?>) readObject();
+            fieldsToSerialize = (Map<Object, Object>) readObject();
+            customObject = deserializeClass(customObject = (T) customObjectClass.newInstance(), fieldsToSerialize);
+            fieldsToSerialize.clear();
+        } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
+
+        return customObject;
+    }
+
+    private <T> T deserializeClass(T customObject, Map<Object, Object> fields) {
+        Arrays.stream(customObject.getClass().getDeclaredMethods()).filter(method -> method.getName().contains("set")).forEach(currentMethod -> fields.forEach((key, value) -> {
+            Class<?> tempClazz = null;
+            try {
+                tempClazz = Class.forName(key.toString().split(" ")[1]);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            Class<?> clazz = tempClazz;
+
+            /* The ifs check whether (the class of the key is a super class (includes case that they are the same and the actual case the other way around)
+             * of the class of the parameter in the setter || the class of the key contains the class of the parameter in the setter)
+             * && (the method name contains set || the method name contains the name of the class of the key)
+             */
+            Class<?> methodParameterClazz = currentMethod.getParameterCount() == 1 ? currentMethod.getParameterTypes()[0] : null;
+            if (methodParameterClazz != null) {
+                if (((clazz.isAssignableFrom(methodParameterClazz) || methodParameterClazz.isAssignableFrom(clazz)) || clazz.toString().contains(methodParameterClazz.toString()))
+                        && (currentMethod.getName().contains(clazz.getSimpleName()) || currentMethod.getName().contains("set"))) {
+                    try {
+                        currentMethod.invoke(customObject, value instanceof Map ? deserializeClass(clazz.newInstance(), (Map<Object, Object>) value) : value);
+                        fields.remove(key);
+                    } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }));
+
+        return customObject;
+    }
+
+    // TODO: Custom class serialization for arrays
+    protected void writeArray(Object[] array) {
+        writeObject(array);
     }
 
     protected <T> T[] readArray() {
@@ -140,7 +213,8 @@ public abstract class Packet {
         byte[] bytes = new byte[length];
         byteBuf.readBytes(bytes);
 
-        try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes); ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
+        try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+             ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
             return (T[]) objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
