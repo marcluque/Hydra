@@ -26,8 +26,6 @@ public class SamplePacket extends Packet {
     }
 
     // This constructor is not obligatory! Just the empty one.
-
-
     public SamplePacket(Object sampleObject, String[] sampleStringArray, CustomClass customObject) {
         this.sampleObject = sampleObject;
         this.sampleStringArray = sampleStringArray;

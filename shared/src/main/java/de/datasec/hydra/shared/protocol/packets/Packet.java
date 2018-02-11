@@ -93,7 +93,7 @@ public abstract class Packet {
 
     protected <T> void writeObject(T object) {
         if (object == null) {
-            throw new IllegalArgumentException("object cannot be null");
+            throw new IllegalArgumentException("object can't be null");
         }
 
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(); ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream)) {
@@ -109,7 +109,7 @@ public abstract class Packet {
     protected Object readObject() {
         int length = byteBuf.readInt();
         if (length > byteBuf.readableBytes()) {
-            throw new IllegalStateException("length cannot be larger than the readable bytes");
+            throw new IllegalStateException("length can't be larger than the readable bytes");
         }
 
         byte[] bytes = new byte[length];
@@ -207,7 +207,7 @@ public abstract class Packet {
     protected <T> T[] readArray() {
         int length = byteBuf.readInt();
         if (length > byteBuf.readableBytes()) {
-            throw new IllegalStateException("length cannot be larger than the readable bytes");
+            throw new IllegalStateException("length can't be larger than the readable bytes");
         }
 
         byte[] bytes = new byte[length];

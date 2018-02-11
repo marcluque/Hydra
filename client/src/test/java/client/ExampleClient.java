@@ -6,8 +6,6 @@ import de.datasec.hydra.shared.handler.Session;
 import de.datasec.hydra.shared.handler.listener.HydraSessionListener;
 import io.netty.channel.ChannelOption;
 
-import java.util.Arrays;
-
 /**
  * Created with love by DataSec on 02.11.2017.
  */
@@ -53,9 +51,9 @@ public class ExampleClient {
 
         /* Send a packet to the server via the session the client has saved */
         // Sends a String, that is converted to a Object and an array, the type of the array is defined in SamplePacket.class
-        session.send(new SamplePacket("This is a message", new String[]{"This", "is", "a", "message"}));
+        //session.send(new SamplePacket("This is a message", new String[]{"This", "is", "a", "message"}));
         // Sends a list, that is converted to a Object and the array, like above
-        session.send(new SamplePacket(Arrays.asList("This", "is", "a", "message", "2"), new String[]{"This", "is", "a", "message", "2"}));
+        //session.send(new SamplePacket(Arrays.asList("This", "is", "a", "message", "2"), new String[]{"This", "is", "a", "message", "2"}));
 
         // Closes the connection and releases all occupied resources
         //client.close();
