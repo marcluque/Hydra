@@ -131,8 +131,6 @@ public abstract class Packet {
 
         serializeClass(customObject, fieldsToSerialize);
 
-        System.out.println(fieldsToSerialize);
-
         writeString(String.format("%s;%s", pathOfCustomClassAtReceiver, packageName.substring(packageName.lastIndexOf(".") + 1)));
         writeObject(fieldsToSerialize);
     }
@@ -154,7 +152,7 @@ public abstract class Packet {
                 Object originalObject = objectToSerialize;
                 serializeClass(objectToSerialize, subFields);
                 String originalObjectClass = originalObject.getClass().getName();
-                objects.put("#" + originalObjectClass.substring(originalObjectClass.lastIndexOf(".") + 1), subFields);
+                objects.put(String.format("#%s", originalObjectClass.substring(originalObjectClass.lastIndexOf(".") + 1)), subFields);
             } else {
                 objects.put(field.getName(), objectToSerialize);
             }
@@ -198,7 +196,6 @@ public abstract class Packet {
                 .forEach(currentMethod -> fields.forEach((key, value) -> {
                     Class<?> clazz = null;
                     boolean valueIsMap = value instanceof Map;
-
                     String valueToCompare = key.toString();
 
                     try {
