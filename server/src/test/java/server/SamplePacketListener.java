@@ -4,8 +4,6 @@ import de.datasec.hydra.shared.handler.Session;
 import de.datasec.hydra.shared.protocol.packets.listener.HydraPacketListener;
 import de.datasec.hydra.shared.protocol.packets.listener.PacketHandler;
 
-import java.util.Arrays;
-
 /**
  * Created with love by DataSec on 03.11.2017.
  */
@@ -23,7 +21,7 @@ public class SamplePacketListener implements HydraPacketListener {
         System.out.println("\n---PACKET-LISTENER OUTPUT---");
 
         // Process received packet
-        System.out.printf("Received from client: %s + %s%n", samplePacket.getSampleObject().toString(), Arrays.toString(samplePacket.getSampleStringArray()));
+        System.out.printf("Received from client: %s%n", samplePacket);
 
         // Send response
         session.send(new SamplePacket("This is a response", new String[]{"This", "is", "a", "response"}));

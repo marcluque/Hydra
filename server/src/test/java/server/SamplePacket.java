@@ -2,6 +2,9 @@ package server;
 
 import de.datasec.hydra.shared.protocol.packets.Packet;
 import de.datasec.hydra.shared.protocol.packets.PacketId;
+import server.serialization.CustomClass;
+
+import java.util.Arrays;
 
 /**
  * Created with love by DataSec on 03.11.2017.
@@ -19,26 +22,41 @@ public class SamplePacket extends Packet {
 
     private String[] sampleStringArray;
 
+    private CustomClass customObject;
+
     public SamplePacket() {
         // Empty constructor is always necessary!
     }
 
     // This constructor is not obligatory! Just the empty one.
+    public SamplePacket(Object sampleObject, String[] sampleStringArray, CustomClass customObject) {
+        this.sampleObject = sampleObject;
+        this.sampleStringArray = sampleStringArray;
+        this.customObject = customObject;
+    }
+
     public SamplePacket(Object sampleObject, String[] sampleStringArray) {
         this.sampleObject = sampleObject;
         this.sampleStringArray = sampleStringArray;
+        customObject = null;
     }
 
     @Override
     public void read() {
         sampleObject = readObject();
         sampleStringArray = readArray();
+        if (customObject != null) {
+            customObject = readCustomObject(customObject);
+        }
     }
 
     @Override
     public void write() {
         writeObject(sampleObject);
         writeArray(sampleStringArray);
+        if (customObject != null) {
+            writeCustomObject(customObject);
+        }
     }
 
     public Object getSampleObject() {
@@ -49,8 +67,17 @@ public class SamplePacket extends Packet {
         return sampleStringArray;
     }
 
+    public CustomClass getCustomObject() {
+        return customObject;
+    }
+
+    // Auto-generated toString method by IntelliJ for example purposes
     @Override
     public String toString() {
-        return sampleObject.toString();
+        return "SamplePacket{" +
+                "sampleObject=" + sampleObject +
+                ", sampleStringArray=" + Arrays.toString(sampleStringArray) +
+                ", customObject=" + customObject +
+                '}';
     }
 }

@@ -4,6 +4,8 @@ import client.serialization.CustomClass;
 import de.datasec.hydra.shared.protocol.packets.Packet;
 import de.datasec.hydra.shared.protocol.packets.PacketId;
 
+import java.util.Arrays;
+
 /**
  * Created with love by DataSec on 03.11.2017.
  */
@@ -33,18 +35,28 @@ public class SamplePacket extends Packet {
         this.customObject = customObject;
     }
 
+    public SamplePacket(Object sampleObject, String[] sampleStringArray) {
+        this.sampleObject = sampleObject;
+        this.sampleStringArray = sampleStringArray;
+        customObject = null;
+    }
+
     @Override
     public void read() {
         sampleObject = readObject();
         sampleStringArray = readArray();
-        customObject = readCustomObject(customObject);
+        if (customObject != null) {
+            customObject = readCustomObject(customObject);
+        }
     }
 
     @Override
     public void write() {
         writeObject(sampleObject);
         writeArray(sampleStringArray);
-        writeCustomObject(customObject);
+        if (customObject != null) {
+            writeCustomObject(customObject);
+        }
     }
 
     public Object getSampleObject() {
@@ -55,8 +67,17 @@ public class SamplePacket extends Packet {
         return sampleStringArray;
     }
 
+    public CustomClass getCustomObject() {
+        return customObject;
+    }
+
+    // Auto-generated toString method by IntelliJ for example purposes
     @Override
     public String toString() {
-        return sampleObject.toString();
+        return "SamplePacket{" +
+                "sampleObject=" + sampleObject +
+                ", sampleStringArray=" + Arrays.toString(sampleStringArray) +
+                ", customObject=" + customObject +
+                '}';
     }
 }

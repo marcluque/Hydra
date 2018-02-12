@@ -28,9 +28,10 @@
 
     <developers>
         <developer>
-            <id>DataSec</id>
+            <id>DataSecs</id>
             <email>datasecs@outlook.de</email>
-            <url>https://github.com/DataSecs</url>
+            <url>https://twitter.com/DataSecs</url>
+            <organizationUrl>https://github.com/DataSecs</organizationUrl>
         </developer>
     </developers>
 

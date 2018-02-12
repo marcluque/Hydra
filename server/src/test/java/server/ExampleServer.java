@@ -48,7 +48,7 @@ public class ExampleServer {
             System.out.printf("Socket address: %s%n", server.getLocalAdress());
         }
 
-        // As soon as a channel with a client is initialized it is added to the set
+        // As soon as a channel with a client is initialized it is added to the set of sessions
         // If no clients are connected the set is empty
         System.out.println("Sessions: " + server.getSessions());
 

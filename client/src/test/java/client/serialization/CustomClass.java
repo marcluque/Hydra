@@ -1,5 +1,6 @@
 package client.serialization;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -71,5 +72,17 @@ public class CustomClass {
 
     public void setCustomClassExtended(CustomClassExtended customClassExtended) {
         this.customClassExtended = customClassExtended;
+    }
+
+    // Auto-generated toString method by IntelliJ for example purposes
+    @Override
+    public String toString() {
+        return "CustomClass{" +
+                "testString='" + testString + '\'' +
+                ", testStringArray=" + Arrays.toString(testStringArray) +
+                ", testStringList=" + testStringList +
+                ", testObject=" + testObject +
+                ", customClassExtended=" + customClassExtended +
+                '}';
     }
 }
