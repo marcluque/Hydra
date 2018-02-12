@@ -54,7 +54,7 @@ public class CustomClass {
     /* This setter method is not obligatory (actually unnecessary and therefore marked with the
      * 'ignoreSerialization' annotation) as the field testInt is marked with the keyword transient
      * NOT EVERY METHOD NEEDS THIS ANNOTATION:
-     * This method just needs the annotation becase it contains the 'keyword set'. That's a keyword the serializer
+     * This method just needs the annotation because it contains the 'keyword set'. That's a keyword the serializer
      * looks for. Therefore it needs to be marked with this annotation.
      */
     @IgnoreSerialization

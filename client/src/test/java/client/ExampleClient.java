@@ -1,16 +1,13 @@
 package client;
 
-import client.serialization.CustomClass;
-import client.serialization.CustomClassExtended;
+import client.packets.SamplePacket;
 import de.datasec.hydra.client.Client;
 import de.datasec.hydra.client.HydraClient;
 import de.datasec.hydra.shared.handler.Session;
 import de.datasec.hydra.shared.handler.listener.HydraSessionListener;
 import io.netty.channel.ChannelOption;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.Arrays;
 
 /**
  * Created with love by DataSec on 02.11.2017.
@@ -47,7 +44,7 @@ public class ExampleClient {
                 })
                 .build();
 
-        // Checks if the client is connected to its remote host
+        // Checks if the client is connected to its remote host (not obligatory)
         if (client.isConnected()) {
             // Returns the session that was created for the client and its remote host
             session = client.getSession();
@@ -55,21 +52,11 @@ public class ExampleClient {
             System.out.printf("Socket address: %s%n", session.getAddress());
         }
 
-        // Create custom classes and necessary stuff for example serialization
-        List<String> testStringList = new ArrayList<>();
-        testStringList.add("Hydra");
-        testStringList.add("Serialization");
-        testStringList.add("Test");
-        CustomClassExtended customClassExtended = new CustomClassExtended("testStringExtended",
-                UUID.randomUUID(), 5L, Integer.class);
-        CustomClass customClass = new CustomClass("testString", 1, new String[]{"Hydra", "serialization"},
-                testStringList, "this is a random object", customClassExtended);
-
         /* Send a packet to the server via the session the client has saved */
         // Sends a String, that is converted to a Object and an array, the type of the array is defined in SamplePacket.class
-        session.send(new SamplePacket("This is a message", new String[]{"This", "is", "a", "message"}, customClass));
+        session.send(new SamplePacket("This is a message", new String[]{"This", "is", "a", "message"}));
         // Sends a list, that is converted to a Object and the array, like above
-        //session.send(new SamplePacket(Arrays.asList("This", "is", "a", "message", "2"), new String[]{"This", "is", "a", "message", "2"}, customClass));
+        session.send(new SamplePacket(Arrays.asList("This", "is", "a", "message", "2"), new String[]{"This", "is", "a", "message", "2"}));
 
         // Closes the connection and releases all occupied resources
         //client.close();

@@ -1,5 +1,6 @@
 package client;
 
+import client.packets.SamplePacket;
 import de.datasec.hydra.shared.handler.Session;
 import de.datasec.hydra.shared.protocol.packets.listener.HydraPacketListener;
 import de.datasec.hydra.shared.protocol.packets.listener.PacketHandler;

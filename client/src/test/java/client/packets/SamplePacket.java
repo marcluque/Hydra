@@ -1,8 +1,7 @@
-package server;
+package client.packets;
 
 import de.datasec.hydra.shared.protocol.packets.Packet;
 import de.datasec.hydra.shared.protocol.packets.PacketId;
-import server.serialization.CustomClass;
 
 import java.util.Arrays;
 
@@ -22,21 +21,11 @@ public class SamplePacket extends Packet {
 
     private String[] sampleStringArray;
 
-    private CustomClass customObject;
-
     public SamplePacket() {
         // Empty constructor is always necessary!
     }
 
     // This constructor is not obligatory! Just the empty one.
-    public SamplePacket(Object sampleObject, String[] sampleStringArray, CustomClass customObject) {
-        this.sampleObject = sampleObject;
-        this.sampleStringArray = sampleStringArray;
-        this.customObject = customObject;
-    }
-
-    // This constructor has no senseful purpose,
-    // it's just so the server can send an easy answer and doesn't need a customObject
     public SamplePacket(Object sampleObject, String[] sampleStringArray) {
         this.sampleObject = sampleObject;
         this.sampleStringArray = sampleStringArray;
@@ -46,26 +35,12 @@ public class SamplePacket extends Packet {
     public void read() {
         sampleObject = readObject();
         sampleStringArray = readArray();
-        customObject = readCustomObject(customObject);
     }
 
     @Override
     public void write() {
         writeObject(sampleObject);
         writeArray(sampleStringArray);
-        writeCustomObject(customObject, "");
-    }
-
-    public Object getSampleObject() {
-        return sampleObject;
-    }
-
-    public String[] getSampleStringArray() {
-        return sampleStringArray;
-    }
-
-    public CustomClass getCustomObject() {
-        return customObject;
     }
 
     // Auto-generated toString method by IntelliJ for example purposes
@@ -74,7 +49,6 @@ public class SamplePacket extends Packet {
         return "SamplePacket{" +
                 "sampleObject=" + sampleObject +
                 ", sampleStringArray=" + Arrays.toString(sampleStringArray) +
-                ", customObject=" + customObject +
                 '}';
     }
 }

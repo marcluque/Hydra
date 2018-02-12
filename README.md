@@ -7,7 +7,7 @@ Hydra is a network framework built upon Netty.
 Hydra is built upon Netty. It is supposed to simplify the process of socket setup in Java. Netty allows high performances and good maintainability of programs built upon it.
 And here comes Hydra in. Hydra uses the builder-pattern in order to make the process of socket setup even simpler. Hydra comes with a handy packet system
 that allows you to easily create your own packets and send them via the session Hydra creates for you. Furthermore you have the ability to create packets and
-listeners which just need a simple annotation and will be invoked by Hydra when a packet is received.
+listener which just need a simple annotation and will be invoked by Hydra when a packet is received.
 Convince yourself by taking a look at the [client](https://github.com/DataSecs/Hydra/tree/master/client/src/test/java/client) and [server](https://github.com/DataSecs/Hydra/tree/master/server/src/test/java/server) examples.
 
 # Installing

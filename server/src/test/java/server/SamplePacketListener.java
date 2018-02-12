@@ -3,6 +3,8 @@ package server;
 import de.datasec.hydra.shared.handler.Session;
 import de.datasec.hydra.shared.protocol.packets.listener.HydraPacketListener;
 import de.datasec.hydra.shared.protocol.packets.listener.PacketHandler;
+import server.packets.SamplePacket;
+import server.packets.SampleSerializationPacket;
 
 /**
  * Created with love by DataSec on 03.11.2017.
@@ -39,5 +41,15 @@ public class SamplePacketListener implements HydraPacketListener {
 
         // Check again if session is active
         System.out.println("Is session active?: " + session.isConnected());
+    }
+
+    @PacketHandler
+    public void onSampleSerializationPacket(SampleSerializationPacket sampleSerializationPacket, Session session) {
+        System.out.println("\n---PACKET-LISTENER OUTPUT---");
+
+        System.out.printf("Received from client: %s%n", sampleSerializationPacket);
+
+        session.close();
+        System.out.println("\nSession closed!");
     }
 }

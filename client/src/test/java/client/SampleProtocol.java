@@ -1,5 +1,7 @@
 package client;
 
+import client.packets.SamplePacket;
+import client.packets.SampleSerializationPacket;
 import de.datasec.hydra.shared.protocol.HydraProtocol;
 
 /**
@@ -10,6 +12,7 @@ public class SampleProtocol extends HydraProtocol {
     public SampleProtocol() {
         // Register your packets and listener. This is a very important step! Otherwise Hydra can't work with them!
         registerPacket(SamplePacket.class);
+        registerPacket(SampleSerializationPacket.class);
         registerListener(new SamplePacketListener());
     }
 }
