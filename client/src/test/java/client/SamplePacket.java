@@ -1,5 +1,6 @@
 package client;
 
+import client.serialization.CustomClass;
 import de.datasec.hydra.shared.protocol.packets.Packet;
 import de.datasec.hydra.shared.protocol.packets.PacketId;
 
