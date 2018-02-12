@@ -1,5 +1,7 @@
 package client.serialization;
 
+import de.datasec.hydra.shared.serialization.IgnoreSerialization;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,26 +38,33 @@ public class CustomClass {
         this.customClassExtended = customClassExtended;
     }
 
-    // TODO: Maybe add a check for whether the value of the field is in the setter method name
-    /*
-     * Setters for every field that is supposed to be serialized are obligatory!!
+    /* Setters for every field that is supposed to be serialized are obligatory!!
      *
-     * The setter method are recognized by their pattern:
-     * 1. They should contain the keyword 'set'
-     * 2. Their method names can contain the class name of the field
-     * One of these 2 should be fulfilled
-     * &&
-     * 3. They should have the same type as parameter as the field
-     * 4. The parameter can have a super class of the field class for polymorphic purposes
-     * Also one of these 2 should be fulfilled
+     * The setter method are recognized by the following pattern:
+     * 1. They have to contain the keyword 'set'
+     * 2. They have to contain the name of the field that is serialized
+     * This unfortunately is currently necessary because the length of the methods is checked to determine the correct one
+     *
+     * HINT: Do it the same way as in this example. These setter methods are just auto-generated which are guaranteed to work
      */
     public void setTestString(String testString) {
         this.testString = testString;
     }
 
-    // This setter method is not obligatory as the field testInt is marked with the keyword transient
+    /* This setter method is not obligatory (actually unnecessary and therefore marked with the
+     * 'ignoreSerialization' annotation) as the field testInt is marked with the keyword transient
+     * NOT EVERY METHOD NEEDS THIS ANNOTATION:
+     * This method just needs the annotation becase it contains the 'keyword set'. That's a keyword the serializer
+     * looks for. Therefore it needs to be marked with this annotation.
+     */
+    @IgnoreSerialization
     public void setTestInt(int testInt) {
         this.testInt = testInt;
+    }
+
+    // This doesn't need an annotation as it hasn't got the keyword 'set'
+    public void testInt(int testInt) {
+        // Do something with testInt
     }
 
     public void setTestStringArray(String[] testStringArray) {

@@ -1,5 +1,6 @@
 package de.datasec.hydra.shared.protocol.packets;
 
+import de.datasec.hydra.shared.serialization.IgnoreSerialization;
 import io.netty.buffer.ByteBuf;
 
 import java.io.*;
@@ -130,6 +131,8 @@ public abstract class Packet {
 
         serializeClass(customObject, fieldsToSerialize);
 
+        System.out.println(fieldsToSerialize);
+
         writeString(String.format("%s;%s", pathOfCustomClassAtReceiver, packageName.substring(packageName.lastIndexOf(".") + 1)));
         writeObject(fieldsToSerialize);
     }
@@ -138,9 +141,7 @@ public abstract class Packet {
         Arrays.stream(customClass.getClass().getDeclaredFields()).filter(field -> {
             try {
                 field.setAccessible(true);
-                if (!Modifier.isTransient(field.getModifiers())) {
-                    objectToSerialize = field.get(customClass);
-                }
+                objectToSerialize = !Modifier.isTransient(field.getModifiers()) ? field.get(customClass) : null;
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
@@ -155,7 +156,7 @@ public abstract class Packet {
                 String originalObjectClass = originalObject.getClass().getName();
                 objects.put("#" + originalObjectClass.substring(originalObjectClass.lastIndexOf(".") + 1), subFields);
             } else {
-                objects.put(objectToSerialize.getClass(), objectToSerialize);
+                objects.put(field.getName(), objectToSerialize);
             }
         });
     }
@@ -164,12 +165,10 @@ public abstract class Packet {
         String[] packagesNames = readString().split(";");
 
         try {
-            Class<?> customObjectClass = Class.forName(String.format("%s.%s", packagesNames[0], packagesNames[1]));
-            System.out.println("RECEIVED CLASS: " + customObjectClass);
-
             fieldsToSerialize = (Map<Object, Object>) readObject();
-            System.out.println("RECEIVED MAP: " + fieldsToSerialize);
-            // Replace the keys that have a normal class name and are marked with a '#', with the appropriate path
+
+            // Replace the keys that have a normal class name and are marked with a '#', with the appropriate path,
+            // as they have a different path on the server side
             fieldsToSerialize.forEach((key, value) -> {
                 if (key instanceof String && ((String) key).startsWith("#")) {
                     String className = ((String) key).substring(1);
@@ -182,9 +181,9 @@ public abstract class Packet {
                 }
             });
 
-            customObject = deserializeClass(customObject = (T) customObjectClass.newInstance(), fieldsToSerialize);
+            customObject = deserializeClass(customObject = (T) Class.forName(String.format("%s.%s", packagesNames[0], packagesNames[1])).newInstance(), fieldsToSerialize);
 
-            // Clear everything for next use
+            // Clear for next use
             fieldsToSerialize.clear();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
@@ -194,32 +193,37 @@ public abstract class Packet {
     }
 
     private <T> T deserializeClass(T customObject, Map<Object, Object> fields) {
-        Arrays.stream(customObject.getClass().getDeclaredMethods()).filter(method -> method.getName().contains("set")).forEach(currentMethod -> fields.forEach((key, value) -> {
-            Class<?> tempClazz = null;
-            try {
-                tempClazz = Class.forName(key.toString().split(" ")[1]);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-            Class<?> clazz = tempClazz;
+        Arrays.stream(customObject.getClass().getDeclaredMethods())
+                .filter(method -> method.getName().contains("set") && !method.isAnnotationPresent(IgnoreSerialization.class))
+                .forEach(currentMethod -> fields.forEach((key, value) -> {
+                    Class<?> clazz = null;
+                    boolean valueIsMap = value instanceof Map;
 
-            /* The ifs check whether (the class of the key is a super class (includes case that they are the same and the actual case the other way around)
-             * of the class of the parameter in the setter || the class of the key contains the class of the parameter in the setter)
-             * && (the method name contains set || the method name contains the name of the class of the key)
-             */
-            Class<?> methodParameterClazz = currentMethod.getParameterCount() == 1 ? currentMethod.getParameterTypes()[0] : null;
-            if (methodParameterClazz != null) {
-                if (((clazz.isAssignableFrom(methodParameterClazz) || methodParameterClazz.isAssignableFrom(clazz)) || clazz.toString().contains(methodParameterClazz.toString()))
-                        && (currentMethod.getName().contains(clazz.getSimpleName()) || currentMethod.getName().contains("set"))) {
+                    String valueToCompare = key.toString();
+
                     try {
-                        currentMethod.invoke(customObject, value instanceof Map ? deserializeClass(clazz.newInstance(), (Map<Object, Object>) value) : value);
-                        fields.remove(key);
-                    } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
+                        if (valueIsMap) {
+                            String className = key.toString().split(" ")[1];
+                            clazz = Class.forName(className);
+                            valueToCompare = className.substring(className.lastIndexOf(".") + 1);
+                        }
+                    } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     }
-                }
-            }
-        }));
+
+
+                    // TODO: Think of a better way than comparing the amount of characters, rather compare the class of the parameter and the class of the value
+                    if ((currentMethod.getParameterCount() == 1 ? currentMethod.getParameterTypes()[0] : null) != null
+                            && currentMethod.getName().toLowerCase().contains(valueToCompare.toLowerCase())
+                            && (currentMethod.getName().length() - 3) == valueToCompare.length()) {
+                        try {
+                            currentMethod.invoke(customObject, valueIsMap ? deserializeClass(clazz.newInstance(), (Map<Object, Object>) value) : value);
+                            fields.remove(key);
+                        } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }));
 
         return customObject;
     }

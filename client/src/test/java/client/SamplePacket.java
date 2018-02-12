@@ -53,6 +53,7 @@ public class SamplePacket extends Packet {
     public void write() {
         writeObject(sampleObject);
         writeArray(sampleStringArray);
+        // TODO: Explain purpose of the string and explain what the conditions of usage with this are
         writeCustomObject(customObject, "server.serialization");
     }
 
