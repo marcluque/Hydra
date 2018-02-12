@@ -40,7 +40,6 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> implements
 
     @Override
     public void send(Packet packet) {
-        // TODO: Implement custom class serialization
         channel.writeAndFlush(packet);
     }
 

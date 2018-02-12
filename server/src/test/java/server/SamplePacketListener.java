@@ -26,7 +26,7 @@ public class SamplePacketListener implements HydraPacketListener {
         // Send response
         session.send(new SamplePacket("This is a response", new String[]{"This", "is", "a", "response"}));
 
-        // Returns if the session is active
+        // Returns whether the session is active
         System.out.println("\nIs session active?: " + session.isConnected());
 
         // Returns the local or remote address, depending if it's the server or the client

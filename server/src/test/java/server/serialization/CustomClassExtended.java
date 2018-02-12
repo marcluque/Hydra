@@ -45,4 +45,15 @@ public class CustomClassExtended {
     public void setTestClass(Class<?> testClass) {
         this.testClass = testClass;
     }
+
+    // Auto-generated toString method by IntelliJ for example purposes
+    @Override
+    public String toString() {
+        return "CustomClassExtended{" +
+                "testStringExtended='" + testStringExtended + '\'' +
+                ", testUUID=" + testUUID +
+                ", testLong=" + testLong +
+                ", testClass=" + testClass +
+                '}';
+    }
 }

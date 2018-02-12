@@ -125,9 +125,12 @@ public abstract class Packet {
         return null;
     }
 
-    protected <T> void writeCustomObject(T customObject) {
-        writeObject(customObject.getClass());
+    protected <T> void writeCustomObject(T customObject, String pathOfCustomClassAtReceiver) {
+        String packageName = customObject.getClass().getName();
+
         serializeClass(customObject, fieldsToSerialize);
+
+        writeString(String.format("%s;%s", pathOfCustomClassAtReceiver, packageName.substring(packageName.lastIndexOf(".") + 1)));
         writeObject(fieldsToSerialize);
     }
 
@@ -145,10 +148,12 @@ public abstract class Packet {
             return objectToSerialize != null;
         }).forEach(field -> {
             if (!(objectToSerialize instanceof Serializable)) {
+                // Add a '#' to the elements that are classes that need to be serialized
                 Map<Object, Object> subFields = new ConcurrentHashMap<>();
                 Object originalObject = objectToSerialize;
                 serializeClass(objectToSerialize, subFields);
-                objects.put(originalObject.getClass(), subFields);
+                String originalObjectClass = originalObject.getClass().getName();
+                objects.put("#" + originalObjectClass.substring(originalObjectClass.lastIndexOf(".") + 1), subFields);
             } else {
                 objects.put(objectToSerialize.getClass(), objectToSerialize);
             }
@@ -156,12 +161,32 @@ public abstract class Packet {
     }
 
     protected <T> T readCustomObject(T customObject) {
+        String[] packagesNames = readString().split(";");
+
         try {
-            Class<?> customObjectClass = (Class<?>) readObject();
+            Class<?> customObjectClass = Class.forName(String.format("%s.%s", packagesNames[0], packagesNames[1]));
+            System.out.println("RECEIVED CLASS: " + customObjectClass);
+
             fieldsToSerialize = (Map<Object, Object>) readObject();
+            System.out.println("RECEIVED MAP: " + fieldsToSerialize);
+            // Replace the keys that have a normal class name and are marked with a '#', with the appropriate path
+            fieldsToSerialize.forEach((key, value) -> {
+                if (key instanceof String && ((String) key).startsWith("#")) {
+                    String className = ((String) key).substring(1);
+                    fieldsToSerialize.remove(key);
+                    try {
+                        fieldsToSerialize.put(Class.forName(String.format("%s.%s", packagesNames[0], className)), value);
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
             customObject = deserializeClass(customObject = (T) customObjectClass.newInstance(), fieldsToSerialize);
+
+            // Clear everything for next use
             fieldsToSerialize.clear();
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
 

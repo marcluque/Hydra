@@ -9,7 +9,6 @@ import de.datasec.hydra.shared.handler.listener.HydraSessionListener;
 import io.netty.channel.ChannelOption;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,7 +30,7 @@ public class ExampleClient {
          */
 
         // The builder returns a session which you can use for several things
-        HydraClient client = new Client.Builder("188.68.54.85", 8888, new SampleProtocol())
+        HydraClient client = new Client.Builder("localhost", 8888, new SampleProtocol())
                 .workerThreads(4)
                 .option(ChannelOption.TCP_NODELAY, true)
                 .option(ChannelOption.SO_KEEPALIVE, true)
@@ -70,7 +69,7 @@ public class ExampleClient {
         // Sends a String, that is converted to a Object and an array, the type of the array is defined in SamplePacket.class
         session.send(new SamplePacket("This is a message", new String[]{"This", "is", "a", "message"}, customClass));
         // Sends a list, that is converted to a Object and the array, like above
-        session.send(new SamplePacket(Arrays.asList("This", "is", "a", "message", "2"), new String[]{"This", "is", "a", "message", "2"}, customClass));
+        //session.send(new SamplePacket(Arrays.asList("This", "is", "a", "message", "2"), new String[]{"This", "is", "a", "message", "2"}, customClass));
 
         // Closes the connection and releases all occupied resources
         //client.close();

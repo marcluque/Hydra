@@ -35,28 +35,25 @@ public class SamplePacket extends Packet {
         this.customObject = customObject;
     }
 
+    // This constructor has no senseful purpose,
+    // it's just so the server can send an easy answer and doesn't need a customObject
     public SamplePacket(Object sampleObject, String[] sampleStringArray) {
         this.sampleObject = sampleObject;
         this.sampleStringArray = sampleStringArray;
-        customObject = null;
     }
 
     @Override
     public void read() {
         sampleObject = readObject();
         sampleStringArray = readArray();
-        if (customObject != null) {
-            customObject = readCustomObject(customObject);
-        }
+        customObject = readCustomObject(customObject);
     }
 
     @Override
     public void write() {
         writeObject(sampleObject);
         writeArray(sampleStringArray);
-        if (customObject != null) {
-            writeCustomObject(customObject);
-        }
+        writeCustomObject(customObject, "");
     }
 
     public Object getSampleObject() {
