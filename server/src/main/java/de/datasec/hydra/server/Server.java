@@ -45,36 +45,84 @@ public class Server {
             this.protocol = protocol;
         }
 
+        /**
+         * Sets the number of worker threads for the server.
+         * A worker thread performs non-blocking operations for one or more channels.
+         * The standard amount is set to 2.
+         *
+         * @param workerThreads the amount of worker threads for the server
+         */
         public Builder workerThreads(int workerThreads) {
             this.workerThreads = workerThreads;
             return this;
         }
 
+        /**
+         * Sets the number of boss threads for the server.
+         * The standard number is set to 1.
+         * Netty sets the standard amount to twice the amount of processors/cores.
+         *
+         * @param bossThreads the amount of boss threads for the server
+         */
         public Builder bossThreads(int bossThreads) {
             this.bossThreads = bossThreads;
             return this;
         }
 
+        /**
+         * Adds a specific option to the server that is added to the channel configuration.
+         * These options include a lot of possibilities.
+         * @see <a href="https://netty.io/4.1/api/io/netty/channel/ChannelOption.html">channel options</a>
+         *
+         * @param channelOption the desired channel option
+         * @param value the value that is supposed to be set for the desired channel option
+         */
         public <T> Builder option(ChannelOption<T> channelOption, T value) {
             options.put(channelOption, value);
             return this;
         }
 
+        /**
+         * Adds a specific option to the connections that are opened with the server's channel.
+         *
+         * @param channelOption the desired channel option
+         * @param value the value that is supposed to be set for the desired channel option
+         */
         public <T> Builder childOption(ChannelOption<T> channelOption, T value) {
             childOptions.put(channelOption, value);
             return this;
         }
 
+        /**
+         * Basically epoll decides whether it's a unix based system netty is operating on, or not.
+         * This method gives the possibility to allow the usage of epoll, if it's available.
+         *
+         * @param useEpoll sets whether epoll should be used or not
+         */
         public Builder useEpoll(boolean useEpoll) {
             this.useEpoll = useEpoll;
             return this;
         }
 
+        /**
+         * This method adds a session listener to the client. The session listener has 2 methods.
+         * The first one is 'onConnected', which gets triggered when the client is successfully connected to the aimed server.
+         * The second on is 'onDisconnected', which gets fired when the client is disconnected from the server it was
+         * connected to.
+         *
+         * @param sessionListener this method takes an instance of the session listener interface HydraSessionListener.
+         */
         public Builder addListener(HydraSessionListener sessionListener) {
             protocol.addSessionListener(sessionListener);
             return this;
         }
 
+        /**
+         * Builds the final server. Returns an instance of type HydraServer, not of type Server, as HydraServer includes
+         * all the useful methods for users.
+         *
+         * @return Returns an instance of HydraServer that can e.g. be used to get the session created for the server and client.
+         */
         public HydraServer build() {
             return setUpServer();
         }

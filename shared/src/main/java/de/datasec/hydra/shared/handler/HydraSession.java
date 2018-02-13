@@ -23,18 +23,18 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> implements
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext context, Packet packet) throws Exception {
+    protected void channelRead0(ChannelHandlerContext context, Packet packet) {
         protocol.callPacketListener(packet, this);
     }
 
     @Override
-    public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+    public void handlerRemoved(ChannelHandlerContext ctx) {
         protocol.callSessionListener(false, this);
         protocol.removeSession(this);
     }
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         cause.printStackTrace();
     }
 
@@ -50,7 +50,7 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> implements
 
     @Override
     public boolean isConnected() {
-        return channel.isWritable();
+        return channel.isActive();
     }
 
     @Override

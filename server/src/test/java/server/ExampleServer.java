@@ -11,8 +11,6 @@ import io.netty.channel.ChannelOption;
  */
 public class ExampleServer {
 
-    private static HydraServer server;
-
     public static void main(String[] args) {
         /*
          * The session listener adds a listener to the server that is supposed to be called when
@@ -23,7 +21,7 @@ public class ExampleServer {
          */
 
         // The builder returns a server which you can use for several things
-        server = new Server.Builder("localhost", 8888, new SampleProtocol())
+        HydraServer server = new Server.Builder("localhost", 8888, new SampleProtocol())
                 .bossThreads(2)
                 .workerThreads(4)
                 .option(ChannelOption.TCP_NODELAY, true)
@@ -34,7 +32,6 @@ public class ExampleServer {
                     @Override
                     public void onConnected(Session session) {
                         System.out.println("\nClient connected!");
-                        callMethod();
                     }
 
                     @Override
@@ -57,9 +54,5 @@ public class ExampleServer {
 
         // Closes the server and releases the occupied resources
         //server.close();
-    }
-
-    private static void callMethod() {
-        System.out.println(server.getChannel().id());
     }
 }

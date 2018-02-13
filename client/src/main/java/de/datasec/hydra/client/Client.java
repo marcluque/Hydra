@@ -67,7 +67,7 @@ public class Client {
 
         /**
          * Basically epoll decides whether it's a unix based system netty is operating on, or not.
-         * This method give the possibility to allow the usage of epoll, if its available.
+         * This method gives the possibility to allow the usage of epoll, if it's available.
          *
          * @param useEpoll sets whether epoll should be used or not
          */

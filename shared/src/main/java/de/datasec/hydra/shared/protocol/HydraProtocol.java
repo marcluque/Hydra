@@ -13,6 +13,8 @@ import java.util.*;
 
 /**
  * Created with love by DataSec on 29.09.2017.
+ *
+ *
  */
 public class HydraProtocol {
 
@@ -45,6 +47,11 @@ public class HydraProtocol {
         return packetBytes.get(packet.getClass());
     }
 
+    /**
+     *
+     *
+     * @param clazz
+     */
     protected void registerPacket(Class<? extends Packet> clazz) {
         if (clazz == null) {
             throw new IllegalArgumentException("clazz can't be null!");
@@ -66,6 +73,11 @@ public class HydraProtocol {
         packetBytes.put(clazz, id);
     }
 
+    /**
+     *
+     *
+     * @param packetListener
+     */
     protected void registerListener(HydraPacketListener packetListener) {
         if (packetListener == null) {
             throw new IllegalArgumentException("packetListener can't be null!");
