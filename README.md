@@ -22,7 +22,7 @@ Convince yourself by taking a look at the [client](https://github.com/DataSecs/H
 <dependency>
     <groupId>de.datasec</groupId>
     <artifactId>hydra</artifactId>
-    <version>1.4.0-SNAPSHOT</version>
+    <version>1.4.1-SNAPSHOT</version>
 </dependency>
 ```
 
