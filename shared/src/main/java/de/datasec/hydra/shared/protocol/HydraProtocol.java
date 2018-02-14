@@ -48,9 +48,10 @@ public class HydraProtocol {
     }
 
     /**
+     * Used to register a packet to the protocol of Hydra.
+     * The protocol needs the information about the packet in order to be able to rebuild it after serialization.
      *
-     *
-     * @param clazz
+     * @param clazz the class of the Packet that is supposed to be registered.
      */
     protected void registerPacket(Class<? extends Packet> clazz) {
         if (clazz == null) {
@@ -74,9 +75,10 @@ public class HydraProtocol {
     }
 
     /**
+     * Register listener in the protocol in order to make Hydra able to call
+     * the listener when a fitting packet is received.
      *
-     *
-     * @param packetListener
+     * @param packetListener the packet listener that is supposed to be registered.
      */
     protected void registerListener(HydraPacketListener packetListener) {
         if (packetListener == null) {
