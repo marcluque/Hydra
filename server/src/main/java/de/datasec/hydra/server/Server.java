@@ -12,6 +12,7 @@ import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.util.AttributeKey;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +35,10 @@ public class Server {
         private Map<ChannelOption, Object> options = new HashMap<>();
 
         private Map<ChannelOption, Object> childOptions = new HashMap<>();
+
+        private Map<AttributeKey, Object> attributeKeys = new HashMap<>();
+
+        private Map<AttributeKey, Object> childAttributeKeys = new HashMap<>();
 
         private boolean useEpoll;
 
@@ -94,6 +99,29 @@ public class Server {
         }
 
         /**
+         * Adds a specific attribute to the server. The attributes are saved in an attribute map by Netty.
+         *
+         * @param attributeKey the attribute key that is supposed to be stored in the map.
+         * @param value the value that is supposed to be mapped to the given attribute key.
+         */
+        public <T> Builder attribute(AttributeKey<T> attributeKey, T value) {
+            attributeKeys.put(attributeKey, value);
+            return this;
+        }
+
+        /**
+         * Adds a specific child attribute to the server. Child attributes apply to the connections that the server creates,
+         * just like child options. The attributes are saved in an attribute map by Netty.
+         *
+         * @param attributeKey the attribute key that is supposed to be stored in the map.
+         * @param value the value that is supposed to be mapped to the given attribute key.
+         */
+        public <T> Builder childAttribute(AttributeKey<T> attributeKey, T value) {
+            childAttributeKeys.put(attributeKey, value);
+            return this;
+        }
+
+        /**
          * Basically epoll decides whether it's a unix based system netty is operating on, or not.
          * This method gives the possibility to allow the usage of epoll, if it's available.
          *
@@ -141,6 +169,9 @@ public class Server {
 
             options.forEach(serverBootstrap::option);
             childOptions.forEach(serverBootstrap::childOption);
+
+            attributeKeys.forEach(serverBootstrap::attr);
+            attributeKeys.forEach(serverBootstrap::childAttr);
 
             Channel channel = null;
             try {

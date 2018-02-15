@@ -12,6 +12,7 @@ import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.AttributeKey;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +31,8 @@ public class Client {
         private int workerThreads = 2;
 
         private Map<ChannelOption, Object> options = new HashMap<>();
+
+        private Map<AttributeKey, Object> attributeKeys = new HashMap<>();
 
         private boolean useEpoll;
 
@@ -62,6 +65,17 @@ public class Client {
          */
         public <T> Builder option(ChannelOption<T> channelOption, T value) {
             options.put(channelOption, value);
+            return this;
+        }
+
+        /**
+         * Adds a specific attribute to the client. The attributes are saved in an attribute map by Netty.
+         *
+         * @param attributeKey the attribute key that is supposed to be stored in the map.
+         * @param value the value that is supposed to be mapped to the given attribute key.
+         */
+        public <T> Builder attribute(AttributeKey<T> attributeKey, T value) {
+            attributeKeys.put(attributeKey, value);
             return this;
         }
 
@@ -110,6 +124,7 @@ public class Client {
                     .handler(new HydraChannelInitializer(protocol, false));
 
             options.forEach(bootstrap::option);
+            attributeKeys.forEach(bootstrap::attr);
 
             Channel channel = null;
             try {
