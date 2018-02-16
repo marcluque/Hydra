@@ -1,6 +1,6 @@
 package client.serialization;
 
-import de.datasec.hydra.shared.serialization.IgnoreSerialization;
+import de.datasecs.hydra.shared.serialization.IgnoreSerialization;
 
 import java.util.Arrays;
 import java.util.List;

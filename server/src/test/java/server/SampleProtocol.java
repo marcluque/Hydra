@@ -1,11 +1,11 @@
 package server;
 
-import de.datasec.hydra.shared.protocol.HydraProtocol;
+import de.datasecs.hydra.shared.protocol.HydraProtocol;
 import server.packets.SamplePacket;
 import server.packets.SampleSerializationPacket;
 
 /**
- * Created with love by DataSec on 03.11.2017.
+ * Created with love by DataSecs on 03.11.2017.
  */
 public class SampleProtocol extends HydraProtocol {
 

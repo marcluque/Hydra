@@ -20,7 +20,7 @@ Convince yourself by taking a look at the [client](https://github.com/DataSecs/H
 
 ```xml
 <dependency>
-    <groupId>de.datasec</groupId>
+    <groupId>de.datasecs</groupId>
     <artifactId>hydra</artifactId>
     <version>1.4.3-SNAPSHOT</version>
 </dependency>

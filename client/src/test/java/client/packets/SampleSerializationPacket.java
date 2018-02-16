@@ -1,8 +1,8 @@
 package client.packets;
 
 import client.serialization.CustomClass;
-import de.datasec.hydra.shared.protocol.packets.Packet;
-import de.datasec.hydra.shared.protocol.packets.PacketId;
+import de.datasecs.hydra.shared.protocol.packets.Packet;
+import de.datasecs.hydra.shared.protocol.packets.PacketId;
 
 /**
  * Created with love by DataSec on 12.02.18

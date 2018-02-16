@@ -1,7 +1,7 @@
 package server.packets;
 
-import de.datasec.hydra.shared.protocol.packets.Packet;
-import de.datasec.hydra.shared.protocol.packets.PacketId;
+import de.datasecs.hydra.shared.protocol.packets.Packet;
+import de.datasecs.hydra.shared.protocol.packets.PacketId;
 import server.serialization.CustomClass;
 
 /**

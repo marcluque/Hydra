@@ -1,9 +1,9 @@
 package server.serialization;
 
-import de.datasec.hydra.server.HydraServer;
-import de.datasec.hydra.server.Server;
-import de.datasec.hydra.shared.handler.Session;
-import de.datasec.hydra.shared.handler.listener.HydraSessionListener;
+import de.datasecs.hydra.server.HydraServer;
+import de.datasecs.hydra.server.Server;
+import de.datasecs.hydra.shared.handler.Session;
+import de.datasecs.hydra.shared.handler.listener.HydraSessionListener;
 import io.netty.channel.ChannelOption;
 import server.SampleProtocol;
 

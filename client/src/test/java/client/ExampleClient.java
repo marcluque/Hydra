@@ -1,16 +1,16 @@
 package client;
 
 import client.packets.SamplePacket;
-import de.datasec.hydra.client.Client;
-import de.datasec.hydra.client.HydraClient;
-import de.datasec.hydra.shared.handler.Session;
-import de.datasec.hydra.shared.handler.listener.HydraSessionListener;
+import de.datasecs.hydra.client.Client;
+import de.datasecs.hydra.client.HydraClient;
+import de.datasecs.hydra.shared.handler.Session;
+import de.datasecs.hydra.shared.handler.listener.HydraSessionListener;
 import io.netty.channel.ChannelOption;
 
 import java.util.Arrays;
 
 /**
- * Created with love by DataSec on 02.11.2017.
+ * Created with love by DataSecs on 02.11.2017.
  */
 public class ExampleClient {
 
