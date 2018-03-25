@@ -10,6 +10,12 @@ that allows you to easily create your own packets and send them via the session 
 listener which just need a simple annotation and will be invoked by Hydra when a packet is received.
 Convince yourself by taking a look at the [client](https://github.com/DataSecs/Hydra/tree/master/client/src/test/java/client) and [server](https://github.com/DataSecs/Hydra/tree/master/server/src/test/java/server) examples.
 
+# Wiki
+
+In case you would like to have an in-depth introduction to Hydra, please take a look at the [wiki](https://github.com/DataSecs/Hydra/wiki).
+The wiki takes you step-by-step through the setup of a server and a client. Furthermore the wiki features example usages,
+like a [simple chat application](https://github.com/DataSecs/Hydra/wiki/Building-a-simple-chat-application) and a [key-value store](https://github.com/DataSecs/Hydra/wiki/Building-a-small-key-value-store).
+
 # Installing
 
  * Install Maven 3

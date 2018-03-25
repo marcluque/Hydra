@@ -99,7 +99,7 @@ public class HydraProtocol {
                                 throw new IllegalArgumentException(String.format("It's not possible to assign multiple PacketHandler methods for packet %s.class", clazz.getSimpleName()));
                             }
                         } else {
-                            throw new IllegalArgumentException(String.format("%s is not a deriving class of Packet.class. Make sure the first argument is a deriving class of Packet.class. And the first argument of the PacketHandler method is the packet itself!", clazz.getSimpleName()));
+                            throw new IllegalArgumentException(String.format("%s is not a deriving class of Packet.class. Make sure the first argument is a deriving class of Packet.class. The first argument of the PacketHandler method is the packet it is supposed to handle!", clazz.getSimpleName()));
                         }
                     } else {
                         throw new IllegalArgumentException("There are just 2 arguments allowed for a PacketHandler method!");
