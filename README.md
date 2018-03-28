@@ -1,6 +1,4 @@
-# Hydra
-
-Hydra is a network framework built upon Netty.
+![hydra banner](http://datasecs.de/hydra_banner.png)
 
 ## Description
 
@@ -10,11 +8,17 @@ that allows you to easily create your own packets and send them via the session 
 listener which just need a simple annotation and will be invoked by Hydra when a packet is received.
 Convince yourself by taking a look at the [client](https://github.com/DataSecs/Hydra/tree/master/client/src/test/java/client) and [server](https://github.com/DataSecs/Hydra/tree/master/server/src/test/java/server) examples.
 
-# Wiki
+## Wiki
 
 In case you would like to have an in-depth introduction to Hydra, please take a look at the [wiki](https://github.com/DataSecs/Hydra/wiki).
 The wiki takes you step-by-step through the setup of a server and a client. Furthermore the wiki features example usages,
 like a [simple chat application](https://github.com/DataSecs/Hydra/wiki/Building-a-simple-chat-application) and a [key-value store](https://github.com/DataSecs/Hydra/wiki/Building-a-small-key-value-store).
+
+# Quantitative benefits over raw netty
+### Raw netty code for server setup:
+![original netty code](http://datasecs.de/Hydra\_original-netty-server-code\_comparsion.png)
+### Hydra code for server setup:
+![hydra code](http://datasecs.de/Hydra\_hydra-code\_comparsion.png)
 
 # Installing
 
@@ -46,7 +50,7 @@ _If you don't use maven you can download a release version and include it in you
 ```java
 HydraClient client = new Client.Builder("localhost", 8888, new SampleProtocol())
                 .workerThreads(4)
-                .option(StandardSocketOptions.TCP_NODELAY, true)
+                .option(ChannelOption.TCP_NODELAY, true)
                 .build();
 ```
 
@@ -60,7 +64,7 @@ For detailed information on how to do that and examples see the [client example]
 HydraServer server = new Server.Builder("localhost", 8888, new SampleProtocol())
                 .bossThreads(2)
                 .workerThreads(4)
-                .option(StandardSocketOptions.TCP_NODELAY, true)
+                .option(ChannelOption.TCP_NODELAY, true)
                 .build();
 ```
 
@@ -71,3 +75,6 @@ For detailed information on how to do that and examples see the [server example]
 # License
 
 Licensed under the GNU General Public License, Version 3.0 - see the [LICENSE](LICENSE) file for details.
+
+### Credits
+Special thanks go to [TheClashster](https://github.com/TheClashster) for creating the awesome banner and logo!

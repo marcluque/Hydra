@@ -13,8 +13,6 @@ import java.util.*;
 
 /**
  * Created with love by DataSecs on 29.09.2017.
- *
- *
  */
 public class HydraProtocol {
 
@@ -61,7 +59,7 @@ public class HydraProtocol {
         PacketId packetId = clazz.getAnnotation(PacketId.class);
 
         if (packetId == null) {
-            throw new NullPointerException(String.format("Annotation of packet %s.class not found. Annotation might not be defined!", clazz.getSimpleName()));
+            throw new NullPointerException(String.format("Annotation of packet %s.class not found. Annotation might not be present!", clazz.getSimpleName()));
         }
 
         byte id = packetId.value();
