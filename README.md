@@ -1,4 +1,4 @@
-![hydra banner](http://datasecs.de/hydra_banner.png)
+![hydra banner](http://hydra.datasecs.de/images/hydra_banner.png)
 
 ## Description
 
@@ -16,9 +16,9 @@ like a [simple chat application](https://github.com/DataSecs/Hydra/wiki/Building
 
 # Quantitative benefits over raw netty
 ### Raw netty code for server setup:
-![original netty code](http://datasecs.de/Hydra\_original-netty-server-code\_comparsion.png)
+![original netty code](http://hydra.datasecs.de/images/original-netty-server-code_comparsion.png)
 ### Hydra code for server setup:
-![hydra code](http://datasecs.de/Hydra\_hydra-code\_comparsion.png)
+![hydra code](http://hydra.datasecs.de/images/hydra-code_comparsion.png)
 
 # Installing
 
