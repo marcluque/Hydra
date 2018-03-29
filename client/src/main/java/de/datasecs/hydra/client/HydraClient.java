@@ -1,7 +1,7 @@
 package de.datasecs.hydra.client;
 
-import de.datasecs.hydra.shared.handler.Session;
 import de.datasecs.hydra.shared.handler.HydraSession;
+import de.datasecs.hydra.shared.handler.Session;
 import de.datasecs.hydra.shared.protocol.HydraProtocol;
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
@@ -66,7 +66,7 @@ public class HydraClient {
 
     /**
      * Returns the session that is created, when the client connects with the server.
-     * {@link HydraSession} for more information about what a session is.
+     * See {@link HydraSession} for more information about what a session is.
      *
      * @return the session created for client and server.
      */

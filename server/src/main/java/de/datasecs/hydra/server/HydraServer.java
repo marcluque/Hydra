@@ -1,7 +1,7 @@
 package de.datasecs.hydra.server;
 
-import de.datasecs.hydra.shared.handler.Session;
 import de.datasecs.hydra.shared.handler.HydraSession;
+import de.datasecs.hydra.shared.handler.Session;
 import de.datasecs.hydra.shared.protocol.HydraProtocol;
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
@@ -72,7 +72,7 @@ public class HydraServer {
 
     /**
      * Returns the set of sessions that Hydra keeps track of. This is useful when e.g. an amount of clients is connected.
-     * {@link HydraSession} for more information what a session is.
+     * See {@link HydraSession} for more information what a session is.
      *
      * @return the set of sessions that the server is connected with.
      */

@@ -58,10 +58,11 @@ public class Client {
 
         /**
          * Adds a specific option to the client. These options include a lot of possibilities.
-         * @see <a href="https://netty.io/4.1/api/io/netty/channel/ChannelOption.html">channel options</a>
          *
          * @param channelOption the desired channel option
          * @param value the value that is supposed to be set for the desired channel option
+         *
+         * @see <a href="https://netty.io/4.1/api/io/netty/channel/ChannelOption.html">Channel options</a>
          */
         public <T> Builder option(ChannelOption<T> channelOption, T value) {
             options.put(channelOption, value);
