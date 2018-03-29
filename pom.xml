@@ -15,6 +15,20 @@
         <module>server</module>
     </modules>
 
+    <name>hydra</name>
+    <description>Hydra is a network framework built upon Netty.</description>
+    <url>http://hydra.datasecs.de</url>
+    <inceptionYear>2017</inceptionYear>
+
+    <developers>
+        <developer>
+            <name>DataSecs</name>
+            <email>datasecs@outlook.de</email>
+            <url>https://datasecs.de</url>
+            <organizationUrl>https://github.com/DataSecs</organizationUrl>
+        </developer>
+    </developers>
+
     <licenses>
         <license>
             <name>GNU General Public License (GPL)</name>
@@ -22,18 +36,11 @@
         </license>
     </licenses>
 
-    <name>hydra</name>
-    <description>Hydra is a network framework built upon Netty</description>
-    <inceptionYear>2017</inceptionYear>
-
-    <developers>
-        <developer>
-            <id>DataSecs</id>
-            <email>datasecs@outlook.de</email>
-            <url>https://twitter.com/DataSecs</url>
-            <organizationUrl>https://github.com/DataSecs</organizationUrl>
-        </developer>
-    </developers>
+    <scm>
+        <connection>scm:git:git://github.com/DataSecs/Hydra.git</connection>
+        <developerConnection>scm:git:ssh://github.com/DataSecs/Hydra.git</developerConnection>
+        <url>https://github.com/DataSecs/Hydra</url>
+    </scm>
 
     <build>
         <plugins>
