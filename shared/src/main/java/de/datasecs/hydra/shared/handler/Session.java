@@ -11,6 +11,9 @@ import java.net.SocketAddress;
  * write to the pipeline. The session is supposed to be the most important part for the user, as it provides the possibility
  * to write to the channel of the session and interact with the connected opponent (client or server,
  * depending of where the session is accessed).
+ *
+ * For an instruction about usage visit in the Hydra wiki the article
+ * <a href="https://github.com/DataSecs/Hydra/wiki/Sessions">sessions</a>.
  */
 public interface Session {
 

@@ -3,6 +3,7 @@ package de.datasecs.hydra.client;
 import de.datasecs.hydra.shared.handler.HydraSession;
 import de.datasecs.hydra.shared.handler.Session;
 import de.datasecs.hydra.shared.protocol.HydraProtocol;
+import de.datasecs.hydra.shared.protocol.packets.Packet;
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
 
@@ -10,6 +11,9 @@ import java.net.SocketAddress;
 
 /**
  * Created with love by DataSecs on 29.09.2017.
+ *
+ * For an instruction about setup visit in the Hydra wiki the article
+ * <a href="https://github.com/DataSecs/Hydra/wiki/Client-setup">client setup</a>.
  */
 public class HydraClient {
 
@@ -19,10 +23,13 @@ public class HydraClient {
 
     private EventLoopGroup workerGroup;
 
+    private Session clientSession;
+
     public HydraClient(Channel channel, HydraProtocol protocol, EventLoopGroup workerGroup) {
         this.channel = channel;
         this.protocol = protocol;
         this.workerGroup = workerGroup;
+        clientSession = protocol.getClientSession();
     }
 
     /**
@@ -41,6 +48,15 @@ public class HydraClient {
      */
     public boolean isConnected() {
         return channel.isWritable();
+    }
+
+    /**
+     * Sends a packet to the opponent that is connected with this session.
+     *
+     * @param packet the packet that is supposed to be send to the opponent of the session.
+     */
+    public void send(Packet packet) {
+        clientSession.send(packet);
     }
 
     /**
@@ -71,6 +87,6 @@ public class HydraClient {
      * @return the session created for client and server.
      */
     public Session getSession() {
-        return protocol.getClientSession();
+        return clientSession;
     }
 }

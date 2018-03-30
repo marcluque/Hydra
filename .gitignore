@@ -4,6 +4,7 @@
 
 target/
 javadoc/
+*.versionsBackup
 
 ###############
 ## IntelliJ  ##

@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created with love by DataSecs on 30.11.17
+ * Created with love by DataSecs on 30.11.17.
  */
 public class Client {
 
