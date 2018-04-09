@@ -2,8 +2,10 @@ package de.datasecs.hydra.client;
 
 import de.datasecs.hydra.shared.handler.HydraSession;
 import de.datasecs.hydra.shared.handler.Session;
+import de.datasecs.hydra.shared.initializer.HydraChannelInitializer;
 import de.datasecs.hydra.shared.protocol.HydraProtocol;
 import de.datasecs.hydra.shared.protocol.packets.Packet;
+import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
 
@@ -25,10 +27,37 @@ public class HydraClient {
 
     private Session clientSession;
 
+    private Bootstrap bootstrap;
+
     public HydraClient(Channel channel, HydraProtocol protocol, EventLoopGroup workerGroup) {
         this.channel = channel;
         this.protocol = protocol;
         this.workerGroup = workerGroup;
+        clientSession = protocol.getClientSession();
+    }
+
+    public HydraClient(HydraProtocol protocol, EventLoopGroup workerGroup, Bootstrap bootstrap) {
+        this.protocol = protocol;
+        this.workerGroup = workerGroup;
+        this.bootstrap = bootstrap;
+    }
+
+    /**
+     * In case that the attribute 'connectAfterSetup' from {@link Client} is set to false via the corresponding method,
+     * the 'connect()' method can be invoked in order to connect the client to the server not instantly after setup,
+     * but at the desired moment.
+     */
+    public void connect() {
+        if (channel != null) {
+            throw new IllegalStateException("Client is already connected!");
+        }
+
+        bootstrap.handler(new HydraChannelInitializer(protocol, false));
+        try {
+            channel = bootstrap.connect().sync().channel();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         clientSession = protocol.getClientSession();
     }
 
@@ -37,6 +66,7 @@ public class HydraClient {
      * This method also shuts down the workerGroup, as it's not needed anymore, when the session is closed.
      */
     public void close() {
+        checkChannel();
         channel.close();
         workerGroup.shutdownGracefully();
     }
@@ -47,6 +77,7 @@ public class HydraClient {
      * @return whether channel is connected.
      */
     public boolean isConnected() {
+        checkChannel();
         return channel.isWritable();
     }
 
@@ -56,6 +87,7 @@ public class HydraClient {
      * @param packet the packet that is supposed to be send to the opponent of the session.
      */
     public void send(Packet packet) {
+        checkChannel();
         clientSession.send(packet);
     }
 
@@ -77,6 +109,7 @@ public class HydraClient {
      * @return the remote address the client is connected to.
      */
     public SocketAddress getRemoteAddress() {
+        checkChannel();
         return channel.remoteAddress();
     }
 
@@ -88,5 +121,15 @@ public class HydraClient {
      */
     public Session getSession() {
         return clientSession;
+    }
+
+
+    /**
+     * Simple check whether the channel is null. If the channel is null, an exception is thrown.
+     */
+    private void checkChannel() {
+        if (channel == null) {
+            throw new IllegalStateException("Client is not connected!");
+        }
     }
 }

@@ -157,11 +157,9 @@ public class Server {
         }
 
         private HydraServer setUpServer() {
-            EventLoopGroup workerGroup, bossGroup;
             boolean epoll = useEpoll && Epoll.isAvailable();
-
-            EventLoopGroup[] loopGroups = new EventLoopGroup[]{bossGroup = epoll ? new EpollEventLoopGroup(bossThreads) : new NioEventLoopGroup(bossThreads),
-                    workerGroup = epoll ? new EpollEventLoopGroup(workerThreads) : new NioEventLoopGroup(workerThreads)};
+            EventLoopGroup workerGroup  = epoll ? new EpollEventLoopGroup(workerThreads) : new NioEventLoopGroup(workerThreads);
+            EventLoopGroup bossGroup = epoll ? new EpollEventLoopGroup(bossThreads) : new NioEventLoopGroup(bossThreads);
 
             ServerBootstrap serverBootstrap = new ServerBootstrap()
                     .group(bossGroup, workerGroup)
@@ -181,7 +179,7 @@ public class Server {
                 e.printStackTrace();
             }
 
-            return new HydraServer(channel, protocol, loopGroups);
+            return new HydraServer(channel, protocol, new EventLoopGroup[]{bossGroup, workerGroup});
         }
     }
 }

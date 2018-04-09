@@ -28,6 +28,8 @@ public class Client {
 
         private int port;
 
+        private boolean connectAfterSetup = true;
+
         private int workerThreads = 2;
 
         private Map<ChannelOption, Object> options = new HashMap<>();
@@ -42,6 +44,18 @@ public class Client {
             this.host = host;
             this.port = port;
             this.protocol = protocol;
+        }
+
+        /**
+         * This attribute determines whether the client connects instantly or just when the 'connect()' method
+         * from {@link HydraClient} is called. The standard value is true, so the standard setting makes the client
+         * connect instantly after setup.
+         *
+         * @param connectAfterSetup determines whether the client connects instantly or just when 'connect()' method is called.
+         */
+        public Builder connectAfterSetup(boolean connectAfterSetup) {
+            this.connectAfterSetup = connectAfterSetup;
+            return this;
         }
 
         /**
@@ -115,26 +129,28 @@ public class Client {
         }
 
         private HydraClient setUpClient() {
-            EventLoopGroup workerGroup;
             boolean epoll = useEpoll && Epoll.isAvailable();
+            EventLoopGroup workerGroup = epoll ? new EpollEventLoopGroup(workerThreads) : new NioEventLoopGroup(workerThreads);
 
             Bootstrap bootstrap = new Bootstrap()
-                    .group(workerGroup = epoll ? new EpollEventLoopGroup(workerThreads) : new NioEventLoopGroup(workerThreads))
+                    .group(workerGroup)
                     .channel(epoll ? EpollSocketChannel.class : NioSocketChannel.class)
-                    .remoteAddress(host, port)
-                    .handler(new HydraChannelInitializer(protocol, false));
+                    .remoteAddress(host, port);
 
             options.forEach(bootstrap::option);
             attributeKeys.forEach(bootstrap::attr);
 
             Channel channel = null;
             try {
-                channel = bootstrap.connect().sync().channel();
+                if (connectAfterSetup) {
+                    bootstrap.handler(new HydraChannelInitializer(protocol, false));
+                    channel = bootstrap.connect().sync().channel();
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-            return new HydraClient(channel, protocol, workerGroup);
+            return connectAfterSetup ? new HydraClient(channel, protocol, workerGroup) : new HydraClient(protocol, workerGroup, bootstrap);
         }
     }
 }

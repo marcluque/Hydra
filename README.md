@@ -34,7 +34,7 @@ like a [simple chat application](https://github.com/DataSecs/Hydra/wiki/Building
 <dependency>
     <groupId>de.datasecs</groupId>
     <artifactId>hydra-all</artifactId>
-    <version>1.4.5</version>
+    <version>1.4.6</version>
 </dependency>
 ```
 
