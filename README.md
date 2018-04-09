@@ -26,7 +26,7 @@ like a [simple chat application](https://github.com/DataSecs/Hydra/wiki/Building
  * Clone/Download this repo
  * Install it with: mvn clean install
 
-### Maven central && local Maven dependency
+### Maven central & local Maven dependency
 
 ```xml
 <dependency>
@@ -36,7 +36,7 @@ like a [simple chat application](https://github.com/DataSecs/Hydra/wiki/Building
 </dependency>
 ```
 
-If you would like to just have the client or server, use <dt>hydra-client<dt> or <dt>hydra-server</dt> instead of <dt>hydra-all</dt>.
+If you would like to just have the client or server, use `hydra-client` or `hydra-server` instead of `hydra-all`.
 _And if you don't use maven you can download a release version and include it in your project._
 
 # Examples
