@@ -208,7 +208,6 @@ public abstract class Packet {
                         e.printStackTrace();
                     }
 
-
                     // TODO: Think of a better way than comparing the amount of characters, rather compare the class of the parameter and the class of the value
                     if ((currentMethod.getParameterCount() == 1 ? currentMethod.getParameterTypes()[0] : null) != null
                             && currentMethod.getName().toLowerCase().contains(valueToCompare.toLowerCase())

@@ -32,7 +32,7 @@ like a [simple chat application](https://github.com/DataSecs/Hydra/wiki/Building
 <dependency>
     <groupId>de.datasecs</groupId>
     <artifactId>hydra</artifactId>
-    <version>1.4.3-SNAPSHOT</version>
+    <version>1.4.3</version>
 </dependency>
 ```
 
@@ -71,6 +71,10 @@ HydraServer server = new Server.Builder("localhost", 8888, new SampleProtocol())
 This here is an example of how to create a server socket.
 In order to make the packet system work, you have to register your created packets and listeners.
 For detailed information on how to do that and examples see the [server example](https://github.com/DataSecs/Hydra/tree/master/server/src/test/java/server).
+
+# Javadoc
+
+The javadoc is always up-to-date and can be found on [hydra.datasecs.de/javadoc](http://hydra.datasecs.de/javadoc)
 
 # License
 

@@ -7,9 +7,10 @@
     <groupId>de.datasecs</groupId>
     <artifactId>hydra</artifactId>
     <packaging>pom</packaging>
-    <version>1.4.3</version>
+    <version>1.4.4</version>
     
     <modules>
+        <module>all</module>
         <module>client</module>
         <module>shared</module>
         <module>server</module>
