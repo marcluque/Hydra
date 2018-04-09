@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * The PacketHandler annotation is used for methods in packet listener classes, that are supposed to handle packets.
  * Simply add the annotation to the method that is supposed to handle a specific packet.
  * But be aware of the notation the methods must have.
- *
+ * <br>
  * For an example of how to work with the packet handler annotation, visit the
  * <a href="https://github.com/DataSecs/Hydra/tree/master/client/src/test/java/client">client example</a>
  * or the <a href="https://github.com/DataSecs/Hydra/tree/master/server/src/test/java/server">server example</a>.

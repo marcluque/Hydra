@@ -13,9 +13,10 @@ import java.util.Set;
 
 /**
  * Created with love by DataSecs on 30.09.2017.
- *
+ * <br>
  * For an instruction about setup visit in the Hydra wiki the article
  * <a href="https://github.com/DataSecs/Hydra/wiki/Server-setup">server setup</a>.
+ * <br>
  * For an example of how to work with the server, visit
  * <a href="https://github.com/DataSecs/Hydra/tree/master/server/src/test/java/server">server example</a>.
  */

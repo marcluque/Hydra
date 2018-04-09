@@ -13,9 +13,10 @@ import java.net.SocketAddress;
 
 /**
  * Created with love by DataSecs on 29.09.2017.
- *
+ * <br>
  * For an instruction about setup visit in the Hydra wiki the article
  * <a href="https://github.com/DataSecs/Hydra/wiki/Client-setup">client setup</a>.
+ * <br>
  * For an example of how to work with the client, visit
  * <a href="https://github.com/DataSecs/Hydra/tree/master/client/src/test/java/client">client example</a>.
  */
