@@ -1,5 +1,7 @@
 ![hydra banner](http://hydra.datasecs.de/images/hydra_banner.png)
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.datasecs/hydra/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.datasecs/hydra)
+
 ## Description
 
 Hydra is built upon Netty. It is supposed to simplify the process of socket setup in Java. Netty allows high performances and good maintainability of programs built upon it.
