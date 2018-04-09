@@ -1,6 +1,7 @@
 package server;
 
 import de.datasecs.hydra.shared.handler.Session;
+import de.datasecs.hydra.shared.protocol.packets.StandardPacket;
 import de.datasecs.hydra.shared.protocol.packets.listener.HydraPacketListener;
 import de.datasecs.hydra.shared.protocol.packets.listener.PacketHandler;
 import server.packets.SamplePacket;
@@ -48,6 +49,16 @@ public class SamplePacketListener implements HydraPacketListener {
         System.out.println("\n---PACKET-LISTENER OUTPUT---");
 
         System.out.printf("Received from client: %s%n", sampleSerializationPacket);
+
+        session.close();
+        System.out.println("\nSession closed!");
+    }
+
+    @PacketHandler
+    public void onStandardPacket(StandardPacket standardPacket, Session session) {
+        System.out.println("\n---PACKET-LISTENER OUTPUT---");
+
+        System.out.printf("Received from client using the StandardPacket: %s%n", standardPacket);
 
         session.close();
         System.out.println("\nSession closed!");

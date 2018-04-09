@@ -4,6 +4,7 @@ import de.datasecs.hydra.shared.handler.Session;
 import de.datasecs.hydra.shared.handler.listener.HydraSessionListener;
 import de.datasecs.hydra.shared.protocol.packets.Packet;
 import de.datasecs.hydra.shared.protocol.packets.PacketId;
+import de.datasecs.hydra.shared.protocol.packets.StandardPacket;
 import de.datasecs.hydra.shared.protocol.packets.listener.HydraPacketListener;
 import de.datasecs.hydra.shared.protocol.packets.listener.PacketHandler;
 
@@ -29,6 +30,11 @@ public class HydraProtocol {
     private HydraPacketListener packetListener;
 
     private HydraSessionListener sessionListener;
+
+    public HydraProtocol() {
+        // Register StandardPacket to be ready out of the box
+        registerPacket(StandardPacket.class);
+    }
 
     public Packet createPacket(byte id) {
         try {

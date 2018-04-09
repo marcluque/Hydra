@@ -2,10 +2,12 @@ package de.datasecs.hydra.shared.handler;
 
 import de.datasecs.hydra.shared.protocol.HydraProtocol;
 import de.datasecs.hydra.shared.protocol.packets.Packet;
+import de.datasecs.hydra.shared.protocol.packets.StandardPacket;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
+import java.io.Serializable;
 import java.net.SocketAddress;
 
 /**
@@ -41,6 +43,11 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> implements
     @Override
     public void send(Packet packet) {
         channel.writeAndFlush(packet);
+    }
+
+    @Override
+    public <T extends Serializable> void send(T object) {
+        channel.writeAndFlush(new StandardPacket(object));
     }
 
     @Override

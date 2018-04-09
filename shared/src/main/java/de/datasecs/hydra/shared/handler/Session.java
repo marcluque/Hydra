@@ -2,6 +2,7 @@ package de.datasecs.hydra.shared.handler;
 
 import de.datasecs.hydra.shared.protocol.packets.Packet;
 
+import java.io.Serializable;
 import java.net.SocketAddress;
 
 /**
@@ -27,6 +28,16 @@ public interface Session {
      * @param packet the packet that is supposed to be send to the opponent of the session.
      */
     void send(Packet packet);
+
+    /**
+     * Sends a packet to the opponent that is connected with this session. With the difference that the param not is a
+     * packet. The packet is created internally and then send to the opponent, so the user doesn't have to bother with
+     * the packet creation. Therefore the object that is passed to the method has to be serializable.
+     * See {@link de.datasecs.hydra.shared.protocol.packets.StandardPacket} for the structure of the standard packet.
+     *
+     * @param object the object that is supposed to be send to the opponent of the session.
+     */
+    <T extends Serializable> void send(T object);
 
     /**
      * Closes the session of the server and client and therefore disconnects from the channel

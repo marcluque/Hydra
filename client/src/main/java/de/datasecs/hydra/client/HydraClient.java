@@ -9,6 +9,7 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
 
+import java.io.Serializable;
 import java.net.SocketAddress;
 
 /**
@@ -92,6 +93,19 @@ public class HydraClient {
     public void send(Packet packet) {
         checkChannel();
         clientSession.send(packet);
+    }
+
+    /**
+     * Sends a packet to the opponent that is connected with this session. With the difference that the param not is a
+     * packet. The packet is created internally and then send to the opponent, so the user doesn't have to bother with
+     * the packet creation. Therefore the object that is passed to the method has to be serializable.
+     * See {@link de.datasecs.hydra.shared.protocol.packets.StandardPacket} for the structure of the standard packet.
+     *
+     * @param object the object that is supposed to be send to the opponent of the session.
+     */
+    public <T extends Serializable> void send(T object) {
+        checkChannel();
+        clientSession.send(object);
     }
 
     /**
