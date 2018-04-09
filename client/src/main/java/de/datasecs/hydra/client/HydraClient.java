@@ -16,6 +16,8 @@ import java.net.SocketAddress;
  *
  * For an instruction about setup visit in the Hydra wiki the article
  * <a href="https://github.com/DataSecs/Hydra/wiki/Client-setup">client setup</a>.
+ * For an example of how to work with the client, visit
+ * <a href="https://github.com/DataSecs/Hydra/tree/master/client/src/test/java/client">client example</a>.
  */
 public class HydraClient {
 

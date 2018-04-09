@@ -16,6 +16,8 @@ import java.util.Set;
  *
  * For an instruction about setup visit in the Hydra wiki the article
  * <a href="https://github.com/DataSecs/Hydra/wiki/Server-setup">server setup</a>.
+ * For an example of how to work with the server, visit
+ * <a href="https://github.com/DataSecs/Hydra/tree/master/server/src/test/java/server">server example</a>.
  */
 public class HydraServer {
 

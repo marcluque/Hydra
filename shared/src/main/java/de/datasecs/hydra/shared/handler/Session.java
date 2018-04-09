@@ -14,6 +14,9 @@ import java.net.SocketAddress;
  *
  * For an instruction about usage visit in the Hydra wiki the article
  * <a href="https://github.com/DataSecs/Hydra/wiki/Sessions">sessions</a>.
+ * For an example of how to work with the session, visit the
+ * <a href="https://github.com/DataSecs/Hydra/tree/master/client/src/test/java/client">client example</a>
+ * or the <a href="https://github.com/DataSecs/Hydra/tree/master/server/src/test/java/server">server example</a>.
  */
 public interface Session {
 

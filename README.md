@@ -38,7 +38,8 @@ like a [simple chat application](https://github.com/DataSecs/Hydra/wiki/Building
 </dependency>
 ```
 
-If you would like to just have the client or server, use `hydra-client` or `hydra-server` instead of `hydra-all` as artifact id.<br>
+If you would like to just have the client or server, use `hydra-client` or `hydra-server` instead of `hydra-all` as artifact id.
+
 _And if you don't use maven you can download a release version and include it in your project._
 
 # Examples
