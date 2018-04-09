@@ -66,6 +66,26 @@ public class HydraServer {
     }
 
     /**
+     * Returns the boss group accepts incoming connections. The boss group handles all incoming connection requests.
+     * Once the boss group accepted a connection, the traffic is handled by the worker group.
+     *
+     * @return the boss group that handles incoming connections.
+     */
+    public EventLoopGroup getBossGroup() {
+        return loopGroups[0];
+    }
+
+    /**
+     * Returns the worker group that handles I/O operations and allows to register channels. The worker group handles
+     * traffic of created connections, once the boss group accepted a specific connection.
+     *
+     * @return the worker group that handles the I/O operations (traffic).
+     */
+    public EventLoopGroup getWorkerGroup() {
+        return loopGroups[1];
+    }
+
+    /**
      * Returns the local address of the server.
      * The local address is the address the socket is bound to. In this case the server is bound to a local address.
      * That is the address client connect to and refer to as remote host.

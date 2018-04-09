@@ -106,6 +106,16 @@ public class HydraClient {
     }
 
     /**
+     * Returns the worker group that handles I/O operations and allows to register channels. The worker group handles
+     * traffic of created connections.
+     *
+     * @return the worker group that handles the I/O operations (traffic).
+     */
+    public EventLoopGroup getWorkerGroup() {
+        return workerGroup;
+    }
+
+    /**
      * Returns the remote address the client is connected to. The client is not bound to a local address.
      * It just has a remote address that it's connected to.
      *
@@ -125,7 +135,6 @@ public class HydraClient {
     public Session getSession() {
         return clientSession;
     }
-
 
     /**
      * Simple check whether the channel is null. If the channel is null, an exception is thrown.
