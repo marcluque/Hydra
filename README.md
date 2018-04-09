@@ -26,22 +26,18 @@ like a [simple chat application](https://github.com/DataSecs/Hydra/wiki/Building
  * Clone/Download this repo
  * Install it with: mvn clean install
 
-### Maven local dependency
+### Maven central && local Maven dependency
 
 ```xml
 <dependency>
     <groupId>de.datasecs</groupId>
-    <artifactId>hydra</artifactId>
-    <version>1.4.3</version>
+    <artifactId>hydra-all</artifactId>
+    <version>1.4.5</version>
 </dependency>
 ```
 
-### Maven central
-
-__It is planned to push this project into the maven central.__
-
-
-_If you don't use maven you can download a release version and include it in your project._
+If you would like to just have the client or server, use <dt>hydra-client<dt> or <dt>hydra-server</dt> instead of <dt>hydra-all</dt>.
+_And if you don't use maven you can download a release version and include it in your project._
 
 # Examples
 
