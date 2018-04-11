@@ -23,8 +23,7 @@ public class ChatClient {
                 .addSessionListener(new HydraSessionListener() {
                     @Override
                     public void onConnected(Session session) {
-                        //TODO: Find out why getAddress() returns null
-                        System.out.printf("You are connected to the server with ip: %s%n", session.getAddress());
+                        System.out.println("You are connected to the server!");
                     }
 
                     @Override
@@ -49,7 +48,7 @@ public class ChatClient {
                     return;
                 }
 
-                messagePacket.setMessage(String.format("%s;%s;%s\r\n", hydraClient.getLocalAddress(), Calendar.getInstance().getTime().toString(), input));
+                messagePacket.setMessage(String.format("%s;%s;%s", hydraClient.getLocalAddress(), Calendar.getInstance().getTime().toString(), input));
                 hydraClient.send(messagePacket);
             } catch (IOException e) {
                 e.printStackTrace();

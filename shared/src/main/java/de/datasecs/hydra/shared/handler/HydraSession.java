@@ -30,7 +30,7 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> implements
     }
 
     @Override
-    public void handlerRemoved(ChannelHandlerContext ctx) {
+    public void handlerRemoved(ChannelHandlerContext context) {
         protocol.callSessionListener(false, this);
         protocol.removeSession(this);
     }
@@ -58,6 +58,11 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> implements
     @Override
     public boolean isConnected() {
         return channel.isActive();
+    }
+
+    @Override
+    public Channel getChannel() {
+        return channel;
     }
 
     @Override

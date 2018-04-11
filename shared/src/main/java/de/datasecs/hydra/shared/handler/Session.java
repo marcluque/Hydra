@@ -1,6 +1,7 @@
 package de.datasecs.hydra.shared.handler;
 
 import de.datasecs.hydra.shared.protocol.packets.Packet;
+import io.netty.channel.Channel;
 
 import java.io.Serializable;
 import java.net.SocketAddress;
@@ -51,6 +52,15 @@ public interface Session {
      * @return whether the session is active.
      */
     boolean isConnected();
+
+    /**
+     * Returns the channel (a connection/pipeline) that was created for the server. The channel allows a lot of functionality.
+     * The channel provides information about the channel configuration, the channel state, the channel pipeline and much
+     * more. The user is not required to use the channel for "casual" use. This method is supposed to allow in-depth work.
+     *
+     * @return the channel that is created for the server.
+     */
+    Channel getChannel();
 
     /**
      * Returns depending of the calling opponent the remote or local address. In case of the server calling this method

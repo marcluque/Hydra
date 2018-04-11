@@ -57,7 +57,7 @@ public class HydraServer {
     /**
      * Returns the channel (a connection/pipeline) that was created for the server. The channel allows a lot of functionality.
      * The channel provides information about the channel configuration, the channel state, the channel pipeline and much
-     * more. The user is not required to use the channel normal use. This method is supposed to allow in-depth work.
+     * more. The user is not required to use the channel for "casual" use. This method is supposed to allow in-depth work.
      *
      * @return the channel that is created for the server.
      */
