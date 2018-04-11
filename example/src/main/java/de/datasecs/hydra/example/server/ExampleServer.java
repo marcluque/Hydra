@@ -1,6 +1,5 @@
 package de.datasecs.hydra.example.server;
 
-import de.datasecs.hydra.example.shared.ExampleProtocol;
 import de.datasecs.hydra.server.HydraServer;
 import de.datasecs.hydra.server.Server;
 import de.datasecs.hydra.shared.handler.Session;
@@ -22,7 +21,7 @@ public class ExampleServer {
          */
 
         // The builder returns a server which you can use for several things
-        HydraServer server = new Server.Builder("localhost", 8888, new ExampleProtocol())
+        HydraServer server = new Server.Builder("localhost", 8888, new ExampleServerProtocol())
                 .bossThreads(2)
                 .workerThreads(4)
                 .option(ChannelOption.TCP_NODELAY, true)

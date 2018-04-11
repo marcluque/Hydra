@@ -2,7 +2,7 @@ package de.datasecs.hydra.example.client;
 
 import de.datasecs.hydra.client.Client;
 import de.datasecs.hydra.client.HydraClient;
-import de.datasecs.hydra.example.shared.ExampleProtocol;
+import de.datasecs.hydra.example.server.ExampleServerProtocol;
 import de.datasecs.hydra.example.shared.packets.ExamplePacket;
 import de.datasecs.hydra.shared.handler.Session;
 import de.datasecs.hydra.shared.handler.listener.HydraSessionListener;
@@ -28,7 +28,7 @@ public class ExampleClient {
          */
 
         // The builder returns a session which you can use for several things
-        HydraClient client = new Client.Builder("localhost", 8888, new ExampleProtocol())
+        HydraClient client = new Client.Builder("localhost", 8888, new ExampleServerProtocol())
                 .workerThreads(4)
                 .option(ChannelOption.TCP_NODELAY, true)
                 .option(ChannelOption.SO_KEEPALIVE, true)
