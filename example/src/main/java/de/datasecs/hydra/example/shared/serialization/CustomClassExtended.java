@@ -1,9 +1,9 @@
-package server.serialization;
+package de.datasecs.hydra.example.shared.serialization;
 
 import java.util.UUID;
 
 /**
- * Created with love by DataSec on 12.02.18
+ * Created with love by DataSecs on 12.02.18
  */
 public class CustomClassExtended {
 

@@ -1,5 +1,6 @@
-package server;
+package de.datasecs.hydra.example.server;
 
+import de.datasecs.hydra.example.shared.SampleProtocol;
 import de.datasecs.hydra.server.HydraServer;
 import de.datasecs.hydra.server.Server;
 import de.datasecs.hydra.shared.handler.Session;

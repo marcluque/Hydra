@@ -1,14 +1,14 @@
-package server.serialization;
+package de.datasecs.hydra.example.server.serialization;
 
+import de.datasecs.hydra.example.shared.SampleProtocol;
 import de.datasecs.hydra.server.HydraServer;
 import de.datasecs.hydra.server.Server;
 import de.datasecs.hydra.shared.handler.Session;
 import de.datasecs.hydra.shared.handler.listener.HydraSessionListener;
 import io.netty.channel.ChannelOption;
-import server.SampleProtocol;
 
 /**
- * Created with love by DataSec on 12.02.18
+ * Created with love by DataSecs on 12.02.18
  */
 public class ExampleSerializationServer {
 

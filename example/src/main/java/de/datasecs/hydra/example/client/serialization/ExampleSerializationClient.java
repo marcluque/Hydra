@@ -1,9 +1,11 @@
-package client.serialization;
+package de.datasecs.hydra.example.client.serialization;
 
-import client.SampleProtocol;
-import client.packets.SampleSerializationPacket;
 import de.datasecs.hydra.client.Client;
 import de.datasecs.hydra.client.HydraClient;
+import de.datasecs.hydra.example.shared.SampleProtocol;
+import de.datasecs.hydra.example.shared.packets.SampleSerializationPacket;
+import de.datasecs.hydra.example.shared.serialization.CustomClass;
+import de.datasecs.hydra.example.shared.serialization.CustomClassExtended;
 import de.datasecs.hydra.shared.handler.Session;
 import de.datasecs.hydra.shared.handler.listener.HydraSessionListener;
 import io.netty.channel.ChannelOption;
@@ -13,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created with love by DataSec on 12.02.18
+ * Created with love by DataSecs on 12.02.18
  */
 public class ExampleSerializationClient {
 

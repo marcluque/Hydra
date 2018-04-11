@@ -1,4 +1,4 @@
-package client.serialization;
+package de.datasecs.hydra.example.shared.serialization;
 
 import de.datasecs.hydra.shared.serialization.IgnoreSerialization;
 
@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created with love by DataSec on 11.02.18
+ * Created with love by DataSecs on 11.02.18
  */
 public class CustomClass {
 

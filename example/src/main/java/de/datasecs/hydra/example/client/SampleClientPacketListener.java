@@ -1,6 +1,6 @@
-package client;
+package de.datasecs.hydra.example.client;
 
-import client.packets.SamplePacket;
+import de.datasecs.hydra.example.shared.packets.SamplePacket;
 import de.datasecs.hydra.shared.handler.Session;
 import de.datasecs.hydra.shared.protocol.packets.listener.HydraPacketListener;
 import de.datasecs.hydra.shared.protocol.packets.listener.PacketHandler;
@@ -8,9 +8,9 @@ import de.datasecs.hydra.shared.protocol.packets.listener.PacketHandler;
 /**
  * Created with love by DataSecs on 03.11.2017.
  */
-public class SamplePacketListener implements HydraPacketListener {
+public class SampleClientPacketListener implements HydraPacketListener {
 
-    public SamplePacketListener() {
+    public SampleClientPacketListener() {
         // Do something
     }
 

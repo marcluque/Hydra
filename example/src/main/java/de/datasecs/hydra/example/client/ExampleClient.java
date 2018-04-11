@@ -1,8 +1,9 @@
-package client;
+package de.datasecs.hydra.example.client;
 
-import client.packets.SamplePacket;
 import de.datasecs.hydra.client.Client;
 import de.datasecs.hydra.client.HydraClient;
+import de.datasecs.hydra.example.shared.SampleProtocol;
+import de.datasecs.hydra.example.shared.packets.SamplePacket;
 import de.datasecs.hydra.shared.handler.Session;
 import de.datasecs.hydra.shared.handler.listener.HydraSessionListener;
 import io.netty.channel.ChannelOption;
@@ -60,7 +61,7 @@ public class ExampleClient {
         /* Sends an object the user wants to send with the limitation that the object has to be serializable.
          * Hydra internally uses a standard packet that comes ready out of the box. The only thing that is important to notice
          * is the fact, that the Handler for the packet still has to be created by the user itself. Therefore see
-         * the SamplePacketListener of the server example classes.
+         * the SampleClientPacketListener of the server example classes.
          */
         session.send("This is a String and dealt with as object by Hydra");
 

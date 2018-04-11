@@ -1,18 +1,18 @@
-package server;
+package de.datasecs.hydra.example.server;
 
+import de.datasecs.hydra.example.shared.packets.SamplePacket;
+import de.datasecs.hydra.example.shared.packets.SampleSerializationPacket;
 import de.datasecs.hydra.shared.handler.Session;
 import de.datasecs.hydra.shared.protocol.packets.StandardPacket;
 import de.datasecs.hydra.shared.protocol.packets.listener.HydraPacketListener;
 import de.datasecs.hydra.shared.protocol.packets.listener.PacketHandler;
-import server.packets.SamplePacket;
-import server.packets.SampleSerializationPacket;
 
 /**
  * Created with love by DataSecs on 03.11.2017.
  */
-public class SamplePacketListener implements HydraPacketListener {
+public class SampleServerPacketListener implements HydraPacketListener {
 
-    public SamplePacketListener() {
+    public SampleServerPacketListener() {
         // Do something
     }
 
