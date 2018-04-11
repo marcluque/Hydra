@@ -3,6 +3,7 @@ package de.datasecs.hydra.example.client.chat;
 import de.datasecs.hydra.client.Client;
 import de.datasecs.hydra.client.HydraClient;
 import de.datasecs.hydra.example.shared.chat.MessagePacket;
+import de.datasecs.hydra.example.shared.chat.ServerPacket;
 import de.datasecs.hydra.shared.handler.Session;
 import de.datasecs.hydra.shared.handler.listener.HydraSessionListener;
 import io.netty.channel.ChannelOption;
@@ -40,8 +41,9 @@ public class ChatClient {
         while (true) {
             try {
                 input = bufferedReader.readLine();
-                if (input.equalsIgnoreCase("#end\r\n")) {
+                if (input.equalsIgnoreCase("#end")) {
                     System.out.println("Disconnecting from chat...");
+                    hydraClient.send(new ServerPacket("disconnect"));
                     hydraClient.close();
                     System.out.println("Disconnected!");
                     return;

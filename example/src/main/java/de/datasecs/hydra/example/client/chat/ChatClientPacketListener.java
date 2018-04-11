@@ -15,7 +15,7 @@ public class ChatClientPacketListener implements HydraPacketListener {
     public void onMessagePacket(MessagePacket messagePacket, Session session) {
         // Message structure is: "ip;date;message" -> displayed as: date | [ip]: message
         String[] messages = messagePacket.getMessage().split(";");
-        System.out.println(messages[0] + " | [" + messages[1] + "]: " + messages[2]);
+        System.out.println(messages[1] + " | [" + messages[0] + "]: " + messages[2]);
     }
 
     @PacketHandler

@@ -1,6 +1,7 @@
 package de.datasecs.hydra.example.server.chat;
 
 import de.datasecs.hydra.example.shared.chat.MessagePacket;
+import de.datasecs.hydra.example.shared.chat.ServerPacket;
 import de.datasecs.hydra.shared.handler.Session;
 import de.datasecs.hydra.shared.protocol.packets.listener.HydraPacketListener;
 import de.datasecs.hydra.shared.protocol.packets.listener.PacketHandler;
@@ -24,5 +25,13 @@ public class ChatServerPacketListener implements HydraPacketListener {
         Set<Session> sessionsCopy = new HashSet<>(sessions);
         sessionsCopy.remove(session);
         sessionsCopy.forEach(receiverSession -> receiverSession.send(messagePacket));
+    }
+
+    @PacketHandler
+    public void onServerPacket(ServerPacket serverPacket, Session session) {
+        Set<Session> sessionsCopy = new HashSet<>(sessions);
+        sessionsCopy.remove(session);
+        ServerPacket disconnectPacket = new ServerPacket("Client with ip " + session.getAddress() + " left the chat!");
+        sessionsCopy.forEach(receiverSession -> receiverSession.send(disconnectPacket));
     }
 }
