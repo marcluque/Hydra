@@ -15,18 +15,18 @@ import java.util.Arrays;
  * value for it is 0. Each packet is supposed to have a different id, the system of assignment is up to the user.
  */
 @PacketId(0)
-public class SamplePacket extends Packet {
+public class ExamplePacket extends Packet {
 
     private Object sampleObject;
 
     private String[] sampleStringArray;
 
-    public SamplePacket() {
+    public ExamplePacket() {
         // Empty constructor is always necessary!
     }
 
     // This constructor is not obligatory! Just the empty one.
-    public SamplePacket(Object sampleObject, String[] sampleStringArray) {
+    public ExamplePacket(Object sampleObject, String[] sampleStringArray) {
         this.sampleObject = sampleObject;
         this.sampleStringArray = sampleStringArray;
     }
@@ -46,7 +46,7 @@ public class SamplePacket extends Packet {
     // Auto-generated toString method by IntelliJ for example purposes
     @Override
     public String toString() {
-        return "SamplePacket{" +
+        return "ExamplePacket{" +
                 "sampleObject=" + sampleObject +
                 ", sampleStringArray=" + Arrays.toString(sampleStringArray) +
                 '}';

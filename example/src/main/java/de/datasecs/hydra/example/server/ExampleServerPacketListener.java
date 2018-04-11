@@ -1,7 +1,7 @@
 package de.datasecs.hydra.example.server;
 
-import de.datasecs.hydra.example.shared.packets.SamplePacket;
-import de.datasecs.hydra.example.shared.packets.SampleSerializationPacket;
+import de.datasecs.hydra.example.shared.packets.ExamplePacket;
+import de.datasecs.hydra.example.shared.packets.ExampleSerializationPacket;
 import de.datasecs.hydra.shared.handler.Session;
 import de.datasecs.hydra.shared.protocol.packets.StandardPacket;
 import de.datasecs.hydra.shared.protocol.packets.listener.HydraPacketListener;
@@ -10,9 +10,9 @@ import de.datasecs.hydra.shared.protocol.packets.listener.PacketHandler;
 /**
  * Created with love by DataSecs on 03.11.2017.
  */
-public class SampleServerPacketListener implements HydraPacketListener {
+public class ExampleServerPacketListener implements HydraPacketListener {
 
-    public SampleServerPacketListener() {
+    public ExampleServerPacketListener() {
         // Do something
     }
 
@@ -20,14 +20,14 @@ public class SampleServerPacketListener implements HydraPacketListener {
      * The amount of parameters has always to be equal 2 and in the given order. (Packet class and then the session)
      */
     @PacketHandler
-    public void onSamplePacket(SamplePacket samplePacket, Session session) {
+    public void onSamplePacket(ExamplePacket examplePacket, Session session) {
         System.out.println("\n---PACKET-LISTENER OUTPUT---");
 
         // Process received packet
-        System.out.printf("Received from client: %s%n", samplePacket);
+        System.out.printf("Received from client: %s%n", examplePacket);
 
         // Send response
-        session.send(new SamplePacket("This is a response", new String[]{"This", "is", "a", "response"}));
+        session.send(new ExamplePacket("This is a response", new String[]{"This", "is", "a", "response"}));
 
         // Returns whether the session is active
         System.out.println("\nIs session active?: " + session.isConnected());
@@ -45,10 +45,10 @@ public class SampleServerPacketListener implements HydraPacketListener {
     }
 
     @PacketHandler
-    public void onSampleSerializationPacket(SampleSerializationPacket sampleSerializationPacket, Session session) {
+    public void onSampleSerializationPacket(ExampleSerializationPacket exampleSerializationPacket, Session session) {
         System.out.println("\n---PACKET-LISTENER OUTPUT---");
 
-        System.out.printf("Received from client: %s%n", sampleSerializationPacket);
+        System.out.printf("Received from client: %s%n", exampleSerializationPacket);
 
         session.close();
         System.out.println("\nSession closed!");

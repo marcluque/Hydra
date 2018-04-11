@@ -2,8 +2,8 @@ package de.datasecs.hydra.example.client;
 
 import de.datasecs.hydra.client.Client;
 import de.datasecs.hydra.client.HydraClient;
-import de.datasecs.hydra.example.shared.SampleProtocol;
-import de.datasecs.hydra.example.shared.packets.SamplePacket;
+import de.datasecs.hydra.example.shared.ExampleProtocol;
+import de.datasecs.hydra.example.shared.packets.ExamplePacket;
 import de.datasecs.hydra.shared.handler.Session;
 import de.datasecs.hydra.shared.handler.listener.HydraSessionListener;
 import io.netty.channel.ChannelOption;
@@ -28,7 +28,7 @@ public class ExampleClient {
          */
 
         // The builder returns a session which you can use for several things
-        HydraClient client = new Client.Builder("localhost", 8888, new SampleProtocol())
+        HydraClient client = new Client.Builder("localhost", 8888, new ExampleProtocol())
                 .workerThreads(4)
                 .option(ChannelOption.TCP_NODELAY, true)
                 .option(ChannelOption.SO_KEEPALIVE, true)
@@ -54,14 +54,14 @@ public class ExampleClient {
         }
 
         /* Send a packet to the server via the session the client has saved */
-        // Sends a String, that is converted to a Object and an array, the type of the array is defined in SamplePacket.class
-        session.send(new SamplePacket("This is a message", new String[]{"This", "is", "a", "message"}));
+        // Sends a String, that is converted to a Object and an array, the type of the array is defined in ExamplePacket.class
+        session.send(new ExamplePacket("This is a message", new String[]{"This", "is", "a", "message"}));
         // Sends a list, that is converted to a Object and the array, like above
-        session.send(new SamplePacket(Arrays.asList("This", "is", "a", "message", "2"), new String[]{"This", "is", "a", "message", "2"}));
+        session.send(new ExamplePacket(Arrays.asList("This", "is", "a", "message", "2"), new String[]{"This", "is", "a", "message", "2"}));
         /* Sends an object the user wants to send with the limitation that the object has to be serializable.
          * Hydra internally uses a standard packet that comes ready out of the box. The only thing that is important to notice
          * is the fact, that the Handler for the packet still has to be created by the user itself. Therefore see
-         * the SampleClientPacketListener of the server example classes.
+         * the ExampleClientPacketListener of the server example classes.
          */
         session.send("This is a String and dealt with as object by Hydra");
 

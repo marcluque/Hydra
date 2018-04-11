@@ -9,13 +9,13 @@ import de.datasecs.hydra.shared.protocol.packets.PacketId;
  */
 // The id now is 1 instead of 0 or empty like for the sample packet, as they have to differ
 @PacketId(1)
-public class SampleSerializationPacket extends Packet {
+public class ExampleSerializationPacket extends Packet {
 
     private CustomClass customClass;
 
-    public SampleSerializationPacket() {}
+    public ExampleSerializationPacket() {}
 
-    public SampleSerializationPacket(CustomClass customClass) {
+    public ExampleSerializationPacket(CustomClass customClass) {
         this.customClass = customClass;
     }
 
@@ -38,7 +38,7 @@ public class SampleSerializationPacket extends Packet {
     // Auto-generated toString method by IntelliJ for example purposes
     @Override
     public String toString() {
-        return "SampleSerializationPacket{" +
+        return "ExampleSerializationPacket{" +
                 "customClass=" + customClass +
                 '}';
     }

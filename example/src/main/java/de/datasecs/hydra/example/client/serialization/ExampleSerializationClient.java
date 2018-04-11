@@ -2,8 +2,8 @@ package de.datasecs.hydra.example.client.serialization;
 
 import de.datasecs.hydra.client.Client;
 import de.datasecs.hydra.client.HydraClient;
-import de.datasecs.hydra.example.shared.SampleProtocol;
-import de.datasecs.hydra.example.shared.packets.SampleSerializationPacket;
+import de.datasecs.hydra.example.shared.ExampleProtocol;
+import de.datasecs.hydra.example.shared.packets.ExampleSerializationPacket;
 import de.datasecs.hydra.example.shared.serialization.CustomClass;
 import de.datasecs.hydra.example.shared.serialization.CustomClassExtended;
 import de.datasecs.hydra.shared.handler.Session;
@@ -22,7 +22,7 @@ public class ExampleSerializationClient {
     private static Session session;
 
     public static void main(String[] args) {
-        HydraClient client = new Client.Builder("localhost", 8888, new SampleProtocol())
+        HydraClient client = new Client.Builder("localhost", 8888, new ExampleProtocol())
                 .workerThreads(4)
                 .option(ChannelOption.TCP_NODELAY, true)
                 .option(ChannelOption.SO_KEEPALIVE, true)
@@ -55,6 +55,6 @@ public class ExampleSerializationClient {
         CustomClass customClass = new CustomClass("testString", 1, new String[]{"Hydra", "serialization"}, testStringList, "this is a random object", customClassExtended);
 
         // Sends the instance of a custom class, that is create and filled with data above
-        session.send(new SampleSerializationPacket(customClass));
+        session.send(new ExampleSerializationPacket(customClass));
     }
 }
