@@ -141,6 +141,17 @@ public class HydraClient {
     }
 
     /**
+     * Returns the local address of the client.
+     * The local address is the address the socket is bound to. In this case the client is bound to a local address.
+     *
+     * @return the local address of the client.
+     */
+    public SocketAddress getLocalAddress() {
+        checkChannel();
+        return channel.localAddress();
+    }
+
+    /**
      * Returns the session that is created, when the client connects with the server.
      * See {@link HydraSession} for more information about what a session is.
      *

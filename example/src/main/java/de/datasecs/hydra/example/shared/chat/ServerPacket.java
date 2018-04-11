@@ -6,14 +6,14 @@ import de.datasecs.hydra.shared.protocol.packets.PacketId;
 /**
  * Created with love by DataSecs on 11.04.18
  */
-@PacketId()
-public class MessagePacket extends Packet {
+@PacketId(1)
+public class ServerPacket extends Packet {
 
     private String message;
 
-    public MessagePacket() {}
+    public ServerPacket() {}
 
-    public MessagePacket(String message) {
+    public ServerPacket(String message) {
         this.message = message;
     }
 
@@ -29,9 +29,5 @@ public class MessagePacket extends Packet {
 
     public String getMessage() {
         return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 }

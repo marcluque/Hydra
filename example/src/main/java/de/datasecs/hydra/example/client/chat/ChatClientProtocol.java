@@ -1,5 +1,7 @@
 package de.datasecs.hydra.example.client.chat;
 
+import de.datasecs.hydra.example.shared.chat.MessagePacket;
+import de.datasecs.hydra.example.shared.chat.ServerPacket;
 import de.datasecs.hydra.shared.protocol.HydraProtocol;
 
 /**
@@ -8,6 +10,8 @@ import de.datasecs.hydra.shared.protocol.HydraProtocol;
 public class ChatClientProtocol extends HydraProtocol {
 
     public ChatClientProtocol() {
-
+        registerPacket(MessagePacket.class);
+        registerPacket(ServerPacket.class);
+        registerListener(new ChatClientPacketListener());
     }
 }
