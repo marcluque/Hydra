@@ -32,7 +32,8 @@ public class ExampleSerializationPacket extends Packet {
          * be serialized are inside. Therefore it's necessary to put all related classes that are supposed to be serialized
          * together in a package. This is the only (big) drawback.
          */
-        writeCustomObject(customClass, "de.datasecs.hydra.example.shared.serialization");
+        //writeCustomObject(customClass, "de.datasecs.hydra.example.shared.serialization");
+        writeCustomObjectTest(customClass, "de.datasecs.hydra.example.shared.serialization");
     }
 
     // Auto-generated toString method by IntelliJ for example purposes

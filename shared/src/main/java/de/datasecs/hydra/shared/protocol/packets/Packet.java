@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Map;
@@ -127,19 +128,20 @@ public abstract class Packet {
     }
 
     protected <T> void writeCustomObject(T customObject, String pathOfCustomClassAtReceiver) {
-        String packageName = customObject.getClass().getName();
-
-        serializeClass(customObject, fieldsToSerialize);
-
-        writeString(String.format("%s;%s", pathOfCustomClassAtReceiver, packageName.substring(packageName.lastIndexOf(".") + 1)));
-        writeObject(fieldsToSerialize);
+        writeCustomObject(customObject, "", pathOfCustomClassAtReceiver);
     }
 
-    private <T> void serializeClass(T customClass, Map<Object, Object> objects) {
-        Arrays.stream(customClass.getClass().getDeclaredFields()).filter(field -> {
+    private <T> void writeCustomObject(T customObject, String prefix, String pathOfCustomClassAtReceiver) {
+        // Send path for rebuild of custom class
+        if (!prefix.startsWith("#")) {
+            writeString(String.format("%s.%s", pathOfCustomClassAtReceiver, customObject.getClass().getSimpleName()));
+        }
+
+        final boolean[] isObject = {true};
+        Arrays.stream(customObject.getClass().getDeclaredFields()).filter(field -> {
             try {
                 field.setAccessible(true);
-                objectToSerialize = !Modifier.isTransient(field.getModifiers()) ? field.get(customClass) : null;
+                objectToSerialize = !Modifier.isTransient(field.getModifiers()) ? field.get(customObject) : null;
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
@@ -147,62 +149,75 @@ public abstract class Packet {
             return objectToSerialize != null;
         }).forEach(field -> {
             if (!(objectToSerialize instanceof Serializable)) {
-                // Add a '#' to the elements that are classes that need to be serialized
-                Map<Object, Object> subFields = new ConcurrentHashMap<>();
-                Object originalObject = objectToSerialize;
-                serializeClass(objectToSerialize, subFields);
-                String originalObjectClass = originalObject.getClass().getName();
-                objects.put(String.format("#%s", originalObjectClass.substring(originalObjectClass.lastIndexOf(".") + 1)), subFields);
+                writeCustomObject(objectToSerialize, String.format("%s#", prefix), pathOfCustomClassAtReceiver);
             } else {
-                objects.put(field.getName(), objectToSerialize);
+                String fieldName = field.getName();
+                if (prefix.startsWith("#")) {
+                    if (isObject[0]) {
+                        fieldName = String.format("%s%s;*.%s", prefix, fieldName, customObject.getClass().getSimpleName());
+                        isObject[0] = false;
+                    } else {
+                        fieldName = String.format("%s%s", prefix, fieldName);
+                    }
+                }
+
+                System.out.println("WRITING: " + fieldName);
+                writeString(fieldName);
+                System.out.println("WRITING: " + objectToSerialize);
+                writeObject(objectToSerialize);
             }
         });
+
+        if (!prefix.startsWith("#")) {
+            // Signalizes that transmission is over
+            writeString("~");
+        }
     }
 
     protected <T> T readCustomObject(T customObject) {
-        String[] packagesNames = readString().split(";");
-
+        String pathOfCustomClass = readString();
         try {
-            fieldsToSerialize = (Map<Object, Object>) readObject();
-
-            // Replace the keys that have a normal class name and are marked with a '#', with the appropriate path,
-            // as they have a different path on the server side
-            fieldsToSerialize.forEach((key, value) -> {
-                if (key instanceof String && ((String) key).startsWith("#")) {
-                    String className = ((String) key).substring(1);
-                    fieldsToSerialize.remove(key);
-                    try {
-                        fieldsToSerialize.put(Class.forName(String.format("%s.%s", packagesNames[0], className)), value);
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
-            customObject = deserializeClass(customObject = (T) Class.forName(String.format("%s.%s", packagesNames[0], packagesNames[1])).newInstance(), fieldsToSerialize);
-
-            // Clear for next use
-            fieldsToSerialize.clear();
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            customObject = (T) Class.forName(pathOfCustomClass).newInstance();
+            pathOfCustomClass = pathOfCustomClass.substring(0, pathOfCustomClass.lastIndexOf("."));
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return customObject;
+        Map<String, Object> fields = new ConcurrentHashMap<>();
+        Map<String, Object> subFields = new ConcurrentHashMap<>();
+
+        String input;
+        while (!(input = readString()).startsWith("~")) {
+            if (input.contains(";")) {
+                subFields.clear();
+
+                String[] fieldNames = input.replace("*", pathOfCustomClass).split(";");
+
+                subFields.put(fieldNames[0].replaceAll("#", ""), String.valueOf(readObject()));
+                fields.put(fieldNames[1], subFields);
+            } else {
+                if (input.startsWith("#")) {
+                    subFields.put(input.replaceAll("#", ""), readObject());
+                } else {
+                    fields.put(input, readObject());
+                }
+            }
+        }
+
+        return readCustomObject(customObject, fields);
     }
 
-    private <T> T deserializeClass(T customObject, Map<Object, Object> fields) {
-        Arrays.stream(customObject.getClass().getDeclaredMethods())
-                .filter(method -> method.getName().contains("set") && !method.isAnnotationPresent(IgnoreSerialization.class))
-                .forEach(currentMethod -> fields.forEach((key, value) -> {
+    private <T> T readCustomObject(T customObject, Map<String, Object> fields) {
+        for (Method currentMethod : customObject.getClass().getDeclaredMethods()) {
+            if (currentMethod.getName().contains("set") && !currentMethod.isAnnotationPresent(IgnoreSerialization.class)) {
+                fields.forEach((key, value) -> {
                     Class<?> clazz = null;
                     boolean valueIsMap = value instanceof Map;
-                    String valueToCompare = key.toString();
 
                     try {
                         if (valueIsMap) {
-                            String className = key.toString().split(" ")[1];
-                            clazz = Class.forName(className);
-                            valueToCompare = className.substring(className.lastIndexOf(".") + 1);
+                            clazz = Class.forName(key);
+                            key = key.substring(key.lastIndexOf(".") + 1);
                         }
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
@@ -210,16 +225,18 @@ public abstract class Packet {
 
                     // TODO: Think of a better way than comparing the amount of characters, rather compare the class of the parameter and the class of the value
                     if ((currentMethod.getParameterCount() == 1 ? currentMethod.getParameterTypes()[0] : null) != null
-                            && currentMethod.getName().toLowerCase().contains(valueToCompare.toLowerCase())
-                            && (currentMethod.getName().length() - 3) == valueToCompare.length()) {
+                            && currentMethod.getName().toLowerCase().contains(key.toLowerCase())
+                            && (currentMethod.getName().length() - 3) == key.length()) {
                         try {
-                            currentMethod.invoke(customObject, valueIsMap ? deserializeClass(clazz.newInstance(), (Map<Object, Object>) value) : value);
+                            currentMethod.invoke(customObject, valueIsMap ? readCustomObject(clazz.newInstance(), (Map<String, Object>) value) : value);
                             fields.remove(key);
                         } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
                             e.printStackTrace();
                         }
                     }
-                }));
+                });
+            }
+        }
 
         return customObject;
     }
