@@ -1,14 +1,12 @@
-package de.datasecs.hydra.example.shared.packets;
+package de.datasecs.hydra.example.shared.serialization;
 
-import de.datasecs.hydra.example.shared.serialization.CustomClass;
 import de.datasecs.hydra.shared.protocol.packets.Packet;
 import de.datasecs.hydra.shared.protocol.packets.PacketId;
 
 /**
  * Created with love by DataSecs on 12.02.18
  */
-// The id now is 1 instead of 0 or empty like for the sample packet, as they have to differ
-@PacketId(1)
+@PacketId()
 public class ExampleSerializationPacket extends Packet {
 
     private CustomClass customClass;
@@ -21,7 +19,7 @@ public class ExampleSerializationPacket extends Packet {
 
     @Override
     public void read() {
-        customClass = readCustomObject(customClass);
+        customClass = readCustomObject();
     }
 
     @Override
@@ -33,7 +31,7 @@ public class ExampleSerializationPacket extends Packet {
          * together in a package. This is the only (big) drawback.
          */
         //writeCustomObject(customClass, "de.datasecs.hydra.example.shared.serialization");
-        writeCustomObjectTest(customClass, "de.datasecs.hydra.example.shared.serialization");
+        writeCustomObject(customClass, "de.datasecs.hydra.example.shared.serialization");
     }
 
     // Auto-generated toString method by IntelliJ for example purposes

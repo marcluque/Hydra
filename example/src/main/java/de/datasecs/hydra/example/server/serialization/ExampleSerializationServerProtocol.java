@@ -1,17 +1,16 @@
-package de.datasecs.hydra.example.server;
+package de.datasecs.hydra.example.server.serialization;
 
-import de.datasecs.hydra.example.shared.ExamplePacket;
+import de.datasecs.hydra.example.server.ExampleServerPacketListener;
 import de.datasecs.hydra.example.shared.serialization.ExampleSerializationPacket;
 import de.datasecs.hydra.shared.protocol.HydraProtocol;
 
 /**
  * Created with love by DataSecs on 03.11.2017.
  */
-public class ExampleServerProtocol extends HydraProtocol {
+public class ExampleSerializationServerProtocol extends HydraProtocol {
 
-    public ExampleServerProtocol() {
+    public ExampleSerializationServerProtocol() {
         // Register your packets and listener. This is a very important step! Otherwise Hydra can't work with them!
-        registerPacket(ExamplePacket.class);
         registerPacket(ExampleSerializationPacket.class);
         registerListener(new ExampleServerPacketListener());
     }

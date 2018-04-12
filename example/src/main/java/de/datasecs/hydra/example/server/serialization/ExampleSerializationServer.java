@@ -1,6 +1,5 @@
 package de.datasecs.hydra.example.server.serialization;
 
-import de.datasecs.hydra.example.server.ExampleServerProtocol;
 import de.datasecs.hydra.server.HydraServer;
 import de.datasecs.hydra.server.Server;
 import de.datasecs.hydra.shared.handler.Session;
@@ -13,7 +12,7 @@ import io.netty.channel.ChannelOption;
 public class ExampleSerializationServer {
 
     public static void main(String[] args) {
-        HydraServer server = new Server.Builder("localhost", 8888, new ExampleServerProtocol())
+        HydraServer server = new Server.Builder("localhost", 8888, new ExampleSerializationServerProtocol())
                 .bossThreads(2)
                 .workerThreads(4)
                 .option(ChannelOption.TCP_NODELAY, true)

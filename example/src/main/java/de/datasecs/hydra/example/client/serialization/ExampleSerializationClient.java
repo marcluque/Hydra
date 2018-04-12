@@ -2,10 +2,9 @@ package de.datasecs.hydra.example.client.serialization;
 
 import de.datasecs.hydra.client.Client;
 import de.datasecs.hydra.client.HydraClient;
-import de.datasecs.hydra.example.server.ExampleServerProtocol;
-import de.datasecs.hydra.example.shared.packets.ExampleSerializationPacket;
 import de.datasecs.hydra.example.shared.serialization.CustomClass;
 import de.datasecs.hydra.example.shared.serialization.CustomClassExtended;
+import de.datasecs.hydra.example.shared.serialization.ExampleSerializationPacket;
 import de.datasecs.hydra.shared.handler.Session;
 import de.datasecs.hydra.shared.handler.listener.HydraSessionListener;
 import io.netty.channel.ChannelOption;
@@ -22,7 +21,7 @@ public class ExampleSerializationClient {
     private static Session session;
 
     public static void main(String[] args) {
-        HydraClient client = new Client.Builder("localhost", 8888, new ExampleServerProtocol())
+        HydraClient client = new Client.Builder("localhost", 8888, new ExampleSerializationClientProtocol())
                 .workerThreads(4)
                 .option(ChannelOption.TCP_NODELAY, true)
                 .option(ChannelOption.SO_KEEPALIVE, true)
