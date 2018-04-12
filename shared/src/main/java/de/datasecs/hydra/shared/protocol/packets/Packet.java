@@ -4,10 +4,10 @@ import de.datasecs.hydra.shared.serialization.IgnoreSerialization;
 import io.netty.buffer.ByteBuf;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -137,36 +137,34 @@ public abstract class Packet {
             writeString(String.format("%s.%s", pathOfCustomClassAtReceiver, customObject.getClass().getSimpleName()));
         }
 
-        final boolean[] isObject = {true};
-        Arrays.stream(customObject.getClass().getDeclaredFields()).filter(field -> {
-            try {
-                field.setAccessible(true);
-                objectToSerialize = !Modifier.isTransient(field.getModifiers()) ? field.get(customObject) : null;
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-
-            return objectToSerialize != null;
-        }).forEach(field -> {
-            if (!(objectToSerialize instanceof Serializable)) {
-                writeCustomObject(objectToSerialize, String.format("%s#", prefix), pathOfCustomClassAtReceiver);
-            } else {
-                String fieldName = field.getName();
-                if (prefix.startsWith("#")) {
-                    if (isObject[0]) {
-                        fieldName = String.format("%s%s;*.%s", prefix, fieldName, customObject.getClass().getSimpleName());
-                        isObject[0] = false;
-                    } else {
-                        fieldName = String.format("%s%s", prefix, fieldName);
-                    }
+        boolean isObject = true;
+        for (Field field : customObject.getClass().getDeclaredFields()) {
+            field.setAccessible(true);
+            if (!Modifier.isTransient(field.getModifiers())) {
+                try {
+                    objectToSerialize = field.get(customObject);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
                 }
 
-                System.out.println("WRITING: " + fieldName);
-                writeString(fieldName);
-                System.out.println("WRITING: " + objectToSerialize);
-                writeObject(objectToSerialize);
+                if (!(objectToSerialize instanceof Serializable)) {
+                    writeCustomObject(objectToSerialize, String.format("%s#", prefix), pathOfCustomClassAtReceiver);
+                } else {
+                    String fieldName = field.getName();
+                    if (prefix.startsWith("#")) {
+                        if (isObject) {
+                            fieldName = String.format("%s%s;*.%s", prefix, fieldName, customObject.getClass().getSimpleName());
+                            isObject = false;
+                        } else {
+                            fieldName = String.format("%s%s", prefix, fieldName);
+                        }
+                    }
+
+                    writeString(fieldName);
+                    writeObject(objectToSerialize);
+                }
             }
-        });
+        }
 
         if (!prefix.startsWith("#")) {
             // Signalizes that transmission is over
