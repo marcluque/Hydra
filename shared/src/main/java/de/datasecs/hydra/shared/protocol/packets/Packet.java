@@ -4,10 +4,7 @@ import de.datasecs.hydra.shared.serialization.IgnoreSerialization;
 import io.netty.buffer.ByteBuf;
 
 import java.io.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,8 +16,6 @@ public abstract class Packet {
     private ByteBuf byteBuf;
 
     private Object objectToSerialize;
-
-    private Map<Object, Object> fieldsToSerialize = new ConcurrentHashMap<>();
 
     public void setByteBuf(ByteBuf byteBuf) {
         this.byteBuf = byteBuf;
@@ -172,8 +167,9 @@ public abstract class Packet {
         }
     }
 
-    protected <T> T readCustomObject(T customObject) {
+    protected <T> T readCustomObject() {
         String pathOfCustomClass = readString();
+        T customObject = null;
         try {
             customObject = (T) Class.forName(pathOfCustomClass).newInstance();
             pathOfCustomClass = pathOfCustomClass.substring(0, pathOfCustomClass.lastIndexOf("."));
@@ -239,7 +235,6 @@ public abstract class Packet {
         return customObject;
     }
 
-    // TODO: Custom class serialization for arrays
     protected void writeArray(Object[] array) {
         writeObject(array);
     }
@@ -261,5 +256,30 @@ public abstract class Packet {
         }
 
         return null;
+    }
+
+    protected <T> void writeCustomClassArray(T[] array, String pathOfCustomClassAtReceiver) {
+        writeInt(array.length);
+        writeString(String.format("%s.%s", pathOfCustomClassAtReceiver, array.getClass().getSimpleName().replace("[]", "")));
+        for (T t : array) {
+            writeCustomObject(t, "", pathOfCustomClassAtReceiver);
+        }
+    }
+
+    protected <T> T[] readCustomClassArray() {
+        int length = readInt();
+        String path = readString();
+        T[] array = null;
+        try {
+            array = (T[]) Array.newInstance(Class.forName(path), length);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        for (int i = 0; i < length; i++) {
+            array[i] = readCustomObject();
+        }
+
+        return array;
     }
 }
