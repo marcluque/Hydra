@@ -51,7 +51,7 @@ public class ExampleSerializationClient {
         testStringList.add("Test");
 
         CustomClassExtended customClassExtended = new CustomClassExtended("testStringExtended", UUID.randomUUID(), 5L, Integer.class);
-        CustomClass customClass = new CustomClass("testString", 1, new String[]{"Hydra", "de/datasecs/hydra/example/client/serialization"}, testStringList, "this is a random object", customClassExtended);
+        CustomClass customClass = new CustomClass("testString", 1, new String[]{"Hydra", "serialization"}, testStringList, "this is a random object", customClassExtended);
 
         // Sends the instance of a custom class, that is create and filled with data above
         session.send(new ExampleSerializationPacket(customClass));
