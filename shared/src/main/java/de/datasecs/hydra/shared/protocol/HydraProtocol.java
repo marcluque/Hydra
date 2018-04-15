@@ -150,4 +150,12 @@ public class HydraProtocol {
     public Set<Session> getSessions() {
         return sessions;
     }
+
+    public HydraSessionListener getSessionListener() {
+        return sessionListener;
+    }
+
+    public HydraPacketListener getPacketListener() {
+        return packetListener;
+    }
 }

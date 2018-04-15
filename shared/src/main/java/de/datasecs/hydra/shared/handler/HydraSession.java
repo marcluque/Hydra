@@ -26,12 +26,17 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> implements
 
     @Override
     protected void channelRead0(ChannelHandlerContext context, Packet packet) {
-        protocol.callPacketListener(packet, this);
+        if (protocol.getPacketListener() != null) {
+            protocol.callPacketListener(packet, this);
+        }
     }
 
     @Override
     public void handlerRemoved(ChannelHandlerContext context) {
-        protocol.callSessionListener(false, this);
+        if (protocol.getSessionListener() != null) {
+            protocol.callSessionListener(false, this);
+        }
+
         protocol.removeSession(this);
     }
 

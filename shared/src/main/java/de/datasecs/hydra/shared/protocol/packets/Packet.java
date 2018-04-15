@@ -13,59 +13,21 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public abstract class Packet {
 
-    private ByteBuf byteBuf;
-
     private Object objectToSerialize;
 
-    public void setByteBuf(ByteBuf byteBuf) {
-        this.byteBuf = byteBuf;
-    }
+    public abstract void read(ByteBuf byteBuf);
 
-    public abstract void read();
+    public abstract void write(ByteBuf byteBuf);
 
-    public abstract void write();
-
-    protected void writeByte(byte byt) {
-        byteBuf.writeByte(byt);
-    }
-
-    protected byte readByte() {
-        return byteBuf.readByte();
-    }
-
-    protected void writeInt(int integer) {
+    protected void writeInt(ByteBuf byteBuf, int integer) {
         byteBuf.writeInt(integer);
     }
 
-    protected int readInt() {
+    protected int readInt(ByteBuf byteBuf) {
         return byteBuf.readInt();
     }
 
-    protected void writeFloat(float floatNumber) {
-        byteBuf.writeFloat(floatNumber);
-    }
-
-    protected float readFloat() {
-        return byteBuf.readFloat();
-    }
-
-    protected void writeDouble(double doubleNumber) {
-        byteBuf.writeDouble(doubleNumber);
-    }
-
-    protected double readDouble() {
-        return byteBuf.readDouble();
-    }
-
-    protected void writeLong(long longNumber) {
-        byteBuf.writeLong(longNumber);
-    }
-
-    protected long readLong() {
-        return byteBuf.readLong();
-    }
-
-    protected void writeString(String string) {
+    protected void writeString(ByteBuf byteBuf, String string) {
         byteBuf.writeInt(string.length());
 
         try {
@@ -75,7 +37,7 @@ public abstract class Packet {
         }
     }
 
-    protected String readString() {
+    protected String readString(ByteBuf byteBuf) {
         byte[] bytes = new byte[byteBuf.readInt()];
         byteBuf.readBytes(bytes);
 
@@ -88,9 +50,9 @@ public abstract class Packet {
         return null;
     }
 
-    protected <T> void writeObject(T object) {
+    protected void writeObject(ByteBuf byteBuf, Object object) {
         if (object == null) {
-            throw new IllegalArgumentException("object can't be null");
+            throw new IllegalArgumentException("object cannot be null");
         }
 
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(); ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream)) {
@@ -103,33 +65,34 @@ public abstract class Packet {
         }
     }
 
-    protected Object readObject() {
+    protected Object readObject(ByteBuf byteBuf) {
+        Object object = null;
+
         int length = byteBuf.readInt();
         if (length > byteBuf.readableBytes()) {
-            throw new IllegalStateException("length can't be larger than the readable bytes");
+            throw new IllegalStateException("length cannot be larger than the readable bytes");
         }
 
         byte[] bytes = new byte[length];
         byteBuf.readBytes(bytes);
 
-        try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
-             ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
-            return objectInputStream.readObject();
+        try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes); ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
+            object = objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
-        return null;
+        return object;
     }
 
-    protected <T> void writeCustomObject(T customObject, String pathOfCustomClassAtReceiver) {
-        writeCustomObject(customObject, "", pathOfCustomClassAtReceiver);
+    protected <T> void writeCustomObject(ByteBuf byteBuf, T customObject, String pathOfCustomClassAtReceiver) {
+        writeCustomObject(byteBuf, customObject, "", pathOfCustomClassAtReceiver);
     }
 
-    private <T> void writeCustomObject(T customObject, String prefix, String pathOfCustomClassAtReceiver) {
+    private <T> void writeCustomObject(ByteBuf byteBuf, T customObject, String prefix, String pathOfCustomClassAtReceiver) {
         // Send path for rebuild of custom class
         if (!prefix.startsWith("#")) {
-            writeString(String.format("%s.%s", pathOfCustomClassAtReceiver, customObject.getClass().getSimpleName()));
+            writeString(byteBuf, String.format("%s.%s", pathOfCustomClassAtReceiver, customObject.getClass().getSimpleName()));
         }
 
         boolean isObject = true;
@@ -143,7 +106,7 @@ public abstract class Packet {
                 }
 
                 if (!(objectToSerialize instanceof Serializable)) {
-                    writeCustomObject(objectToSerialize, String.format("%s#", prefix), pathOfCustomClassAtReceiver);
+                    writeCustomObject(byteBuf, objectToSerialize, String.format("%s#", prefix), pathOfCustomClassAtReceiver);
                 } else {
                     String fieldName = field.getName();
                     if (prefix.startsWith("#")) {
@@ -155,20 +118,20 @@ public abstract class Packet {
                         }
                     }
 
-                    writeString(fieldName);
-                    writeObject(objectToSerialize);
+                    writeString(byteBuf, fieldName);
+                    writeObject(byteBuf, objectToSerialize);
                 }
             }
         }
 
         if (!prefix.startsWith("#")) {
             // Signalizes that transmission is over
-            writeString("~");
+            writeString(byteBuf, "~");
         }
     }
 
-    protected <T> T readCustomObject() {
-        String pathOfCustomClass = readString();
+    protected <T> T readCustomObject(ByteBuf byteBuf) {
+        String pathOfCustomClass = readString(byteBuf);
         T customObject = null;
         try {
             customObject = (T) Class.forName(pathOfCustomClass).newInstance();
@@ -181,19 +144,19 @@ public abstract class Packet {
         Map<String, Object> subFields = new ConcurrentHashMap<>();
 
         String input;
-        while (!(input = readString()).startsWith("~")) {
+        while (!(input = readString(byteBuf)).startsWith("~")) {
             if (input.contains(";")) {
                 subFields.clear();
 
                 String[] fieldNames = input.replace("*", pathOfCustomClass).split(";");
 
-                subFields.put(fieldNames[0].replaceAll("#", ""), String.valueOf(readObject()));
+                subFields.put(fieldNames[0].replaceAll("#", ""), String.valueOf(readObject(byteBuf)));
                 fields.put(fieldNames[1], subFields);
             } else {
                 if (input.startsWith("#")) {
-                    subFields.put(input.replaceAll("#", ""), readObject());
+                    subFields.put(input.replaceAll("#", ""), readObject(byteBuf));
                 } else {
-                    fields.put(input, readObject());
+                    fields.put(input, readObject(byteBuf));
                 }
             }
         }
@@ -235,11 +198,11 @@ public abstract class Packet {
         return customObject;
     }
 
-    protected void writeArray(Object[] array) {
-        writeObject(array);
+    protected void writeArray(ByteBuf byteBuf, Object[] array) {
+        writeObject(byteBuf, array);
     }
 
-    protected <T> T[] readArray() {
+    protected <T> T[] readArray(ByteBuf byteBuf) {
         int length = byteBuf.readInt();
         if (length > byteBuf.readableBytes()) {
             throw new IllegalStateException("length can't be larger than the readable bytes");
@@ -258,17 +221,17 @@ public abstract class Packet {
         return null;
     }
 
-    protected <T> void writeCustomClassArray(T[] array, String pathOfCustomClassAtReceiver) {
-        writeInt(array.length);
-        writeString(String.format("%s.%s", pathOfCustomClassAtReceiver, array.getClass().getSimpleName().replace("[]", "")));
+    protected <T> void writeCustomClassArray(ByteBuf byteBuf, T[] array, String pathOfCustomClassAtReceiver) {
+        writeInt(byteBuf, array.length);
+        writeString(byteBuf, String.format("%s.%s", pathOfCustomClassAtReceiver, array.getClass().getSimpleName().replace("[]", "")));
         for (T t : array) {
-            writeCustomObject(t, "", pathOfCustomClassAtReceiver);
+            writeCustomObject(byteBuf, t, "", pathOfCustomClassAtReceiver);
         }
     }
 
-    protected <T> T[] readCustomClassArray() {
-        int length = readInt();
-        String path = readString();
+    protected <T> T[] readCustomClassArray(ByteBuf byteBuf) {
+        int length = readInt(byteBuf);
+        String path = readString(byteBuf);
         T[] array = null;
         try {
             array = (T[]) Array.newInstance(Class.forName(path), length);
@@ -277,7 +240,7 @@ public abstract class Packet {
         }
 
         for (int i = 0; i < length; i++) {
-            array[i] = readCustomObject();
+            array[i] = readCustomObject(byteBuf);
         }
 
         return array;

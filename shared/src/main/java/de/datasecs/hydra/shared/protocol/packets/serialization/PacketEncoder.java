@@ -20,13 +20,10 @@ public class PacketEncoder extends MessageToMessageEncoder<Packet> {
     }
 
     @Override
-    protected void encode(ChannelHandlerContext context, Packet packet, List<Object> out) throws Exception {
+    protected void encode(ChannelHandlerContext context, Packet packet, List<Object> out) {
         ByteBuf byteBuf = context.alloc().buffer();
         byteBuf.writeByte(protocol.getPacketId(packet));
-
-        packet.setByteBuf(byteBuf);
-        packet.write();
-
+        packet.write(byteBuf);
         out.add(byteBuf);
     }
 }

@@ -20,13 +20,13 @@ public class PacketDecoder extends MessageToMessageDecoder<ByteBuf> {
     }
 
     @Override
-    protected void decode(ChannelHandlerContext context, ByteBuf in, List<Object> out) throws Exception {
-        in.readInt();
+    protected void decode(ChannelHandlerContext context, ByteBuf in, List<Object> out) {
+        int length = in.readInt();
 
-        Packet packet = protocol.createPacket(in.readByte());
-        packet.setByteBuf(in);
-        packet.read();
-
-        out.add(packet);
+        if(length > 0) {
+            Packet packet = protocol.createPacket(in.readByte());
+            packet.read(in);
+            out.add(packet);
+        }
     }
 }

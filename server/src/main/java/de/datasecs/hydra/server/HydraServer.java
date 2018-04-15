@@ -1,11 +1,14 @@
 package de.datasecs.hydra.server;
 
+import de.datasecs.hydra.shared.distribution.Distribution;
 import de.datasecs.hydra.shared.handler.HydraSession;
 import de.datasecs.hydra.shared.handler.Session;
 import de.datasecs.hydra.shared.protocol.HydraProtocol;
+import de.datasecs.hydra.shared.protocol.packets.Packet;
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
 import io.netty.util.concurrent.EventExecutorGroup;
+import io.netty.util.internal.ConcurrentSet;
 
 import java.net.SocketAddress;
 import java.util.Arrays;
@@ -104,5 +107,21 @@ public class HydraServer {
      */
     public Set<Session> getSessions() {
         return protocol.getSessions();
+    }
+
+    /**
+     * Sends a packet to all clients that are connected to the server with the specified distribution type.
+     *
+     * @param packet the packet that is supposed to be send to all connected clients.
+     * @param distributionType the type of distribution that is supposed to be used.
+     */
+    public void send(Packet packet, Distribution distributionType) {
+        switch (distributionType) {
+            case SIMPLE_BROADCAST:
+                ConcurrentSet<Session> sessions = new ConcurrentSet<>();
+                sessions.addAll(protocol.getSessions());
+                sessions.forEach(session -> session.send(packet));
+                break;
+        }
     }
 }

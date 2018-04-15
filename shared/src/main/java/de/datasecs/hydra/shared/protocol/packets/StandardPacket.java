@@ -1,5 +1,7 @@
 package de.datasecs.hydra.shared.protocol.packets;
 
+import io.netty.buffer.ByteBuf;
+
 /**
  * Created with love by DataSecs on 09.04.18
  */
@@ -15,17 +17,17 @@ public class StandardPacket extends Packet {
     }
 
     @Override
-    public void read() {
-        object = readObject();
-    }
-
-    @Override
-    public void write() {
-        writeObject(object);
-    }
-
-    @Override
     public String toString() {
         return object.toString();
+    }
+
+    @Override
+    public void read(ByteBuf byteBuf) {
+        readObject(byteBuf);
+    }
+
+    @Override
+    public void write(ByteBuf byteBuf) {
+        writeObject(byteBuf, object);
     }
 }
