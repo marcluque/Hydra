@@ -2,6 +2,7 @@ package de.datasecs.hydra.example.shared.chat;
 
 import de.datasecs.hydra.shared.protocol.packets.Packet;
 import de.datasecs.hydra.shared.protocol.packets.PacketId;
+import io.netty.buffer.ByteBuf;
 
 /**
  * Created with love by DataSecs on 11.04.18
@@ -18,13 +19,13 @@ public class MessagePacket extends Packet {
     }
 
     @Override
-    public void read() {
-        message = readString();
+    public void read(ByteBuf byteBuf) {
+        message = readString(byteBuf);
     }
 
     @Override
-    public void write() {
-        writeString(message);
+    public void write(ByteBuf byteBuf) {
+        writeString(byteBuf, message);
     }
 
     public String getMessage() {

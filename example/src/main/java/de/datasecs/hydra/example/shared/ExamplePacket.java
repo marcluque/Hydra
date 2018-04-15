@@ -2,6 +2,7 @@ package de.datasecs.hydra.example.shared;
 
 import de.datasecs.hydra.shared.protocol.packets.Packet;
 import de.datasecs.hydra.shared.protocol.packets.PacketId;
+import io.netty.buffer.ByteBuf;
 
 import java.util.Arrays;
 
@@ -32,15 +33,15 @@ public class ExamplePacket extends Packet {
     }
 
     @Override
-    public void read() {
-        sampleObject = readObject();
-        sampleStringArray = readArray();
+    public void read(ByteBuf byteBuf) {
+        sampleObject = readObject(byteBuf);
+        sampleStringArray = readArray(byteBuf);
     }
 
     @Override
-    public void write() {
-        writeObject(sampleObject);
-        writeArray(sampleStringArray);
+    public void write(ByteBuf byteBuf) {
+        writeObject(byteBuf, sampleObject);
+        writeArray(byteBuf, sampleStringArray);
     }
 
     // Auto-generated toString method by IntelliJ for example purposes

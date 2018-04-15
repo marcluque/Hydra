@@ -36,7 +36,7 @@ like a [simple chat application](https://github.com/DataSecs/Hydra/wiki/Building
 <dependency>
     <groupId>de.datasecs</groupId>
     <artifactId>hydra-all</artifactId>
-    <version>1.6.0</version>
+    <version>1.6.1</version>
 </dependency>
 ```
 
@@ -46,7 +46,7 @@ like a [simple chat application](https://github.com/DataSecs/Hydra/wiki/Building
 <dependency>
     <groupId>de.datasecs</groupId>
     <artifactId>hydra-all</artifactId>
-    <version>1.5.0</version>
+    <version>1.6.0</version>
 </dependency>
 ```
 
