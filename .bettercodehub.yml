@@ -3,4 +3,4 @@ languages:
 - java
 
 exclude:
-- /de.datasecs.hydra.example/.*
+- /example/.*
