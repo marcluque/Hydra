@@ -2,6 +2,7 @@
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.datasecs/hydra/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.datasecs/hydra-all)
 ![BCH compliance](https://bettercodehub.com/edge/badge/DataSecs/Hydra?branch=master)
+[![codecov](https://codecov.io/gh/DataSecs/Hydra/branch/master/graph/badge.svg)](https://codecov.io/gh/DataSecs/Hydra)
 
 ## Description
 
@@ -37,7 +38,7 @@ like a [simple chat application](https://github.com/DataSecs/Hydra/wiki/Building
 <dependency>
     <groupId>de.datasecs</groupId>
     <artifactId>hydra-all</artifactId>
-    <version>1.6.1</version>
+    <version>1.6.2</version>
 </dependency>
 ```
 
