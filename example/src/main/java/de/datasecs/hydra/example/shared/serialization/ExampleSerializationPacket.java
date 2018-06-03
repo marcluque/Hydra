@@ -9,7 +9,7 @@ import java.util.Arrays;
 /**
  * Created with love by DataSecs on 12.02.18
  */
-@PacketId()
+@PacketId(1)
 public class ExampleSerializationPacket extends Packet {
 
     private CustomClass customClass;

@@ -1,7 +1,7 @@
 package de.datasecs.hydra.shared.initializer;
 
-import de.datasecs.hydra.shared.handler.HydraSession;
-import de.datasecs.hydra.shared.protocol.HydraProtocol;
+import de.datasecs.hydra.shared.handler.impl.HydraSession;
+import de.datasecs.hydra.shared.protocol.impl.HydraProtocol;
 import de.datasecs.hydra.shared.protocol.packets.serialization.PacketDecoder;
 import de.datasecs.hydra.shared.protocol.packets.serialization.PacketEncoder;
 import io.netty.channel.ChannelInitializer;

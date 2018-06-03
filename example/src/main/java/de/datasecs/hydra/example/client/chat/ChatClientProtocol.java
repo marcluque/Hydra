@@ -2,7 +2,7 @@ package de.datasecs.hydra.example.client.chat;
 
 import de.datasecs.hydra.example.shared.chat.MessagePacket;
 import de.datasecs.hydra.example.shared.chat.ServerPacket;
-import de.datasecs.hydra.shared.protocol.HydraProtocol;
+import de.datasecs.hydra.shared.protocol.impl.HydraProtocol;
 
 /**
  * Created with love by DataSecs on 11.04.18

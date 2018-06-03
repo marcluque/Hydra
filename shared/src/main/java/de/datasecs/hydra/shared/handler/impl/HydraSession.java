@@ -1,6 +1,7 @@
-package de.datasecs.hydra.shared.handler;
+package de.datasecs.hydra.shared.handler.impl;
 
-import de.datasecs.hydra.shared.protocol.HydraProtocol;
+import de.datasecs.hydra.shared.handler.Session;
+import de.datasecs.hydra.shared.protocol.impl.HydraProtocol;
 import de.datasecs.hydra.shared.protocol.packets.Packet;
 import de.datasecs.hydra.shared.protocol.packets.StandardPacket;
 import io.netty.channel.Channel;

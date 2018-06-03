@@ -2,7 +2,7 @@ package de.datasecs.hydra.example.server;
 
 import de.datasecs.hydra.example.shared.ExamplePacket;
 import de.datasecs.hydra.example.shared.serialization.ExampleSerializationPacket;
-import de.datasecs.hydra.shared.protocol.HydraProtocol;
+import de.datasecs.hydra.shared.protocol.impl.HydraProtocol;
 
 /**
  * Created with love by DataSecs on 03.11.2017.

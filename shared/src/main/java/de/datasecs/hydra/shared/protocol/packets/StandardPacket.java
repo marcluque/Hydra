@@ -23,7 +23,7 @@ public class StandardPacket extends Packet {
 
     @Override
     public void read(ByteBuf byteBuf) {
-        readObject(byteBuf);
+        object = readObject(byteBuf);
     }
 
     @Override

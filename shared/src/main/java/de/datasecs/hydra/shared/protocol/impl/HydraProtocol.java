@@ -1,7 +1,8 @@
-package de.datasecs.hydra.shared.protocol;
+package de.datasecs.hydra.shared.protocol.impl;
 
 import de.datasecs.hydra.shared.handler.Session;
 import de.datasecs.hydra.shared.handler.listener.HydraSessionListener;
+import de.datasecs.hydra.shared.protocol.Protocol;
 import de.datasecs.hydra.shared.protocol.packets.Packet;
 import de.datasecs.hydra.shared.protocol.packets.PacketId;
 import de.datasecs.hydra.shared.protocol.packets.StandardPacket;
@@ -10,12 +11,15 @@ import de.datasecs.hydra.shared.protocol.packets.listener.PacketHandler;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created with love by DataSecs on 29.09.2017.
  */
-public class HydraProtocol {
+public class HydraProtocol implements Protocol {
 
     private Map<Byte, Class<? extends Packet>> packets = new HashMap<>();
 
@@ -51,13 +55,8 @@ public class HydraProtocol {
         return packetBytes.get(packet.getClass());
     }
 
-    /**
-     * Used to register a packet to the protocol of Hydra.
-     * The protocol needs the information about the packet in order to be able to rebuild it after serialization.
-     *
-     * @param clazz the class of the Packet that is supposed to be registered.
-     */
-    protected void registerPacket(Class<? extends Packet> clazz) {
+    @Override
+    public void registerPacket(Class<? extends Packet> clazz) {
         if (clazz == null) {
             throw new IllegalArgumentException("clazz can't be null!");
         }
@@ -78,37 +77,32 @@ public class HydraProtocol {
         packetBytes.put(clazz, id);
     }
 
-    /**
-     * Register listener in the protocol in order to make Hydra able to call
-     * the listener when a fitting packet is received.
-     *
-     * @param packetListener the packet listener that is supposed to be registered.
-     */
-    protected void registerListener(HydraPacketListener packetListener) {
+    @Override
+    public void registerListener(HydraPacketListener packetListener) {
         if (packetListener == null) {
             throw new IllegalArgumentException("packetListener can't be null!");
         }
 
         this.packetListener = packetListener;
 
-        Arrays.stream(packetListener.getClass().getMethods())
-                .filter(method -> method.isAnnotationPresent(PacketHandler.class))
-                .forEach(method -> {
-                    if (method.getParameterCount() == 2) {
-                        Class clazz = method.getParameterTypes()[0];
-                        if (Packet.class.isAssignableFrom(clazz)) {
-                            if (!packetListenerMethods.containsKey(clazz)) {
-                                packetListenerMethods.put(clazz, method);
-                            } else {
-                                throw new IllegalArgumentException(String.format("It's not possible to assign multiple PacketHandler methods for packet %s.class", clazz.getSimpleName()));
-                            }
+        for (Method method : packetListener.getClass().getMethods()) {
+            if (method.isAnnotationPresent(PacketHandler.class)) {
+                if (method.getParameterCount() == 2) {
+                    Class clazz = method.getParameterTypes()[0];
+                    if (Packet.class.isAssignableFrom(clazz)) {
+                        if (!packetListenerMethods.containsKey(clazz)) {
+                            packetListenerMethods.put(clazz, method);
                         } else {
-                            throw new IllegalArgumentException(String.format("%s is not a deriving class of Packet.class. Make sure the first argument is a deriving class of Packet.class. The first argument of the PacketHandler method is the packet it is supposed to handle!", clazz.getSimpleName()));
+                            throw new IllegalArgumentException(String.format("It's not possible to assign multiple PacketHandler methods for packet %s.class", clazz.getSimpleName()));
                         }
                     } else {
-                        throw new IllegalArgumentException("There are just 2 arguments allowed for a PacketHandler method!");
+                        throw new IllegalArgumentException(String.format("%s is not a deriving class of Packet.class. Make sure the first argument is a deriving class of Packet.class. The first argument of the PacketHandler method is the packet it is supposed to handle!", clazz.getSimpleName()));
                     }
-                });
+                } else {
+                    throw new IllegalArgumentException("There are just 2 arguments allowed for a PacketHandler method!");
+                }
+            }
+        }
     }
 
     public void callPacketListener(Packet packet, Session session) {

@@ -1,6 +1,6 @@
 package de.datasecs.hydra.shared.protocol.packets.serialization;
 
-import de.datasecs.hydra.shared.protocol.HydraProtocol;
+import de.datasecs.hydra.shared.protocol.impl.HydraProtocol;
 import de.datasecs.hydra.shared.protocol.packets.Packet;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

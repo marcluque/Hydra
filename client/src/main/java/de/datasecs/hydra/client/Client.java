@@ -2,7 +2,8 @@ package de.datasecs.hydra.client;
 
 import de.datasecs.hydra.shared.handler.listener.HydraSessionListener;
 import de.datasecs.hydra.shared.initializer.HydraChannelInitializer;
-import de.datasecs.hydra.shared.protocol.HydraProtocol;
+import de.datasecs.hydra.shared.protocol.Protocol;
+import de.datasecs.hydra.shared.protocol.impl.HydraProtocol;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
@@ -40,10 +41,10 @@ public class Client {
 
         private HydraProtocol protocol;
 
-        public Builder(String host, int port, HydraProtocol protocol) {
+        public Builder(String host, int port, Protocol protocol) {
             this.host = host;
             this.port = port;
-            this.protocol = protocol;
+            this.protocol = (HydraProtocol) protocol;
         }
 
         /**

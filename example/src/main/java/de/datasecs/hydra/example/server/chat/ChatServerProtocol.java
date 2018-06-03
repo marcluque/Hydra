@@ -3,7 +3,7 @@ package de.datasecs.hydra.example.server.chat;
 import de.datasecs.hydra.example.shared.chat.MessagePacket;
 import de.datasecs.hydra.example.shared.chat.ServerPacket;
 import de.datasecs.hydra.shared.handler.Session;
-import de.datasecs.hydra.shared.protocol.HydraProtocol;
+import de.datasecs.hydra.shared.protocol.impl.HydraProtocol;
 
 import java.util.Set;
 

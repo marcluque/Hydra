@@ -1,9 +1,9 @@
 package de.datasecs.hydra.server;
 
 import de.datasecs.hydra.shared.distribution.Distribution;
-import de.datasecs.hydra.shared.handler.HydraSession;
 import de.datasecs.hydra.shared.handler.Session;
-import de.datasecs.hydra.shared.protocol.HydraProtocol;
+import de.datasecs.hydra.shared.handler.impl.HydraSession;
+import de.datasecs.hydra.shared.protocol.impl.HydraProtocol;
 import de.datasecs.hydra.shared.protocol.packets.Packet;
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
