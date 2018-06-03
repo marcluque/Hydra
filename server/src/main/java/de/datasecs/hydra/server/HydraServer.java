@@ -3,7 +3,7 @@ package de.datasecs.hydra.server;
 import de.datasecs.hydra.shared.distribution.Distribution;
 import de.datasecs.hydra.shared.handler.Session;
 import de.datasecs.hydra.shared.handler.impl.HydraSession;
-import de.datasecs.hydra.shared.protocol.impl.HydraProtocol;
+import de.datasecs.hydra.shared.protocol.Protocol;
 import de.datasecs.hydra.shared.protocol.packets.Packet;
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
@@ -27,11 +27,11 @@ public class HydraServer {
 
     private Channel channel;
 
-    private HydraProtocol protocol;
+    private Protocol protocol;
 
     private EventLoopGroup[] loopGroups;
 
-    public HydraServer(Channel channel, HydraProtocol protocol, EventLoopGroup[] loopGroups) {
+    public HydraServer(Channel channel, Protocol protocol, EventLoopGroup[] loopGroups) {
         this.channel = channel;
         this.protocol = protocol;
         this.loopGroups = loopGroups;

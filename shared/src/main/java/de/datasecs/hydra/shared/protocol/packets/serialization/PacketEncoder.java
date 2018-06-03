@@ -1,6 +1,6 @@
 package de.datasecs.hydra.shared.protocol.packets.serialization;
 
-import de.datasecs.hydra.shared.protocol.impl.HydraProtocol;
+import de.datasecs.hydra.shared.protocol.Protocol;
 import de.datasecs.hydra.shared.protocol.packets.Packet;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -13,9 +13,9 @@ import java.util.List;
  */
 public class PacketEncoder extends MessageToMessageEncoder<Packet> {
 
-    private HydraProtocol protocol;
+    private Protocol protocol;
 
-    public PacketEncoder(HydraProtocol protocol) {
+    public PacketEncoder(Protocol protocol) {
         this.protocol = protocol;
     }
 

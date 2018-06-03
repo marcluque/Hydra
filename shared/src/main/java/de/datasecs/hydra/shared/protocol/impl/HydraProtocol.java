@@ -40,6 +40,7 @@ public class HydraProtocol implements Protocol {
         registerPacket(StandardPacket.class);
     }
 
+    @Override
     public Packet createPacket(byte id) {
         try {
             return packets.get(id).newInstance();
@@ -51,6 +52,7 @@ public class HydraProtocol implements Protocol {
         return null;
     }
 
+    @Override
     public byte getPacketId(Packet packet) {
         return packetBytes.get(packet.getClass());
     }
@@ -105,6 +107,7 @@ public class HydraProtocol implements Protocol {
         }
     }
 
+    @Override
     public void callPacketListener(Packet packet, Session session) {
         try {
             packetListenerMethods.get(packet.getClass()).invoke(packetListener, packet.getClass().cast(packet), session);
@@ -113,10 +116,12 @@ public class HydraProtocol implements Protocol {
         }
     }
 
+    @Override
     public void addSessionListener(HydraSessionListener sessionListener) {
         this.sessionListener = sessionListener;
     }
 
+    @Override
     public void callSessionListener(boolean connected, Session session) {
         if (connected) {
             sessionListener.onConnected(session);
@@ -125,30 +130,37 @@ public class HydraProtocol implements Protocol {
         }
     }
 
+    @Override
     public void setClientSession(Session clientSession) {
         this.clientSession = clientSession;
     }
 
+    @Override
     public Session getClientSession() {
         return clientSession;
     }
 
+    @Override
     public void addSession(Session session) {
         sessions.add(session);
     }
 
+    @Override
     public void removeSession(Session session) {
         sessions.remove(session);
     }
 
+    @Override
     public Set<Session> getSessions() {
         return sessions;
     }
 
+    @Override
     public HydraSessionListener getSessionListener() {
         return sessionListener;
     }
 
+    @Override
     public HydraPacketListener getPacketListener() {
         return packetListener;
     }

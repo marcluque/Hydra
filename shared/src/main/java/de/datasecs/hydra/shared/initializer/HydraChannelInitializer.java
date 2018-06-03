@@ -1,7 +1,7 @@
 package de.datasecs.hydra.shared.initializer;
 
 import de.datasecs.hydra.shared.handler.impl.HydraSession;
-import de.datasecs.hydra.shared.protocol.impl.HydraProtocol;
+import de.datasecs.hydra.shared.protocol.Protocol;
 import de.datasecs.hydra.shared.protocol.packets.serialization.PacketDecoder;
 import de.datasecs.hydra.shared.protocol.packets.serialization.PacketEncoder;
 import io.netty.channel.ChannelInitializer;
@@ -15,11 +15,11 @@ import io.netty.handler.codec.LengthFieldPrepender;
  */
 public class HydraChannelInitializer extends ChannelInitializer<SocketChannel> {
 
-    private HydraProtocol protocol;
+    private Protocol protocol;
 
     private boolean isServer;
 
-    public HydraChannelInitializer(HydraProtocol protocol, boolean isServer) {
+    public HydraChannelInitializer(Protocol protocol, boolean isServer) {
         this.protocol = protocol;
         this.isServer = isServer;
     }

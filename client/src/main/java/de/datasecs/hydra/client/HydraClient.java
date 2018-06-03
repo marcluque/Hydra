@@ -3,7 +3,7 @@ package de.datasecs.hydra.client;
 import de.datasecs.hydra.shared.handler.Session;
 import de.datasecs.hydra.shared.handler.impl.HydraSession;
 import de.datasecs.hydra.shared.initializer.HydraChannelInitializer;
-import de.datasecs.hydra.shared.protocol.impl.HydraProtocol;
+import de.datasecs.hydra.shared.protocol.Protocol;
 import de.datasecs.hydra.shared.protocol.packets.Packet;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -25,7 +25,7 @@ public class HydraClient {
 
     private Channel channel;
 
-    private HydraProtocol protocol;
+    private Protocol protocol;
 
     private EventLoopGroup workerGroup;
 
@@ -33,14 +33,14 @@ public class HydraClient {
 
     private Bootstrap bootstrap;
 
-    public HydraClient(Channel channel, HydraProtocol protocol, EventLoopGroup workerGroup) {
+    public HydraClient(Channel channel, Protocol protocol, EventLoopGroup workerGroup) {
         this.channel = channel;
         this.protocol = protocol;
         this.workerGroup = workerGroup;
         clientSession = protocol.getClientSession();
     }
 
-    public HydraClient(HydraProtocol protocol, EventLoopGroup workerGroup, Bootstrap bootstrap) {
+    public HydraClient(Protocol protocol, EventLoopGroup workerGroup, Bootstrap bootstrap) {
         this.protocol = protocol;
         this.workerGroup = workerGroup;
         this.bootstrap = bootstrap;
