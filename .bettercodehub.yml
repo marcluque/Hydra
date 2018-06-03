@@ -1,0 +1,6 @@
+component_depth: 8
+languages:
+- java
+
+exclude:
+- /de.datasecs.hydra.example/.*

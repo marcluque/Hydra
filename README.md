@@ -1,6 +1,7 @@
 ![hydra banner](http://hydra.datasecs.de/images/hydra_banner.png)
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.datasecs/hydra/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.datasecs/hydra-all)
+[![BCH compliance](https://bettercodehub.com/edge/badge/DataSecs/Hydra?branch=master)]
 
 ## Description
 
