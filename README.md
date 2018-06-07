@@ -3,6 +3,7 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.datasecs/hydra/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.datasecs/hydra-all)
 [![BCH compliance](https://bettercodehub.com/edge/badge/DataSecs/Hydra?branch=master)](https://datasecs.de)
 [![codecov](https://codecov.io/gh/DataSecs/Hydra/branch/master/graph/badge.svg)](https://codecov.io/gh/DataSecs/Hydra)
+[![Build Status](https://travis-ci.com/DataSecs/Hydra.svg?branch=master)](https://travis-ci.com/DataSecs/Hydra)
 
 ## Description
 
