@@ -9,15 +9,11 @@ os:
 
 jdk:
 - oraclejdk8
-- oraclejdk10
-- openjdk11
 
 matrix:
   allow_failures:
     - os: osx
-      jdk: oraclejdk10
       jdk: oraclejdk8
-    - jdk: openjdk11
 
 after_success:
 - bash < (curl -s https://codecov.io/bash)
