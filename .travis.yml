@@ -1,6 +1,6 @@
 language: java
 
-script: "mvn clean compile test --pl \!de.datasecs:hydra-all,\!de.datasecs:hydra-example"
+script: "mvn clean compile test --pl de.datasecs:hydra-all, de.datasecs:hydra-example"
 
 os:
 - linux
