@@ -145,16 +145,12 @@
                 <artifactId>cobertura-maven-plugin</artifactId>
                 <version>2.7</version>
                 <configuration>
+                    <quiet>true</quiet>
                     <formats>
                         <format>html</format>
                         <format>xml</format>
                     </formats>
                     <check />
-                    <instrumentation>
-                        <excludes>
-                            <exclude>de.datasecs.hydra.shared.protocol.packets.Packet</exclude>
-                        </excludes>
-                    </instrumentation>
                 </configuration>
             </plugin>
         </plugins>
