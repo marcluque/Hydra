@@ -17,6 +17,17 @@
         <module>example</module>
     </modules>
 
+    <profiles>
+        <profile>
+            <id>ci</id>
+            <modules>
+                <module>shared</module>
+                <module>client</module>
+                <module>server</module>
+            </modules>
+        </profile>
+    </profiles>
+
     <name>hydra</name>
     <description>Hydra is a network framework built upon Netty.</description>
     <url>http://hydra.datasecs.de</url>
