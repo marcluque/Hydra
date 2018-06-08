@@ -32,6 +32,7 @@
             <!-- Clean -->
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>
+                <version>LATEST</version>
                 <executions>
                     <execution>
                         <id>clean-first</id>
@@ -104,6 +105,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
+                <version>LATEST</version>
                 <executions>
                     <execution>
                         <id>add-source</id>
