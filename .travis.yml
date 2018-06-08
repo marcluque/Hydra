@@ -1,6 +1,6 @@
 language: java
 
-install: "mvn -P ci clean install"
+install: "mvn clean compile test --pl \!de.datasecs:hydra-all,\!de.datasecs:hydra-example"
 script: "mvn -P ci clean compile test"
 
 os:
