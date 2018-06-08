@@ -1,7 +1,7 @@
 language: java
 
 install: "mvn -P ci clean install"
-script: "mvn -P ci clean compile test"
+script: "mvn -P ci clean compile test cobertura:cobertura"
 
 os:
 - linux
