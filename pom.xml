@@ -150,6 +150,11 @@
                         <format>xml</format>
                     </formats>
                     <check />
+                    <instrumentation>
+                        <excludes>
+                            <exclude>de.datasecs.hydra.shared.protocol.packets.Packet</exclude>
+                        </excludes>
+                    </instrumentation>
                 </configuration>
             </plugin>
         </plugins>
