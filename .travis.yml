@@ -1,7 +1,9 @@
 language: java
 
-install: "mvn clean compile test --pl \!de.datasecs:hydra-all,\!de.datasecs:hydra-example"
-script: "mvn -P ci clean compile test"
+sudo: false
+
+install: "mvn -P ci clean install"
+script: "mvn -P ci clean compile test cobertura:cobertura"
 
 os:
 - linux
@@ -21,4 +23,4 @@ matrix:
     jdk: oraclejdk10
 
 after_success:
-- bash < (curl -s https://codecov.io/bash)
+- bash < (curl -s https://codecov.io/bash) || echo 'Codecov failed to upload'
