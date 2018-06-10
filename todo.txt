@@ -1,0 +1,10 @@
+    @Override
+    public String toString() {
+        return "HydraSession{" +
+                "channel=" + channel +
+                ", protocol=" + protocol +
+                ", connected=" + channel.isActive() +
+                ", writable=" + channel.isWritable() +
+                ", address=" + getAddress() +
+                '}';
+    }
