@@ -78,4 +78,15 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> implements
         SocketAddress address = channel.remoteAddress();
         return address == null ? channel.localAddress() : address;
     }
+
+    @Override
+    public String toString() {
+        return "HydraSession{" +
+                "channel=" + channel +
+                ", protocol=" + protocol +
+                ", connected=" + channel.isActive() +
+                ", writable=" + channel.isWritable() +
+                ", address=" + getAddress() +
+                '}';
+    }
 }
