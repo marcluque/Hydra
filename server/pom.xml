@@ -18,6 +18,14 @@
             <artifactId>hydra-shared</artifactId>
             <version>1.6.2</version>
         </dependency>
+
+        <!-- JaCoCo -->
+        <dependency>
+            <groupId>org.jacoco</groupId>
+            <artifactId>org.jacoco.agent</artifactId>
+            <version>0.7.9</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
