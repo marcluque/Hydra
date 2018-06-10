@@ -36,6 +36,8 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> implements
     public void handlerRemoved(ChannelHandlerContext context) {
         if (protocol.getSessionListener() != null) {
             protocol.callSessionListener(false, this);
+        } else if (protocol.getSessionConsumer() != null) {
+            protocol.callSessionConsumer(false, this);
         }
 
         protocol.removeSession(this);

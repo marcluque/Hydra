@@ -1,5 +1,7 @@
 package de.datasecs.hydra.server;
 
+import de.datasecs.hydra.shared.handler.Session;
+import de.datasecs.hydra.shared.handler.listener.HydraSessionConsumer;
 import de.datasecs.hydra.shared.handler.listener.HydraSessionListener;
 import de.datasecs.hydra.shared.initializer.HydraChannelInitializer;
 import de.datasecs.hydra.shared.protocol.Protocol;
@@ -16,6 +18,7 @@ import io.netty.util.AttributeKey;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * Created with love by DataSecs on 29.11.17
@@ -44,10 +47,15 @@ public class Server {
 
         private Protocol protocol;
 
+        private HydraSessionConsumer hydraSessionConsumer;
+
         public Builder(String host, int port, Protocol protocol) {
             this.host = host;
             this.port = port;
             this.protocol = protocol;
+
+            hydraSessionConsumer = new HydraSessionConsumer();
+            protocol.addSessionConsumer(hydraSessionConsumer);
         }
 
         /**
@@ -143,6 +151,16 @@ public class Server {
          */
         public Builder addListener(HydraSessionListener sessionListener) {
             protocol.addSessionListener(sessionListener);
+            return this;
+        }
+
+        public Builder onConnected(Consumer<Session> onConnectedConsumer) {
+            hydraSessionConsumer.setOnConnectedConsumer(onConnectedConsumer);
+            return this;
+        }
+
+        public Builder onDisconnected(Consumer<Session> onDisconnectedConsumer) {
+            hydraSessionConsumer.setOnDisconnectedConsumer(onDisconnectedConsumer);
             return this;
         }
 

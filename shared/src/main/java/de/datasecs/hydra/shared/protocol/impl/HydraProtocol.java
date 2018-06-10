@@ -1,6 +1,7 @@
 package de.datasecs.hydra.shared.protocol.impl;
 
 import de.datasecs.hydra.shared.handler.Session;
+import de.datasecs.hydra.shared.handler.listener.HydraSessionConsumer;
 import de.datasecs.hydra.shared.handler.listener.HydraSessionListener;
 import de.datasecs.hydra.shared.protocol.Protocol;
 import de.datasecs.hydra.shared.protocol.packets.Packet;
@@ -34,6 +35,8 @@ public class HydraProtocol implements Protocol {
     private HydraPacketListener packetListener;
 
     private HydraSessionListener sessionListener;
+
+    private HydraSessionConsumer sessionConsumer;
 
     public HydraProtocol() {
         // Register StandardPacket to be ready out of the box
@@ -131,6 +134,20 @@ public class HydraProtocol implements Protocol {
     }
 
     @Override
+    public void addSessionConsumer(HydraSessionConsumer sessionConsumer) {
+        this.sessionConsumer = sessionConsumer;
+    }
+
+    @Override
+    public void callSessionConsumer(boolean connected, Session session) {
+        if (connected) {
+            sessionConsumer.getOnConnectedConsumer().accept(session);
+        } else {
+            sessionConsumer.getOnDisconnectedConsumer().accept(session);
+        }
+    }
+
+    @Override
     public void setClientSession(Session clientSession) {
         this.clientSession = clientSession;
     }
@@ -158,6 +175,10 @@ public class HydraProtocol implements Protocol {
     @Override
     public HydraSessionListener getSessionListener() {
         return sessionListener;
+    }
+
+    public HydraSessionConsumer getSessionConsumer() {
+        return sessionConsumer;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package de.datasecs.hydra.shared.protocol;
 
 import de.datasecs.hydra.shared.handler.Session;
+import de.datasecs.hydra.shared.handler.listener.HydraSessionConsumer;
 import de.datasecs.hydra.shared.handler.listener.HydraSessionListener;
 import de.datasecs.hydra.shared.protocol.packets.Packet;
 import de.datasecs.hydra.shared.protocol.packets.listener.HydraPacketListener;
@@ -38,6 +39,10 @@ public interface Protocol {
 
     void callSessionListener(boolean connected, Session session);
 
+    void addSessionConsumer(HydraSessionConsumer sessionConsumer);
+
+    void callSessionConsumer(boolean connected, Session session);
+
     void setClientSession(Session clientSession);
 
     Session getClientSession();
@@ -49,6 +54,8 @@ public interface Protocol {
     Set<Session> getSessions();
 
     HydraSessionListener getSessionListener();
+
+    HydraSessionConsumer getSessionConsumer();
 
     HydraPacketListener getPacketListener();
 }

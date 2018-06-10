@@ -49,6 +49,9 @@ public class HydraChannelInitializer extends ChannelInitializer<SocketChannel> {
         if (protocol.getSessionListener() != null) {
             // Inform SessionListener about new session
             protocol.callSessionListener(true, session);
+        } else if (protocol.getSessionConsumer() != null) {
+            // Inform SessionConsumer about new session
+            protocol.callSessionConsumer(true, session);
         }
     }
 }
