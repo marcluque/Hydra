@@ -2,6 +2,9 @@ language: java
 
 sudo: false
 
+install: "mvn -P ci install"
+script: "mvn -P ci clean compile test"
+
 os:
 - linux
 - osx
