@@ -2,9 +2,6 @@ language: java
 
 sudo: false
 
-install: "mvn -P ci install"
-script: "mvn -P ci clean compile test"
-
 os:
 - linux
 - osx
@@ -27,4 +24,4 @@ matrix:
     jdk: oraclejdk10
 
 after_success:
-- bash < (curl -s https://codecov.io/bash)
+  - mvn clean test saga:coverage coveralls:report
