@@ -24,4 +24,4 @@ matrix:
     jdk: oraclejdk10
 
 after_success:
-  - mvn clean test saga:coverage coveralls:report
+  - mvn -P ci clean test jacoco:coverage coveralls:report
