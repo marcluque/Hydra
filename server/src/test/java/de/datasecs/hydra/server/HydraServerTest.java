@@ -1,5 +1,7 @@
 package de.datasecs.hydra.server;
 
+import de.datasecs.hydra.shared.handler.Session;
+import de.datasecs.hydra.shared.handler.listener.HydraSessionListener;
 import io.netty.channel.ChannelOption;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -17,8 +19,17 @@ public class HydraServerTest {
         server = new Server.Builder("localhost", 8888, new TestProtocol())
                 .bossThreads(2)
                 .workerThreads(4)
-                .onConnected(session -> System.out.println("TestClient connected!"))
-                .onDisconnected(session -> System.out.println("TestClient disconnected!"))
+                .addListener(new HydraSessionListener() {
+                    @Override
+                    public void onConnected(Session session) {
+                        System.out.println("TestClient connected!");
+                    }
+
+                    @Override
+                    public void onDisconnected(Session session) {
+                        System.out.println("TestClient disconnected!");
+                    }
+                })
                 .option(ChannelOption.TCP_NODELAY, true)
                 .option(ChannelOption.SO_KEEPALIVE, true)
                 .option(ChannelOption.SO_BACKLOG, 200)
