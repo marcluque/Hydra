@@ -46,30 +46,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.eluder.coveralls</groupId>
-                <artifactId>coveralls-maven-plugin</artifactId>
-                <version>4.3.0</version>
-                <configuration>
-                    <sourceEncoding>UTF-8</sourceEncoding>
-                </configuration>
-            </plugin>
-
-            <!-- Coverage Reports -->
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.1</version>
-                <executions>
-                    <execution>
-                        <id>prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
             <!-- Compiler -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -178,6 +154,42 @@
 
     <profiles>
         <profile>
+            <id>unit-testing</id>
+            <modules>
+                <module>shared</module>
+                <module>client</module>
+                <module>server</module>
+            </modules>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.eluder.coveralls</groupId>
+                        <artifactId>coveralls-maven-plugin</artifactId>
+                        <version>4.3.0</version>
+                        <configuration>
+                            <sourceEncoding>UTF-8</sourceEncoding>
+                        </configuration>
+                    </plugin>
+
+                    <!-- Coverage Reports
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.8.1</version>
+                        <executions>
+                            <execution>
+                                <id>prepare-agent</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>-->
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
             <id>ci</id>
             <modules>
                 <module>shared</module>
@@ -195,7 +207,7 @@
                         </configuration>
                     </plugin>
 
-                    <!-- Coverage Reports -->
+                    <!-- Coverage Reports
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
@@ -208,7 +220,7 @@
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin>
+                    </plugin>-->
 
                     <!-- Authentication -->
                     <plugin>

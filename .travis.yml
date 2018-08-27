@@ -25,6 +25,3 @@ matrix:
     jdk: oraclejdk8
   - os: linux
     jdk: oraclejdk10
-
-after_success:
-  - mvn -P ci clean test jacoco:coverage coveralls:report
