@@ -4,7 +4,7 @@
 [![BCH compliance](https://bettercodehub.com/edge/badge/DataSecs/Hydra?branch=master)](https://datasecs.de)
 [![Build Status](https://travis-ci.com/DataSecs/Hydra.svg?branch=master)](https://travis-ci.com/DataSecs/Hydra)
 [![Coverage Status](https://coveralls.io/repos/github/DataSecs/Hydra/badge.svg?branch=master)](https://coveralls.io/github/DataSecs/Hydra?branch=master)
-[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![License](https://img.shields.io/badge/License-BSD%202--Clause-orange.svg)](https://opensource.org/licenses/BSD-2-Clause)
 
 ## Description
 
@@ -93,7 +93,7 @@ The javadoc is always up-to-date and can be found on [hydra.datasecs.de/javadoc]
 
 # License
 
-Licensed under the GNU General Public License, Version 3.0 - see the [LICENSE](LICENSE) file for details.
+Licensed under the BSD 2-Clause License - see the [LICENSE](LICENSE) file for details.
 
 ### Credits
 Special thanks go to [TheClashster](https://github.com/TheClashster) for creating the awesome banner and logo!
