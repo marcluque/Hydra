@@ -11,11 +11,16 @@ import io.netty.channel.epoll.Epoll;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.channel.udt.UdtChannel;
+import io.netty.channel.udt.nio.NioUdtProvider;
 import io.netty.util.AttributeKey;
+import io.netty.util.concurrent.DefaultThreadFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ThreadFactory;
 
 /**
  * Created with love by DataSecs on 30.11.17.
@@ -27,6 +32,8 @@ public class Client {
         private String host;
 
         private int port;
+
+        private boolean useUDT;
 
         private boolean connectAfterSetup = true;
 
@@ -47,11 +54,23 @@ public class Client {
         }
 
         /**
+         * This attribute determines whether the server is supposed to use UDT (an modified version of UDP) as
+         * data transfer protocol. The standard value is false.
+         * @see <a href="https://en.wikipedia.org/wiki/UDP-based_Data_Transfer_Protocol">UDP</a>
+         *
+         * @param useUDT determines whether the server is supposed to use UDT (an modified version of UDP) as data transfer protocol
+         */
+        public Builder useUDT(boolean useUDT) {
+            this.useUDT = useUDT;
+            return this;
+        }
+
+        /**
          * This attribute determines whether the client connects instantly or just when the 'connect()' method
          * from {@link HydraClient} is called. The standard value is true, so the standard setting makes the client
          * connect instantly after setup.
          *
-         * @param connectAfterSetup determines whether the client connects instantly or just when 'connect()' method is called.
+         * @param connectAfterSetup determines whether the client connects instantly or just when 'connect()' method is called
          */
         public Builder connectAfterSetup(boolean connectAfterSetup) {
             this.connectAfterSetup = connectAfterSetup;
@@ -129,13 +148,20 @@ public class Client {
         }
 
         private HydraClient setUpClient() {
+            EventLoopGroup workerGroup;
             boolean epoll = useEpoll && Epoll.isAvailable();
-            EventLoopGroup workerGroup = epoll ? new EpollEventLoopGroup(workerThreads) : new NioEventLoopGroup(workerThreads);
+            Bootstrap bootstrap = new Bootstrap();
 
-            Bootstrap bootstrap = new Bootstrap()
-                    .group(workerGroup)
-                    .channel(epoll ? EpollSocketChannel.class : NioSocketChannel.class)
-                    .remoteAddress(host, port);
+            if (useUDT) {
+                ThreadFactory connectFactory = new DefaultThreadFactory("connect");
+                workerGroup = new NioEventLoopGroup(1, connectFactory, NioUdtProvider.MESSAGE_PROVIDER);
+                bootstrap.channelFactory(NioUdtProvider.MESSAGE_CONNECTOR);
+            } else {
+                workerGroup = epoll ? new EpollEventLoopGroup(workerThreads) : new NioEventLoopGroup(workerThreads);
+                bootstrap.channel(epoll ? EpollSocketChannel.class : NioSocketChannel.class);
+            }
+
+            bootstrap.group(workerGroup).remoteAddress(host, port);
 
             options.forEach(bootstrap::option);
             attributeKeys.forEach(bootstrap::attr);
@@ -143,7 +169,12 @@ public class Client {
             Channel channel = null;
             try {
                 if (connectAfterSetup) {
-                    bootstrap.handler(new HydraChannelInitializer(protocol, false));
+                    if (useUDT) {
+                        bootstrap.handler(new HydraChannelInitializer<UdtChannel>(protocol, false));
+                    } else {
+                        bootstrap.handler(new HydraChannelInitializer<SocketChannel>(protocol, false));
+                    }
+
                     channel = bootstrap.connect().sync().channel();
                 }
             } catch (InterruptedException e) {

@@ -13,11 +13,16 @@ import io.netty.channel.epoll.Epoll;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.udt.UdtChannel;
+import io.netty.channel.udt.nio.NioUdtProvider;
 import io.netty.util.AttributeKey;
+import io.netty.util.concurrent.DefaultThreadFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ThreadFactory;
 import java.util.function.Consumer;
 
 /**
@@ -30,6 +35,8 @@ public class Server {
         private String host;
 
         private int port;
+
+        private boolean useUDT;
 
         private int workerThreads = 2;
 
@@ -56,6 +63,18 @@ public class Server {
 
             hydraSessionConsumer = new HydraSessionConsumer();
             protocol.addSessionConsumer(hydraSessionConsumer);
+        }
+
+        /**
+         * This attribute determines whether the server is supposed to use UDT (an modified version of UDP) as
+         * data transfer protocol. The standard value is false.
+         * @see <a href="https://en.wikipedia.org/wiki/UDP-based_Data_Transfer_Protocol">UDP</a>
+         *
+         * @param useUDT determines whether the server is supposed to use UDT (an modified version of UDP) as data transfer protocol
+         */
+        public Builder useUDT(boolean useUDT) {
+            this.useUDT = useUDT;
+            return this;
         }
 
         /**
@@ -175,14 +194,28 @@ public class Server {
         }
 
         private HydraServer setUpServer() {
+            EventLoopGroup workerGroup, bossGroup;
             boolean epoll = useEpoll && Epoll.isAvailable();
-            EventLoopGroup workerGroup  = epoll ? new EpollEventLoopGroup(workerThreads) : new NioEventLoopGroup(workerThreads);
-            EventLoopGroup bossGroup = epoll ? new EpollEventLoopGroup(bossThreads) : new NioEventLoopGroup(bossThreads);
+            ServerBootstrap serverBootstrap = new ServerBootstrap();
 
-            ServerBootstrap serverBootstrap = new ServerBootstrap()
-                    .group(bossGroup, workerGroup)
-                    .channel(epoll ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
-                    .childHandler(new HydraChannelInitializer(protocol, true));
+            if (useUDT) {
+                ThreadFactory acceptFactory = new DefaultThreadFactory("accept");
+                ThreadFactory connectFactory = new DefaultThreadFactory("connect");
+                workerGroup = new NioEventLoopGroup(1, connectFactory, NioUdtProvider.MESSAGE_PROVIDER);
+                bossGroup = new NioEventLoopGroup(1, acceptFactory, NioUdtProvider.MESSAGE_PROVIDER);
+
+                // TODO: Handler needed?
+                serverBootstrap.channelFactory(NioUdtProvider.MESSAGE_ACCEPTOR);
+                serverBootstrap.childHandler(new HydraChannelInitializer<UdtChannel>(protocol, false));
+            } else {
+                workerGroup = epoll ? new EpollEventLoopGroup(workerThreads) : new NioEventLoopGroup(workerThreads);
+                bossGroup = epoll ? new EpollEventLoopGroup(bossThreads) : new NioEventLoopGroup(bossThreads);
+
+                serverBootstrap.channel(epoll ? EpollServerSocketChannel.class : NioServerSocketChannel.class);
+                serverBootstrap.childHandler(new HydraChannelInitializer<SocketChannel>(protocol, false));
+            }
+
+            serverBootstrap.group(bossGroup, workerGroup);
 
             options.forEach(serverBootstrap::option);
             childOptions.forEach(serverBootstrap::childOption);

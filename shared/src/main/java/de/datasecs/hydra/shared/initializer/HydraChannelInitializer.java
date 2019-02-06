@@ -4,16 +4,16 @@ import de.datasecs.hydra.shared.handler.impl.HydraSession;
 import de.datasecs.hydra.shared.protocol.Protocol;
 import de.datasecs.hydra.shared.protocol.packets.serialization.PacketDecoder;
 import de.datasecs.hydra.shared.protocol.packets.serialization.PacketEncoder;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 
 /**
  * Created with love by DataSecs on 29.09.2017.
  */
-public class HydraChannelInitializer extends ChannelInitializer<SocketChannel> {
+public class HydraChannelInitializer<C extends Channel> extends ChannelInitializer<C> {
 
     private Protocol protocol;
 
@@ -25,7 +25,7 @@ public class HydraChannelInitializer extends ChannelInitializer<SocketChannel> {
     }
 
     @Override
-    protected void initChannel(SocketChannel channel) {
+    protected void initChannel(C channel) {
         ChannelPipeline pipeline = channel.pipeline();
 
         // In
