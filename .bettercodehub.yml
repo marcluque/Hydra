@@ -4,3 +4,4 @@ languages:
 
 exclude:
 - /example/.*
+- .*/Packet\.java
