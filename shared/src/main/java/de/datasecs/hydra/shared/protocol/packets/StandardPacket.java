@@ -17,11 +17,6 @@ public class StandardPacket extends Packet {
     }
 
     @Override
-    public String toString() {
-        return object.toString();
-    }
-
-    @Override
     public void read(ByteBuf byteBuf) {
         object = readObject(byteBuf);
     }
@@ -29,5 +24,14 @@ public class StandardPacket extends Packet {
     @Override
     public void write(ByteBuf byteBuf) {
         writeObject(byteBuf, object);
+    }
+
+    public Object getObject() {
+        return object;
+    }
+
+    @Override
+    public String toString() {
+        return object.toString();
     }
 }
