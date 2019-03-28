@@ -96,4 +96,4 @@ The javadoc is always up-to-date and can be found on [hydra.datasecs.de/javadoc]
 Licensed under the BSD 2-Clause License - see the [LICENSE](LICENSE) file for details.
 
 ### Credits
-Special thanks go to [TheClashster](https://github.com/TheClashster) for creating the awesome banner and logo!
+Special thanks go to [Aadi Bajpai](https://github.com/aadibajpai) for creating the awesome banner and logo!
