@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>hydra</artifactId>
+        <groupId>de.datasecs</groupId>
+        <version>1.6.2</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>hydra-test</artifactId>
+
+    <dependencies>
+        <!-- Hydra client -->
+        <dependency>
+            <groupId>de.datasecs</groupId>
+            <artifactId>hydra-client</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+
+        <!-- Hydra server -->
+        <dependency>
+            <groupId>de.datasecs</groupId>
+            <artifactId>hydra-server</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+
+        <!-- JUnit 5 -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.5.0-M1</version>
+        </dependency>
+    </dependencies>
+</project>

@@ -15,6 +15,7 @@
         <module>shared</module>
         <module>server</module>
         <module>example</module>
+        <module>test</module>
     </modules>
 
     <name>hydra</name>

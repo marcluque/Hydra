@@ -50,6 +50,7 @@ public abstract class Packet {
         return null;
     }
 
+    // TODO: Add serialization for custom objects that are send using .send(customObject) or whenever this method is called
     protected void writeObject(ByteBuf byteBuf, Object object) {
         if (object == null) {
             throw new IllegalArgumentException("object cannot be null");
