@@ -75,8 +75,7 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> implements
 
     @Override
     public SocketAddress getAddress() {
-        SocketAddress address = channel.remoteAddress();
-        return address == null ? channel.localAddress() : address;
+        return channel.remoteAddress() == null ? channel.localAddress() : channel.remoteAddress();
     }
 
     @Override

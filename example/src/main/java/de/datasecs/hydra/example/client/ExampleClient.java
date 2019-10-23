@@ -64,7 +64,6 @@ public class ExampleClient {
          * the ExampleClientPacketListener of the server example classes.
          */
         session.send("This is a String and dealt with as object by Hydra");
-        session.send(new ExamplePacket(Arrays.asList(new ExampleClientProtocol(), new ExampleClientProtocol()), new String[]{"This", "is", "a", "message", "in an array"}));
 
         // Closes the connection and releases all occupied resources
         //client.close();
