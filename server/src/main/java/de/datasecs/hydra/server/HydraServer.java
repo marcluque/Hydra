@@ -44,7 +44,9 @@ public class HydraServer {
      */
     public void close() {
         channel.close();
-        Arrays.stream(loopGroups).forEach(EventExecutorGroup::shutdownGracefully);
+        for (EventLoopGroup loopGroup : loopGroups) {
+            loopGroup.shutdownGracefully();
+        }
     }
 
     /**
@@ -118,9 +120,10 @@ public class HydraServer {
     public void send(Packet packet, Distribution distributionType) {
         switch (distributionType) {
             case SIMPLE_BROADCAST:
-                ConcurrentSet<Session> sessions = new ConcurrentSet<>();
-                sessions.addAll(protocol.getSessions());
-                sessions.forEach(session -> session.send(packet));
+                Set<Session> sessions = protocol.getSessions();
+                for (Session s : sessions) {
+                    s.send(packet);
+                }
                 break;
         }
     }

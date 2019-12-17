@@ -206,13 +206,13 @@ public class Server {
 
                 // TODO: Handler needed?
                 serverBootstrap.channelFactory(NioUdtProvider.MESSAGE_ACCEPTOR);
-                serverBootstrap.childHandler(new HydraChannelInitializer<UdtChannel>(protocol, false));
+                serverBootstrap.childHandler(new HydraChannelInitializer<UdtChannel>(protocol, true));
             } else {
                 workerGroup = epoll ? new EpollEventLoopGroup(workerThreads) : new NioEventLoopGroup(workerThreads);
                 bossGroup = epoll ? new EpollEventLoopGroup(bossThreads) : new NioEventLoopGroup(bossThreads);
 
                 serverBootstrap.channel(epoll ? EpollServerSocketChannel.class : NioServerSocketChannel.class);
-                serverBootstrap.childHandler(new HydraChannelInitializer<SocketChannel>(protocol, false));
+                serverBootstrap.childHandler(new HydraChannelInitializer<SocketChannel>(protocol, true));
             }
 
             serverBootstrap.group(bossGroup, workerGroup);
