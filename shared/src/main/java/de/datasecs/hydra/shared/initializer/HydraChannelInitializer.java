@@ -19,9 +19,12 @@ public class HydraChannelInitializer<C extends Channel> extends ChannelInitializ
 
     private boolean isServer;
 
-    public HydraChannelInitializer(Protocol protocol, boolean isServer) {
+    private boolean useUDP;
+
+    public HydraChannelInitializer(Protocol protocol, boolean isServer, boolean useUDP) {
         this.protocol = protocol;
         this.isServer = isServer;
+        this.useUDP = useUDP;
     }
 
     @Override
@@ -46,12 +49,14 @@ public class HydraChannelInitializer<C extends Channel> extends ChannelInitializ
             protocol.setClientSession(session);
         }
 
-        if (protocol.getSessionListener() != null) {
-            // Inform SessionListener about new session
-            protocol.callSessionListener(true, session);
-        } else if (protocol.getSessionConsumer() != null) {
-            // Inform SessionConsumer about new session
-            protocol.callSessionConsumer(true, session);
+        if (!useUDP) {
+            if (protocol.getSessionListener() != null) {
+                // Inform SessionListener about new session
+                protocol.callSessionListener(true, session);
+            } else if (protocol.getSessionConsumer() != null) {
+                // Inform SessionConsumer about new session
+                protocol.callSessionConsumer(true, session);
+            }
         }
     }
 }

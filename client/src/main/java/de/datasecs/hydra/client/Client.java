@@ -12,6 +12,7 @@ import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.channel.udt.UdtChannel;
 import io.netty.channel.udt.nio.NioUdtProvider;
@@ -35,6 +36,8 @@ public class Client {
 
         private boolean useUDT;
 
+        private boolean useUDP;
+
         private boolean connectAfterSetup = true;
 
         private int workerThreads = 2;
@@ -54,14 +57,25 @@ public class Client {
         }
 
         /**
-         * This attribute determines whether the server is supposed to use UDT (an modified version of UDP) as
+         * This attribute determines whether the client is supposed to use UDT (an modified version of UDP) as
          * data transfer protocol. The standard value is false.
          * @see <a href="https://en.wikipedia.org/wiki/UDP-based_Data_Transfer_Protocol">UDP</a>
          *
-         * @param useUDT determines whether the server is supposed to use UDT (an modified version of UDP) as data transfer protocol
+         * @param useUDT determines whether the client is supposed to use UDT (an modified version of UDP) as data transfer protocol
          */
         public Builder useUDT(boolean useUDT) {
             this.useUDT = useUDT;
+            return this;
+        }
+
+        /**
+         * This attribute determines whether the client is supposed to use UDP as data transfer protocol. The standard value is false.
+         * @see <a href="https://en.wikipedia.org/wiki/User_Datagram_Protocol">UDP</a>
+         *
+         * @param useUDP determines whether the client is supposed to use UDP as data transfer protocol
+         */
+        public Builder useUDP(boolean useUDP) {
+            this.useUDP = useUDP;
             return this;
         }
 
@@ -152,13 +166,18 @@ public class Client {
             boolean epoll = useEpoll && Epoll.isAvailable();
             Bootstrap bootstrap = new Bootstrap();
 
-            if (useUDT) {
-                ThreadFactory connectFactory = new DefaultThreadFactory("connect");
-                workerGroup = new NioEventLoopGroup(1, connectFactory, NioUdtProvider.MESSAGE_PROVIDER);
-                bootstrap.channelFactory(NioUdtProvider.MESSAGE_CONNECTOR);
+            if (useUDP) {
+                workerGroup = new NioEventLoopGroup();
+                bootstrap.channel(NioDatagramChannel.class);
             } else {
-                workerGroup = epoll ? new EpollEventLoopGroup(workerThreads) : new NioEventLoopGroup(workerThreads);
-                bootstrap.channel(epoll ? EpollSocketChannel.class : NioSocketChannel.class);
+                if (useUDT) {
+                    ThreadFactory connectFactory = new DefaultThreadFactory("connect");
+                    workerGroup = new NioEventLoopGroup(1, connectFactory, NioUdtProvider.MESSAGE_PROVIDER);
+                    bootstrap.channelFactory(NioUdtProvider.MESSAGE_CONNECTOR);
+                } else {
+                    workerGroup = epoll ? new EpollEventLoopGroup(workerThreads) : new NioEventLoopGroup(workerThreads);
+                    bootstrap.channel(epoll ? EpollSocketChannel.class : NioSocketChannel.class);
+                }
             }
 
             bootstrap.group(workerGroup).remoteAddress(host, port);
@@ -170,9 +189,11 @@ public class Client {
             try {
                 if (connectAfterSetup) {
                     if (useUDT) {
-                        bootstrap.handler(new HydraChannelInitializer<UdtChannel>(protocol, false));
+                        bootstrap.handler(new HydraChannelInitializer<UdtChannel>(protocol, false, false));
+                    } else if (useUDP) {
+                        bootstrap.handler(new HydraChannelInitializer<NioDatagramChannel>(protocol, false, true));
                     } else {
-                        bootstrap.handler(new HydraChannelInitializer<SocketChannel>(protocol, false));
+                        bootstrap.handler(new HydraChannelInitializer<SocketChannel>(protocol, false, false));
                     }
 
                     channel = bootstrap.connect().sync().channel();

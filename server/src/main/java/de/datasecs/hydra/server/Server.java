@@ -222,8 +222,9 @@ public class Server {
                 EventLoopGroup group = new NioEventLoopGroup();
                 bootstrap.group(group)
                         .channel(NioDatagramChannel.class)
-                        .option(ChannelOption.SO_BROADCAST, true)
-                        .handler(new HydraChannelInitializer<SocketChannel>(protocol, true));
+                        .handler(new HydraChannelInitializer<NioDatagramChannel>(protocol, true, true));
+
+                options.forEach(bootstrap::option);
 
                 Channel channel = null;
                 try {
@@ -244,13 +245,13 @@ public class Server {
 
                     // TODO: Handler needed?
                     serverBootstrap.channelFactory(NioUdtProvider.MESSAGE_ACCEPTOR);
-                    serverBootstrap.childHandler(new HydraChannelInitializer<UdtChannel>(protocol, true));
+                    serverBootstrap.childHandler(new HydraChannelInitializer<UdtChannel>(protocol, true, false));
                 } else {
                     workerGroup = epoll ? new EpollEventLoopGroup(workerThreads) : new NioEventLoopGroup(workerThreads);
                     bossGroup = epoll ? new EpollEventLoopGroup(bossThreads) : new NioEventLoopGroup(bossThreads);
 
                     serverBootstrap.channel(epoll ? EpollServerSocketChannel.class : NioServerSocketChannel.class);
-                    serverBootstrap.childHandler(new HydraChannelInitializer<SocketChannel>(protocol, true));
+                    serverBootstrap.childHandler(new HydraChannelInitializer<SocketChannel>(protocol, true, false));
                 }
 
                 serverBootstrap.group(bossGroup, workerGroup);

@@ -56,7 +56,8 @@ public class HydraClient {
             throw new IllegalStateException("Client is already connected!");
         }
 
-        bootstrap.handler(new HydraChannelInitializer(protocol, false));
+        // TODO: Make usable with UDP
+        bootstrap.handler(new HydraChannelInitializer(protocol, false, false));
         try {
             channel = bootstrap.connect().sync().channel();
         } catch (InterruptedException e) {
