@@ -5,7 +5,7 @@
     <parent>
         <artifactId>hydra</artifactId>
         <groupId>de.datasecs</groupId>
-        <version>1.6.2</version>
+        <version>1.6.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -16,14 +16,14 @@
         <dependency>
             <groupId>de.datasecs</groupId>
             <artifactId>hydra-client</artifactId>
-            <version>1.6.2</version>
+            <version>1.6.3</version>
         </dependency>
 
         <!-- Hydra server -->
         <dependency>
             <groupId>de.datasecs</groupId>
             <artifactId>hydra-server</artifactId>
-            <version>1.6.2</version>
+            <version>1.6.3</version>
         </dependency>
     </dependencies>
 
