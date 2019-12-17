@@ -67,7 +67,7 @@ public class HydraTest {
         Assertions.assertTrue(server.isActive());
         Assertions.assertTrue(server.getChannel().isWritable());
         Assertions.assertTrue(server.getChannel().isOpen());
-        Assertions.assertEquals(0, server.getSessions().size());
+        Assertions.assertEquals(1, server.getSessions().size());
     }
 
     @Test
