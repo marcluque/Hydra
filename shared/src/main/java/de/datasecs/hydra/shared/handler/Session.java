@@ -70,4 +70,12 @@ public interface Session {
      * @return the remote or local address, depending of calling opponent.
      */
     SocketAddress getAddress();
+
+    /**
+     *
+     *
+     * @param s
+     * @return
+     */
+    boolean compare(Session s);
 }

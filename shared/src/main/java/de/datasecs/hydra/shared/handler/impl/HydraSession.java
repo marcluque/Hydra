@@ -10,6 +10,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 
 import java.io.Serializable;
 import java.net.SocketAddress;
+import java.util.Objects;
 
 /**
  * Created with love by DataSecs on 29.09.2017.
@@ -76,6 +77,16 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> implements
     @Override
     public SocketAddress getAddress() {
         return channel.remoteAddress() == null ? channel.localAddress() : channel.remoteAddress();
+    }
+
+    @Override
+    public boolean compare(Session s) {
+        return channel.id() == s.getChannel().id();
+    }
+
+    @Override
+    public int hashCode() {
+        return channel.id().hashCode();
     }
 
     @Override
