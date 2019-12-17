@@ -45,9 +45,9 @@ public class ExampleSerializationPacket extends Packet {
     // Auto-generated toString method by IntelliJ for example purposes
     @Override
     public String toString() {
-        return "ExampleSerializationPacket{" +
-                "customClass=" + customClass +
-                "customClasses=" + Arrays.toString(customClasses) +
+        return "ExampleSerializationPacket{" + "\n" +
+                "  customClass=" + customClass + "\n" +
+                "  customClasses=" + Arrays.toString(customClasses) + "\n" +
                 '}';
     }
 }

@@ -12,9 +12,9 @@ import java.util.Set;
  */
 public class ChatServerProtocol extends HydraProtocol {
 
-    public ChatServerProtocol(Set<Session> sessions) {
+    public ChatServerProtocol() {
         registerPacket(MessagePacket.class);
         registerPacket(ServerPacket.class);
-        registerListener(new ChatServerPacketListener(sessions));
+        registerListener(new ChatServerPacketListener());
     }
 }

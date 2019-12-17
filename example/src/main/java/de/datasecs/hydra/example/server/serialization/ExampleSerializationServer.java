@@ -15,8 +15,6 @@ public class ExampleSerializationServer {
         HydraServer server = new Server.Builder("localhost", 8888, new ExampleSerializationServerProtocol())
                 .bossThreads(2)
                 .workerThreads(4)
-                .option(ChannelOption.TCP_NODELAY, true)
-                .option(ChannelOption.SO_KEEPALIVE, true)
                 .childOption(ChannelOption.TCP_NODELAY, true)
                 .childOption(ChannelOption.SO_KEEPALIVE, true)
                 .addListener(new HydraSessionListener() {

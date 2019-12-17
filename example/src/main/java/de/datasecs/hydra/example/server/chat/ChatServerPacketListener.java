@@ -14,24 +14,12 @@ import java.util.Set;
  */
 public class ChatServerPacketListener implements HydraPacketListener {
 
-    private Set<Session> sessions;
-
-    public ChatServerPacketListener(Set<Session> sessions) {
-        this.sessions = sessions;
-    }
-
     @PacketHandler
     public void onMessagePacket(MessagePacket messagePacket, Session session) {
-        Set<Session> sessionsCopy = new HashSet<>(sessions);
-        sessionsCopy.remove(session);
-        sessionsCopy.forEach(receiverSession -> receiverSession.send(messagePacket));
-    }
-
-    @PacketHandler
-    public void onServerPacket(ServerPacket serverPacket, Session session) {
-        Set<Session> sessionsCopy = new HashSet<>(sessions);
-        sessionsCopy.remove(session);
-        ServerPacket disconnectPacket = new ServerPacket("Client with ip " + session.getAddress() + " left the chat!");
-        sessionsCopy.forEach(receiverSession -> receiverSession.send(disconnectPacket));
+        for (Session s : ChatServer.sessions) {
+            if (!s.equals(session)) {
+                s.send(messagePacket);
+            }
+        }
     }
 }

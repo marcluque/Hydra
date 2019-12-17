@@ -28,7 +28,7 @@ public class ExampleClient {
          */
 
         // The builder returns a session which you can use for several things
-        HydraClient client = new Client.Builder("localhost", 8888, new ExampleServerProtocol())
+        HydraClient client = new Client.Builder("localhost", 8888, new ExampleClientProtocol())
                 .workerThreads(4)
                 .option(ChannelOption.TCP_NODELAY, true)
                 .option(ChannelOption.SO_KEEPALIVE, true)
