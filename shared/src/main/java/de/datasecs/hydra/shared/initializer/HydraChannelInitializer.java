@@ -1,6 +1,7 @@
 package de.datasecs.hydra.shared.initializer;
 
-import de.datasecs.hydra.shared.handler.impl.HydraSession;
+import de.datasecs.hydra.shared.handler.impl.TCPHydraSession;
+import de.datasecs.hydra.shared.handler.impl.UDPHydraSession;
 import de.datasecs.hydra.shared.protocol.Protocol;
 import de.datasecs.hydra.shared.protocol.packets.serialization.PacketDecoder;
 import de.datasecs.hydra.shared.protocol.packets.serialization.PacketEncoder;
@@ -39,8 +40,13 @@ public class HydraChannelInitializer<C extends Channel> extends ChannelInitializ
         pipeline.addLast(new LengthFieldPrepender(4));
         pipeline.addLast(new PacketEncoder(protocol));
 
-        HydraSession session = new HydraSession(channel, protocol);
-        pipeline.addLast(session);
+        if (!useUDP) {
+            TCPHydraSession session = new TCPHydraSession(channel, protocol);
+            pipeline.addLast(session);
+        } else {
+            UDPHydraSession session = new UDPHydraSession(channel, protocol);
+            pipeline.addLast(session);
+        }
 
         // Add sessions to protocol, to keep track of them
         if (isServer) {

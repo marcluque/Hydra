@@ -1,7 +1,7 @@
 package de.datasecs.hydra.client;
 
 import de.datasecs.hydra.shared.handler.Session;
-import de.datasecs.hydra.shared.handler.impl.HydraSession;
+import de.datasecs.hydra.shared.handler.impl.TCPHydraSession;
 import de.datasecs.hydra.shared.initializer.HydraChannelInitializer;
 import de.datasecs.hydra.shared.protocol.Protocol;
 import de.datasecs.hydra.shared.protocol.packets.Packet;
@@ -154,7 +154,7 @@ public class HydraClient {
 
     /**
      * Returns the session that is created, when the client connects with the server.
-     * See {@link HydraSession} for more information about what a session is.
+     * See {@link TCPHydraSession} for more information about what a session is.
      *
      * @return the session created for client and server.
      */

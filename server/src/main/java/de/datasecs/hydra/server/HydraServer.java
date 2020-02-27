@@ -2,16 +2,13 @@ package de.datasecs.hydra.server;
 
 import de.datasecs.hydra.shared.distribution.Distribution;
 import de.datasecs.hydra.shared.handler.Session;
-import de.datasecs.hydra.shared.handler.impl.HydraSession;
+import de.datasecs.hydra.shared.handler.impl.TCPHydraSession;
 import de.datasecs.hydra.shared.protocol.Protocol;
 import de.datasecs.hydra.shared.protocol.packets.Packet;
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
-import io.netty.util.concurrent.EventExecutorGroup;
-import io.netty.util.internal.ConcurrentSet;
 
 import java.net.SocketAddress;
-import java.util.Arrays;
 import java.util.Set;
 
 /**
@@ -103,7 +100,7 @@ public class HydraServer {
 
     /**
      * Returns the set of sessions that Hydra keeps track of. This is useful when e.g. an amount of clients is connected.
-     * See {@link HydraSession} for more information what a session is.
+     * See {@link TCPHydraSession} for more information what a session is.
      *
      * @return the set of sessions that the server is connected with.
      */
