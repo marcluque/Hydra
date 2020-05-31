@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -28,26 +29,16 @@ public abstract class Packet {
     }
 
     protected void writeString(ByteBuf byteBuf, String string) {
-        byteBuf.writeInt(string.length());
-
-        try {
-            byteBuf.writeBytes(string.getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        byte[] bytes = string.getBytes(StandardCharsets.UTF_8);
+        byteBuf.writeInt(bytes.length);
+        byteBuf.writeBytes(bytes);
     }
 
     protected String readString(ByteBuf byteBuf) {
         byte[] bytes = new byte[byteBuf.readInt()];
         byteBuf.readBytes(bytes);
 
-        try {
-            return new String(bytes, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+        return new String(bytes, StandardCharsets.UTF_8);
     }
 
     // TODO: Add serialization for custom objects that are send using .send(customObject) or whenever this method is called
