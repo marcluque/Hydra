@@ -19,7 +19,7 @@ public class TestClientPacketListener implements HydraPacketListener {
     @PacketHandler
     public void onTestPacket(TestPacket examplePacket, Session session) {
         Assertions.assertTrue(session.isConnected());
-
+        System.out.printf("Stage %d done!%n", examplePacket.getNumber());
     }
 
     @PacketHandler

@@ -4,48 +4,50 @@ import de.datasecs.hydra.shared.protocol.packets.Packet;
 import de.datasecs.hydra.shared.protocol.packets.PacketId;
 import io.netty.buffer.ByteBuf;
 
+import java.util.Arrays;
+
 /**
- * Created by DataSec on 28.03.2019.
+ * Created by DataSec on 01.06.2020.
  */
-@PacketId(2)
-public class TestPacket extends Packet {
+@PacketId(8)
+public class ArrayPacket extends Packet {
 
     private int number;
 
-    private Object object;
+    private String[] strings;
 
-    public TestPacket() {}
+    public ArrayPacket() {}
 
-    public TestPacket(int number, Object object) {
+    public ArrayPacket(int number, String[] strings) {
         this.number = number;
-        this.object = object;
+        this.strings = strings;
     }
 
     @Override
     public void read(ByteBuf byteBuf) {
         number = readInt(byteBuf);
-        object = readObject(byteBuf);
+        strings = readArray(byteBuf);
     }
 
     @Override
     public void write(ByteBuf byteBuf) {
         writeInt(byteBuf, number);
-        writeObject(byteBuf, object);
+        writeArray(byteBuf, strings);
     }
 
     public int getNumber() {
         return number;
     }
 
-    public Object getObject() {
-        return object;
+    public String[] getStrings() {
+        return strings;
     }
 
     @Override
     public String toString() {
         return "TestPacket{" +
                 "number=" + number +
-                ", object=" + object +
+                ", object=" + Arrays.toString(strings) +
                 '}';
     }
 }

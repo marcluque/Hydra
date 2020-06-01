@@ -9,6 +9,7 @@ import de.datasecs.hydra.server.TestServerProtocol;
 import de.datasecs.hydra.shared.TestPacket;
 import de.datasecs.hydra.shared.handler.Session;
 import de.datasecs.hydra.shared.handler.listener.HydraSessionListener;
+import de.datasecs.hydra.shared.protocol.packets.StandardPacket;
 import io.netty.channel.ChannelOption;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,13 +24,27 @@ public class HydraTest {
 
     private static HydraClient client;
 
-    @BeforeAll
+    private static final Object LOCK = new Object();
+
+    private static boolean clientConnected;
+
+    @Test
+    public void testAll() {
+        init();
+        testServer();
+        testClient();
+    }
+
     public static void init() {
         server = new Server.Builder("localhost", 8888, new TestServerProtocol())
                 .addListener(new HydraSessionListener() {
                     @Override
                     public void onConnected(Session session) {
                         System.out.println("TestClient connected!");
+                        synchronized(LOCK) {
+                            clientConnected = true;
+                            LOCK.notify();
+                        }
                     }
 
                     @Override
@@ -37,10 +52,12 @@ public class HydraTest {
                         System.out.println("TestClient disconnected!");
                     }
                 })
-                .option(ChannelOption.SO_BACKLOG, 10)
+                .option(ChannelOption.SO_BACKLOG, 200)
+                .childOption(ChannelOption.TCP_NODELAY, true)
+                .childOption(ChannelOption.SO_KEEPALIVE, true)
                 .build();
 
-        System.out.println("Server started!");
+        System.out.println("Server started successfully!");
 
         client = new Client.Builder("localhost", 8888, new TestClientProtocol())
                 .workerThreads(4)
@@ -59,19 +76,29 @@ public class HydraTest {
                 })
                 .build();
 
-        System.out.println("Client started!");
+        System.out.println("Client started successfully!");
     }
 
-    @Test
-    public void testServer() {
+    public static void testServer() {
         Assertions.assertTrue(server.isActive());
         Assertions.assertTrue(server.getChannel().isWritable());
         Assertions.assertTrue(server.getChannel().isOpen());
-        Assertions.assertEquals(1, server.getSessions().size());
+
+        // It's necessary to wait until Netty built the connection up entirely
+        try {
+            synchronized(LOCK) {
+                while(!clientConnected) {
+                    LOCK.wait();
+                }
+
+                Assertions.assertEquals(1, server.getSessions().size());
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    @Test
-    public void testClient() {
+    public static void testClient() {
         Assertions.assertTrue(client.isConnected());
         Assertions.assertTrue(client.getChannel().isWritable());
         Assertions.assertTrue(client.getChannel().isOpen());
@@ -79,16 +106,17 @@ public class HydraTest {
         Assertions.assertNotNull(client.getSession());
 
         // String test
-        client.send(new TestPacket(0, "Test"));
+        client.send(new TestPacket(1, "Test"));
 
         // (String) array test
         String[] testArray = new String[1000];
         for (int i = 0; i < 1000; i++) {
             testArray[i] = String.format("test%d", i);
         }
-        client.send(new TestPacket(1, testArray));
+        client.send(new TestPacket(2, testArray));
 
         // Custom class test
 
+        // Finish test, when okay is received, realize with synchronized
     }
 }
