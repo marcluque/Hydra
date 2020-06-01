@@ -126,7 +126,7 @@ public abstract class Packet {
         String pathOfCustomClass = readString(byteBuf);
         T customObject = null;
         try {
-            customObject = (T) Class.forName(pathOfCustomClass).newInstance();
+            customObject = (T) Class.forName(pathOfCustomClass).getDeclaredConstructor().newInstance();
             pathOfCustomClass = pathOfCustomClass.substring(0, pathOfCustomClass.lastIndexOf("."));
         } catch (Exception e) {
             e.printStackTrace();
@@ -177,9 +177,9 @@ public abstract class Packet {
                             && currentMethod.getName().toLowerCase().contains(key.toLowerCase())
                             && (currentMethod.getName().length() - 3) == key.length()) {
                         try {
-                            currentMethod.invoke(customObject, valueIsMap ? readCustomObject(clazz.newInstance(), (Map<String, Object>) value) : value);
+                            currentMethod.invoke(customObject, valueIsMap ? readCustomObject(clazz.getDeclaredConstructor().newInstance(), (Map<String, Object>) value) : value);
                             fields.remove(key);
-                        } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
+                        } catch (IllegalAccessException | InvocationTargetException | InstantiationException | NoSuchMethodException e) {
                             e.printStackTrace();
                         }
                     }
