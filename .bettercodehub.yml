@@ -1,13 +1,7 @@
 component_depth: 8
 languages:
 - name: java
-  production:
-    exclude:
-      - /test/.*
-      - /example/.*
-    test:
-      include:
-        - /test/.*
 
 exclude:
 - .*/Packet\.java
+- /example/.*
