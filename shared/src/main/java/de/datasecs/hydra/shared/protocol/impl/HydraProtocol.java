@@ -12,6 +12,7 @@ import de.datasecs.hydra.shared.protocol.packets.listener.PacketHandler;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.DatagramPacket;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -120,6 +121,11 @@ public class HydraProtocol implements Protocol {
     }
 
     @Override
+    public void callPacketListener(DatagramPacket packet, Session session) {
+
+    }
+
+    @Override
     public void addSessionListener(HydraSessionListener sessionListener) {
         this.sessionListener = sessionListener;
     }
@@ -168,6 +174,16 @@ public class HydraProtocol implements Protocol {
     }
 
     @Override
+    public Map<Byte, Class<? extends Packet>> getRegisteredPackets() {
+        return packets;
+    }
+
+    @Override
+    public Map<Class<?>, Method> getRegisteredPacketListenerMethods() {
+        return packetListenerMethods;
+    }
+
+    @Override
     public Set<Session> getSessions() {
         return sessions;
     }
@@ -184,5 +200,13 @@ public class HydraProtocol implements Protocol {
     @Override
     public HydraPacketListener getPacketListener() {
         return packetListener;
+    }
+
+    @Override
+    public String toString() {
+        return "HydraProtocol{" +
+                "registered packets=" + packets +
+                ", registered packetListenerMethods=" + packetListenerMethods +
+                '}';
     }
 }

@@ -2,8 +2,6 @@ package de.datasecs.hydra.example.server.udp;
 
 import de.datasecs.hydra.server.HydraServer;
 import de.datasecs.hydra.server.Server;
-import de.datasecs.hydra.shared.handler.Session;
-import de.datasecs.hydra.shared.handler.listener.HydraSessionListener;
 import io.netty.channel.ChannelOption;
 
 /*
@@ -15,17 +13,6 @@ public class UdpServer {
         HydraServer server = new Server.Builder("localhost", 8888, new UdpServerProtocol())
                 .useUDP(true)
                 .childOption(ChannelOption.SO_BROADCAST, true)
-                .addListener(new HydraSessionListener() {
-                    @Override
-                    public void onConnected(Session session) {
-                        System.out.println("\nClient connected! Session:" + session);
-                    }
-
-                    @Override
-                    public void onDisconnected(Session session) {
-                        System.out.println("\nClient disconnected! Session: " + session);
-                    }
-                })
                 .build();
 
         // Check if server is actively running (not obligatory)

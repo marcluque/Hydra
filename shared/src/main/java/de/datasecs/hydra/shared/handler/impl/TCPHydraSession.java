@@ -10,17 +10,18 @@ import io.netty.channel.SimpleChannelInboundHandler;
 
 import java.io.Serializable;
 import java.net.SocketAddress;
+import java.util.Objects;
 
 /**
  * Created with love by DataSecs on 29.09.2017.
  */
-public class HydraSession extends SimpleChannelInboundHandler<Packet> implements Session {
+public class TCPHydraSession extends SimpleChannelInboundHandler<Packet> implements Session {
 
     private Channel channel;
 
     private Protocol protocol;
 
-    public HydraSession(Channel channel, Protocol protocol) {
+    public TCPHydraSession(Channel channel, Protocol protocol) {
         this.channel = channel;
         this.protocol = protocol;
     }
@@ -90,7 +91,7 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> implements
 
     @Override
     public String toString() {
-        return "HydraSession{" +
+        return "TCPHydraSession{" +
                 "channel=" + channel +
                 ", protocol=" + protocol +
                 ", connected=" + channel.isActive() +

@@ -1,7 +1,13 @@
 component_depth: 8
 languages:
-- java
+- name: java
+  production:
+    exclude:
+      - .*/test/java/de/datasecs/hydra/.*\.java
+  test:
+    include:
+      - .*/test/java/de/datasecs/hydra/.*\.java
 
 exclude:
-- /example/.*
 - .*/Packet\.java
+- /example/.*

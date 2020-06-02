@@ -6,6 +6,9 @@ import de.datasecs.hydra.shared.handler.listener.HydraSessionListener;
 import de.datasecs.hydra.shared.protocol.packets.Packet;
 import de.datasecs.hydra.shared.protocol.packets.listener.HydraPacketListener;
 
+import java.lang.reflect.Method;
+import java.net.DatagramPacket;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -35,6 +38,8 @@ public interface Protocol {
 
     void callPacketListener(Packet packet, Session session);
 
+    void callPacketListener(DatagramPacket packet, Session session);
+
     void addSessionListener(HydraSessionListener sessionListener);
 
     void callSessionListener(boolean connected, Session session);
@@ -50,6 +55,10 @@ public interface Protocol {
     void addSession(Session session);
 
     void removeSession(Session session);
+
+    public Map<Byte, Class<? extends Packet>> getRegisteredPackets();
+
+    Map<Class<?>, Method> getRegisteredPacketListenerMethods();
 
     Set<Session> getSessions();
 

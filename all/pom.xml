@@ -5,25 +5,32 @@
     <parent>
         <artifactId>hydra</artifactId>
         <groupId>de.datasecs</groupId>
-        <version>1.6.3</version>
+        <version>1.6.5</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>hydra-all</artifactId>
 
     <dependencies>
+        <!-- Hydra shared -->
+        <dependency>
+            <groupId>de.datasecs</groupId>
+            <artifactId>hydra-shared</artifactId>
+            <version>1.6.5</version>
+        </dependency>
+
         <!-- Hydra client -->
         <dependency>
             <groupId>de.datasecs</groupId>
             <artifactId>hydra-client</artifactId>
-            <version>1.6.3</version>
+            <version>1.6.5</version>
         </dependency>
 
         <!-- Hydra server -->
         <dependency>
             <groupId>de.datasecs</groupId>
             <artifactId>hydra-server</artifactId>
-            <version>1.6.3</version>
+            <version>1.6.5</version>
         </dependency>
     </dependencies>
 
@@ -44,7 +51,7 @@
                 </executions>
             </plugin>
 
-            <!-- Generate Javadoc -->
+            <!-- Generate Javadoc
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <executions>
@@ -55,7 +62,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
 
             <!-- Dependencies -->
             <plugin>

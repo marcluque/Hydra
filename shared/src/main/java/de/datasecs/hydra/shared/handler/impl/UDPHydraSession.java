@@ -9,24 +9,25 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 import java.io.Serializable;
+import java.net.DatagramPacket;
 import java.net.SocketAddress;
 
-/**
- * Created with love by DataSecs on 29.09.2017.
+/*
+ * Created with <3 by DataSecs on 03.01.20
  */
-public class HydraSession extends SimpleChannelInboundHandler<Packet> implements Session {
+public class UDPHydraSession extends SimpleChannelInboundHandler<DatagramPacket> implements Session {
 
     private Channel channel;
 
     private Protocol protocol;
 
-    public HydraSession(Channel channel, Protocol protocol) {
+    public UDPHydraSession(Channel channel, Protocol protocol) {
         this.channel = channel;
         this.protocol = protocol;
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext context, Packet packet) {
+    protected void channelRead0(ChannelHandlerContext context, DatagramPacket packet) {
         if (protocol.getPacketListener() != null) {
             protocol.callPacketListener(packet, this);
         }
@@ -50,7 +51,7 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> implements
 
     @Override
     public void send(Packet packet) {
-        channel.writeAndFlush(packet);
+
     }
 
     @Override

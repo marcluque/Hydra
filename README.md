@@ -30,7 +30,7 @@ like a [simple chat application](https://github.com/DataSecs/Hydra/wiki/Building
 
  * Install Maven 3
  * Clone/Download this repo
- * Install it with: mvn clean install
+ * Install it with: ```mvn -U -Dmaven.test.skip=true clean compile install```
 
 ## Maven
 
@@ -40,7 +40,7 @@ like a [simple chat application](https://github.com/DataSecs/Hydra/wiki/Building
 <dependency>
     <groupId>de.datasecs</groupId>
     <artifactId>hydra-all</artifactId>
-    <version>1.6.3</version>
+    <version>1.6.5</version>
 </dependency>
 ```
 
