@@ -165,7 +165,7 @@ public class Client {
             // Check whether every packet that is registered has a method that listens for it
             protocol.getRegisteredPackets().values().forEach(p -> {
                 if (!protocol.getRegisteredPacketListenerMethods().containsKey(p)) {
-                    System.err.println("PACKET " + p.getSimpleName() + ".class HAS NO LISTENER! THIS MAY LEAD TO A NULL POINTER EXCEPTION WHEN RECEIVING THE PACKET!");
+                    System.err.printf("PACKET %s.class HAS NO LISTENER! THIS MAY LEAD TO AN EXCEPTION WHEN RECEIVING THE PACKET!%n", p.getSimpleName());
                 }
             });
 
