@@ -174,6 +174,16 @@ public class HydraProtocol implements Protocol {
     }
 
     @Override
+    public Map<Byte, Class<? extends Packet>> getRegisteredPackets() {
+        return packets;
+    }
+
+    @Override
+    public Map<Class<?>, Method> getRegisteredPacketListenerMethods() {
+        return packetListenerMethods;
+    }
+
+    @Override
     public Set<Session> getSessions() {
         return sessions;
     }

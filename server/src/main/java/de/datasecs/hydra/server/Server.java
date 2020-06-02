@@ -210,6 +210,13 @@ public class Server {
         }
 
         private HydraServer setUpServer() {
+            // Check whether every packet that is registered has a method that listens for it
+            protocol.getRegisteredPackets().values().forEach(p -> {
+                if (!protocol.getRegisteredPacketListenerMethods().containsKey(p)) {
+                    System.err.println("PACKET " + p.getSimpleName() + ".class HAS NO LISTENER! THIS MAY LEAD TO A NULL POINTER EXCEPTION WHEN RECEIVING THE PACKET!");
+                }
+            });
+
             // TODO: Throw an error if more than one option is used
 
             EventLoopGroup workerGroup, bossGroup;
