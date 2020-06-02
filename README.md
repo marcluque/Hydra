@@ -30,7 +30,7 @@ like a [simple chat application](https://github.com/DataSecs/Hydra/wiki/Building
 
  * Install Maven 3
  * Clone/Download this repo
- * Install it with: ```mvn -U -Dmaven.test.skip=true clean install```
+ * Install it with: ```mvn -U -Dmaven.test.skip=true clean compile install```
 
 ## Maven
 
