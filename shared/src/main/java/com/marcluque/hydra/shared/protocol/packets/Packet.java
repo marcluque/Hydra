@@ -140,7 +140,6 @@ public abstract class Packet {
     protected <T> T readCustomObject(ByteBuf byteBuf, T object) {
         String input;
         while (!(input = readString(byteBuf)).startsWith("~")) {
-            System.out.println(input);
             // $ indicates the beginning of an embedded class
             if (input.startsWith("$")) {
                 input = input.replace("#", "");
@@ -225,7 +224,7 @@ public abstract class Packet {
         writeInt(byteBuf, array.length);
         writeString(byteBuf, array.getClass().getCanonicalName().replace("[]", ""));
         for (T t : array) {
-            writeCustomObject(byteBuf, t, "");
+            writeCustomObject(byteBuf, t);
         }
     }
 
