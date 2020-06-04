@@ -92,7 +92,7 @@
                 </executions>
             </plugin>
 
-            <!-- Javadoc -->
+            <!-- Javadoc (SKIPPED) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -103,7 +103,7 @@
                 </configuration>
             </plugin>
 
-            <!-- GPG Signing -->
+            <!-- GPG Signing (SKIPPED) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>

@@ -2,8 +2,7 @@ language: java
 
 sudo: false
 
-install: "mvn -P ci install"
-script: "mvn -P ci clean compile && mvn test"
+script: "mvn clean compile install"
 
 os:
 - linux

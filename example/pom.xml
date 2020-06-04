@@ -12,9 +12,17 @@
     <artifactId>hydra-example</artifactId>
 
     <dependencies>
+        <!-- Hydra client -->
+        <dependency>
+            <groupId>de.datasecs</groupId>
+            <artifactId>hydra-client</artifactId>
+            <version>1.6.5</version>
+        </dependency>
+
+        <!-- Hydra server -->
         <dependency>
             <groupId>com.marcluque</groupId>
-            <artifactId>hydra-all</artifactId>
+            <artifactId>hydra-server</artifactId>
             <version>1.6.5</version>
         </dependency>
     </dependencies>

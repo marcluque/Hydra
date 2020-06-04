@@ -11,6 +11,8 @@ public class CustomClassExtended {
 
     private UUID testUUID;
 
+    private CustomClassExtended customClassExtended;
+
     private long testLong;
 
     private Class<?> testClass;
@@ -20,40 +22,23 @@ public class CustomClassExtended {
     }
 
     // Optional constructor
-    public CustomClassExtended(String testStringExtended, UUID testUUID, long testLong, Class<?> testClass) {
+    public CustomClassExtended(String testStringExtended, UUID testUUID, CustomClassExtended customClassExtended, long testLong, Class<?> testClass) {
         this.testStringExtended = testStringExtended;
         this.testUUID = testUUID;
+        this.customClassExtended = customClassExtended;
         this.testLong = testLong;
-        this.testClass = testClass;
-    }
-
-    /*
-     * Obligatory setter methods for every field that is supposed to be serialized
-     */
-    public void setTestStringExtended(String testStringExtended) {
-        this.testStringExtended = testStringExtended;
-    }
-
-    public void setTestUUID(UUID testUUID) {
-        this.testUUID = testUUID;
-    }
-
-    public void setTestLong(long testLong) {
-        this.testLong = testLong;
-    }
-
-    public void setTestClass(Class<?> testClass) {
         this.testClass = testClass;
     }
 
     // Auto-generated toString method by IntelliJ for example purposes
     @Override
     public String toString() {
-        return "CustomClassExtended{" + "\n" +
-                "  testStringExtended='" + testStringExtended + '\'' + "\n" +
-                "  testUUID=" + testUUID + "\n" +
-                "  testLong=" + testLong + "\n" +
-                "  testClass=" + testClass + "\n" +
-                '}';
+        return "CustomClassExtended {" + "\n" +
+                "testStringExtended='" + testStringExtended + '\'' + ",\n" +
+                "testUUID=" + testUUID + ",\n" +
+                "customClassExtended=" + customClassExtended + ",\n" +
+                "testLong=" + testLong + ",\n" +
+                "testClass=" + testClass + "\n" +
+                "}";
     }
 }

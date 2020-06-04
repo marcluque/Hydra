@@ -50,8 +50,22 @@ public class ExampleSerializationClient {
         testStringList.add("Serialization");
         testStringList.add("Test");
 
-        CustomClassExtended customClassExtended = new CustomClassExtended("testStringExtended", UUID.randomUUID(), 5L, Integer.class);
-        CustomClass customClass = new CustomClass("testString", 1, new String[]{"Hydra", "serialization"}, testStringList, "this is a random object", customClassExtended);
+        CustomClassExtended customClassExtended = new CustomClassExtended("testStringExtended",
+                                                                                            UUID.randomUUID(),
+                                                                                            null,
+                                                                                            5L,
+                                                                                            Integer.class);
+        CustomClassExtended customClassExtended2 = new CustomClassExtended("testStringExtended",
+                                                                                            UUID.randomUUID(),
+                                                                                            customClassExtended,
+                                                                                            5L,
+                                                                                            Integer.class);
+        CustomClass customClass = new CustomClass("testString",
+                                                            1,
+                                                            new String[]{"Hydra", "serialization"},
+                                                            customClassExtended2,
+                                                            testStringList,
+                                                            "this is a random object");
 
         // Sends the instance of a custom class, that is create and filled with data above
         session.send(new ExampleSerializationPacket(customClass));

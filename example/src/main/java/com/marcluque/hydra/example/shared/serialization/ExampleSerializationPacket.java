@@ -24,28 +24,25 @@ public class ExampleSerializationPacket extends Packet {
 
     @Override
     public void read(ByteBuf byteBuf) {
+        // This method allows the user to receive a custom classes
         customClass = readCustomObject(byteBuf);
+        // This method allows the user to receive an array of custom classes
         customClasses = readCustomClassArray(byteBuf);
     }
 
     @Override
     public void write(ByteBuf byteBuf) {
-        /* The string 'pathOfCustomClassAtReceiver' is used to determine what the package name of the custom class
-         * is, at the server side. As the package names from client and server very likely differ (actually should differ),
-         * there is this string to determine the package where ALL the classes that are related to each other and have to
-         * be serialized are inside. Therefore it's necessary to put all related classes that are supposed to be serialized
-         * together in a package. This is the only (big) drawback.
-         */
-        writeCustomObject(byteBuf, customClass, "com.marcluque.hydra.example.shared.serialization");
+        // Is used just like any other writing method
+        writeCustomObject(byteBuf, customClass);
 
-        // This method allows the user to send an array of custom classes. This method also needs the 'pathOfCustomClassAtReceiver'
-        writeCustomClassArray(byteBuf, new CustomClass[]{customClass, customClass}, "com.marcluque.hydra.example.shared.serialization");
+        // This method allows the user to send an array of custom classes
+        writeCustomClassArray(byteBuf, new CustomClass[]{customClass, customClass});
     }
 
     // Auto-generated toString method by IntelliJ for example purposes
     @Override
     public String toString() {
-        return "ExampleSerializationPacket{" + "\n" +
+        return "ExampleSerializationPacket {" + "\n" +
                 "  customClass=" + customClass + "\n" +
                 "  customClasses=" + Arrays.toString(customClasses) + "\n" +
                 '}';
