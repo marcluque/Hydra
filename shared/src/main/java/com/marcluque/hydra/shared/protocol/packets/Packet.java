@@ -4,10 +4,11 @@ import com.marcluque.hydra.shared.serialization.IgnoreSerialization;
 import io.netty.buffer.ByteBuf;
 
 import java.io.*;
-import java.lang.reflect.*;
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Objects;
 
 /**
  * Created with love by marcluque on 29.09.2017.
@@ -77,117 +78,124 @@ public abstract class Packet {
         return object;
     }
 
-    protected <T> void writeCustomObject(ByteBuf byteBuf, T customObject, String pathOfCustomClassAtReceiver) {
-        writeCustomObject(byteBuf, customObject, "", pathOfCustomClassAtReceiver);
+    protected <T> void writeCustomObject(ByteBuf byteBuf, T customObject) {
+        // Send path for rebuild of custom class
+        writeString(byteBuf, customObject.getClass().getName());
+
+        // Serialize objects and send them as String(fieldName) + Object(value)
+        writeCustomObject(byteBuf, customObject, "");
+
+        // Signalizes that transmission is over
+        writeString(byteBuf, "~");
     }
 
-    private <T> void writeCustomObject(ByteBuf byteBuf, T customObject, String prefix, String pathOfCustomClassAtReceiver) {
-        // Send path for rebuild of custom class
-        if (!prefix.startsWith("#")) {
-            writeString(byteBuf, String.format("%s.%s", pathOfCustomClassAtReceiver, customObject.getClass().getSimpleName()));
+    private <T> void writeCustomObject(ByteBuf byteBuf, T customObject, String prefix) {
+        Field[] declaredFields = customObject.getClass().getDeclaredFields();
+
+        for (int i = 0; i < declaredFields.length - 1; i++) {
+            serializeField(byteBuf, declaredFields[i], prefix, customObject);
         }
 
-        boolean isObject = true;
-        for (Field field : customObject.getClass().getDeclaredFields()) {
-            field.setAccessible(true);
-            if (!Modifier.isTransient(field.getModifiers())) {
-                try {
-                    objectToSerialize = field.get(customObject);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
+        prefix = prefix.startsWith("#") ? "§" + prefix : prefix;
+        serializeField(byteBuf, declaredFields[declaredFields.length - 1], prefix, customObject);
+    }
 
-                if (!(objectToSerialize instanceof Serializable)) {
-                    writeCustomObject(byteBuf, objectToSerialize, String.format("%s#", prefix), pathOfCustomClassAtReceiver);
-                } else {
-                    String fieldName = field.getName();
-                    if (prefix.startsWith("#")) {
-                        if (isObject) {
-                            fieldName = String.format("%s%s;*.%s", prefix, fieldName, customObject.getClass().getSimpleName());
-                            isObject = false;
-                        } else {
-                            fieldName = String.format("%s%s", prefix, fieldName);
-                        }
-                    }
-
-                    writeString(byteBuf, fieldName);
-                    writeObject(byteBuf, objectToSerialize);
-                }
+    private <T> void serializeField(ByteBuf byteBuf, Field declaredField, String prefix, T customObject) {
+        if (!Modifier.isTransient(declaredField.getModifiers())) {
+            boolean isAccessible = declaredField.isAccessible();
+            declaredField.setAccessible(true);
+            try {
+                objectToSerialize = declaredField.get(customObject);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
             }
-        }
 
-        if (!prefix.startsWith("#")) {
-            // Signalizes that transmission is over
-            writeString(byteBuf, "~");
+            // Ignore if object is null
+            if (objectToSerialize == null) {
+                return;
+            }
+
+            if (!(objectToSerialize instanceof Serializable)) {
+                writeString(byteBuf, String.format("$%s#%s;%s", prefix, objectToSerialize.getClass().getCanonicalName(), declaredField.getName()));
+                writeCustomObject(byteBuf, objectToSerialize, String.format("%s#", prefix));
+            } else {
+                writeString(byteBuf, String.format("%s%s", prefix, declaredField.getName()));
+                writeObject(byteBuf, objectToSerialize);
+            }
+            declaredField.setAccessible(isAccessible);
         }
     }
 
     protected <T> T readCustomObject(ByteBuf byteBuf) {
-        String pathOfCustomClass = readString(byteBuf);
         T customObject = null;
         try {
-            customObject = (T) Class.forName(pathOfCustomClass).getDeclaredConstructor().newInstance();
-            pathOfCustomClass = pathOfCustomClass.substring(0, pathOfCustomClass.lastIndexOf("."));
+            customObject = (T) Class.forName(readString(byteBuf)).getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        Map<String, Object> fields = new ConcurrentHashMap<>();
-        Map<String, Object> subFields = new ConcurrentHashMap<>();
-
-        String input;
-        while (!(input = readString(byteBuf)).startsWith("~")) {
-            if (input.contains(";")) {
-                subFields.clear();
-
-                String[] fieldNames = input.replace("*", pathOfCustomClass).split(";");
-
-                subFields.put(fieldNames[0].replaceAll("#", ""), String.valueOf(readObject(byteBuf)));
-                fields.put(fieldNames[1], subFields);
-            } else {
-                if (input.startsWith("#")) {
-                    subFields.put(input.replaceAll("#", ""), readObject(byteBuf));
-                } else {
-                    fields.put(input, readObject(byteBuf));
-                }
-            }
-        }
-
-        return readCustomObject(customObject, fields);
+        return readCustomObject(byteBuf, customObject);
     }
 
-    private <T> T readCustomObject(T customObject, Map<String, Object> fields) {
-        for (Method currentMethod : customObject.getClass().getDeclaredMethods()) {
-            if (currentMethod.getName().contains("set") && !currentMethod.isAnnotationPresent(IgnoreSerialization.class)) {
-                fields.forEach((key, value) -> {
-                    Class<?> clazz = null;
-                    boolean valueIsMap = value instanceof Map;
+    protected <T> T readCustomObject(ByteBuf byteBuf, T object) {
+        String input;
+        while (!(input = readString(byteBuf)).startsWith("~")) {
+            System.out.println(input);
+            // $ indicates the beginning of an embedded class
+            if (input.startsWith("$")) {
+                input = input.replace("#", "");
+                T subObject = getNewInstance(input.substring(1, input.lastIndexOf(";")));
+                subObject = readCustomObject(byteBuf, subObject);
+                setField(object, input.substring(input.lastIndexOf(";") + 1), subObject);
+            }
+            // § indicates the last object of an embedded class. Read it and then return object because it's complete
+            else if (input.startsWith("§")) {
+                setField(object, input.substring(1).replace("#", ""), readObject(byteBuf));
+                return object;
+            } else {
+                if (input.startsWith("#")) {
+                    input = input.replace("#", "");
+                }
 
-                    try {
-                        if (valueIsMap) {
-                            clazz = Class.forName(key);
-                            key = key.substring(key.lastIndexOf(".") + 1);
-                        }
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-
-                    // TODO: Think of a better way than comparing the amount of characters, rather compare the class of the parameter and the class of the value
-                    if ((currentMethod.getParameterCount() == 1 ? currentMethod.getParameterTypes()[0] : null) != null
-                            && currentMethod.getName().toLowerCase().contains(key.toLowerCase())
-                            && (currentMethod.getName().length() - 3) == key.length()) {
-                        try {
-                            currentMethod.invoke(customObject, valueIsMap ? readCustomObject(clazz.getDeclaredConstructor().newInstance(), (Map<String, Object>) value) : value);
-                            fields.remove(key);
-                        } catch (IllegalAccessException | InvocationTargetException | InstantiationException | NoSuchMethodException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+                setField(object, input, readObject(byteBuf));
             }
         }
 
-        return customObject;
+        return object;
+    }
+
+    private <T> T getNewInstance(String path) {
+        try {
+            return (T) Class.forName(path).getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private <T> void setField(T customObject, String fieldName, Object fieldValue) {
+        boolean isAccessible;
+        Field field = null;
+        try {
+            field = customObject.getClass().getDeclaredField(fieldName);
+            isAccessible = field.isAccessible();
+            field.setAccessible(true);
+            field.set(customObject, fieldValue);
+            field.setAccessible(isAccessible);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            String stringBuilder = "\nAdditional information:\n" +
+                    "customObject: " + customObject + "\n" +
+                    "Field name: " + fieldName + "\n" +
+                    "Field value: " + fieldValue + "\n" +
+                    "Found field by name: " + field + "\n" +
+                    "Field Accessibility: "
+                    + (field == null ? "Could not print accessibility, field == null" : field.isAccessible())
+                    + "\n";
+            System.err.println(stringBuilder);
+        }
     }
 
     protected void writeArray(ByteBuf byteBuf, Object[] array) {
@@ -213,11 +221,11 @@ public abstract class Packet {
         return null;
     }
 
-    protected <T> void writeCustomClassArray(ByteBuf byteBuf, T[] array, String pathOfCustomClassAtReceiver) {
+    protected <T> void writeCustomClassArray(ByteBuf byteBuf, T[] array) {
         writeInt(byteBuf, array.length);
-        writeString(byteBuf, String.format("%s.%s", pathOfCustomClassAtReceiver, array.getClass().getSimpleName().replace("[]", "")));
+        writeString(byteBuf, array.getClass().getCanonicalName().replace("[]", ""));
         for (T t : array) {
-            writeCustomObject(byteBuf, t, "", pathOfCustomClassAtReceiver);
+            writeCustomObject(byteBuf, t, "");
         }
     }
 
@@ -231,6 +239,7 @@ public abstract class Packet {
             e.printStackTrace();
         }
 
+        Objects.requireNonNull(array, "Array could not be instantiated.");
         for (int i = 0; i < length; i++) {
             array[i] = readCustomObject(byteBuf);
         }
