@@ -1,6 +1,4 @@
 language: java
-after_success:
-  - mvn -P ci clean test jacoco:report-aggregate coveralls:report -DrepoToken=COVERALLS_TOKEN
 
 sudo: false
 
@@ -26,3 +24,6 @@ matrix:
     jdk: oraclejdk8
   - os: linux
     jdk: oraclejdk10
+
+after_success:
+  - mvn -P ci clean test jacoco:report-aggregate coveralls:report -DrepoToken=$COVERALLS_TOKEN
