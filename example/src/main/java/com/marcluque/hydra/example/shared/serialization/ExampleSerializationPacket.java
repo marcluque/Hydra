@@ -5,6 +5,9 @@ import com.marcluque.hydra.shared.protocol.packets.PacketId;
 import io.netty.buffer.ByteBuf;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created with love by marcluque on 12.02.18
@@ -28,6 +31,8 @@ public class ExampleSerializationPacket extends Packet {
         customClass = readCustomObject(byteBuf);
         // This method allows the user to receive an array of custom classes
         customClasses = readCustomClassArray(byteBuf);
+        // This method allows the user to receive a collection of custom classes
+        Collection<CustomClass> l = readCustomClassCollection(byteBuf);
     }
 
     @Override
@@ -37,6 +42,13 @@ public class ExampleSerializationPacket extends Packet {
 
         // This method allows the user to send an array of custom classes
         writeCustomClassArray(byteBuf, new CustomClass[]{customClass, customClass});
+
+        // Send a collection of custom classes
+        List<CustomClass> l = new LinkedList<>();
+        l.add(customClass);
+        l.add(customClass);
+        l.add(customClass);
+        writeCustomClassCollection(byteBuf, l);
     }
 
     // Auto-generated toString method by IntelliJ for example purposes

@@ -6,9 +6,13 @@ import io.netty.buffer.ByteBuf;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
+import java.util.stream.StreamSupport;
 
 /**
  * Created with love by marcluque on 29.09.2017.
@@ -48,7 +52,8 @@ public abstract class Packet {
             throw new IllegalArgumentException("object cannot be null");
         }
 
-        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(); ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream)) {
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+             ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream)) {
             objectOutputStream.writeObject(object);
             byte[] bytes = byteArrayOutputStream.toByteArray();
             byteBuf.writeInt(bytes.length);
@@ -69,7 +74,8 @@ public abstract class Packet {
         byte[] bytes = new byte[length];
         byteBuf.readBytes(bytes);
 
-        try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes); ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
+        try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+             ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
             object = objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -244,5 +250,29 @@ public abstract class Packet {
         }
 
         return array;
+    }
+
+    protected <T> void writeCustomClassCollection(ByteBuf byteBuf, Collection<T> collection) {
+        writeInt(byteBuf, collection.size());
+        writeString(byteBuf, collection.getClass().getCanonicalName());
+        collection.forEach(object -> writeCustomObject(byteBuf, object));
+    }
+
+    protected <T> Collection<T> readCustomClassCollection(ByteBuf byteBuf) {
+        int length = readInt(byteBuf);
+
+        Collection<T> collection = null;
+        try {
+            collection = (Collection<T>) Class.forName(readString(byteBuf)).getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Objects.requireNonNull(collection);
+        for (int i = 0; i < length; i++) {
+            collection.add(readCustomObject(byteBuf));
+        }
+
+        return collection;
     }
 }
