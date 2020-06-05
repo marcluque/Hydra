@@ -1,4 +1,6 @@
 language: java
+after_success:
+  - mvn -P ci clean test jacoco:report-aggregate coveralls:report -DrepoToken=COVERALLS_TOKEN
 
 sudo: false
 
