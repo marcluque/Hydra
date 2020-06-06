@@ -50,7 +50,7 @@ like a [simple chat application](https://github.com/marcluque/Hydra/wiki/Buildin
 <dependency>
     <groupId>com.marcluque</groupId>
     <artifactId>hydra-all</artifactId>
-    <version>1.6.0</version>
+    <version>1.6.5</version>
 </dependency>
 ```
 
