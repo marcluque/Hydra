@@ -1,9 +1,9 @@
-package de.datasecs.hydra.shared.handler.impl;
+package com.marcluque.hydra.shared.handler.impl;
 
-import de.datasecs.hydra.shared.handler.Session;
-import de.datasecs.hydra.shared.protocol.Protocol;
-import de.datasecs.hydra.shared.protocol.packets.Packet;
-import de.datasecs.hydra.shared.protocol.packets.UDPPacket;
+import com.marcluque.hydra.shared.handler.Session;
+import com.marcluque.hydra.shared.protocol.Protocol;
+import com.marcluque.hydra.shared.protocol.packets.Packet;
+import com.marcluque.hydra.shared.protocol.packets.UDPPacket;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

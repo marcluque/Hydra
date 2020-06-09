@@ -1,4 +1,4 @@
-package de.datasecs.hydra.shared.protocol.packets;
+package com.marcluque.hydra.shared.protocol.packets;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

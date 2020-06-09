@@ -6,6 +6,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
 
 import java.io.Serializable;
+import java.net.SocketAddress;
 
 public class HydraUDPClient {
 
@@ -49,6 +50,17 @@ public class HydraUDPClient {
     }
 
     /**
+     * Returns the local address of the server.
+     * The local address is the address the socket is bound to. In this case the server is bound to a local address.
+     * That is the address client connect to and refer to as remote host.
+     *
+     * @return the local address of the server.
+     */
+    public SocketAddress getLocalAdress() {
+        return channel.localAddress();
+    }
+
+    /**
      * Sends a packet to the recipient that is specified in the packet.
      *
      * @param packet the packet that is supposed to be send to the recipient.
@@ -83,7 +95,7 @@ public class HydraUDPClient {
         return workerGroup;
     }
 
-    public UDPSession getUDPSession() {
+    public UDPSession getUdpSession() {
         return udpSession;
     }
 }
