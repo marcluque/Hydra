@@ -2,7 +2,6 @@ package com.marcluque.hydra.server;
 
 import com.marcluque.hydra.shared.distribution.Distribution;
 import com.marcluque.hydra.shared.handler.Session;
-import com.marcluque.hydra.shared.handler.impl.TCPHydraSession;
 import com.marcluque.hydra.shared.protocol.Protocol;
 import com.marcluque.hydra.shared.protocol.packets.Packet;
 import io.netty.channel.Channel;
@@ -100,7 +99,7 @@ public class HydraServer {
 
     /**
      * Returns the set of sessions that Hydra keeps track of. This is useful when e.g. an amount of clients is connected.
-     * See {@link TCPHydraSession} for more information what a session is.
+     * See {@link Session} for more information what a session is.
      *
      * @return the set of sessions that the server is connected with.
      */

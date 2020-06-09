@@ -28,7 +28,7 @@ public interface Session {
      *
      * @param packet the packet that is supposed to be send to the opponent of the session.
      */
-    void send(Packet packet);
+    <T extends Packet> void send(T packet);
 
     /**
      * Sends a packet to the opponent that is connected with this session. With the difference that the param not is a
@@ -72,10 +72,10 @@ public interface Session {
     SocketAddress getAddress();
 
     /**
+     * Returns true if sessions are equal. Comparision happens based on netty channel id.
      *
-     *
-     * @param s
-     * @return
+     * @param s a session to compare to this session
+     * @return true, if passed session equals this session
      */
     boolean compare(Session s);
 }
