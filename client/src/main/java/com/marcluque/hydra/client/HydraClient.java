@@ -7,11 +7,14 @@ import com.marcluque.hydra.shared.protocol.Protocol;
 import com.marcluque.hydra.shared.protocol.packets.Packet;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.util.concurrent.Future;
 
 import java.io.Serializable;
 import java.net.SocketAddress;
+import java.util.Objects;
 
 /**
  * Created with love by marcluque on 29.09.2017.
@@ -70,10 +73,13 @@ public class HydraClient {
      * Closes the channel of the client, so that the session is closed and can't be reused.
      * This method also shuts down the workerGroup, as it's not needed anymore, when the session is closed.
      */
-    public void close() {
+    public Future<?> close() {
         checkChannel();
-        channel.close();
-        workerGroup.shutdownGracefully();
+        clientSession.close();
+        protocol = null;
+        clientSession = null;
+
+        return workerGroup.shutdownGracefully();
     }
 
     /**
@@ -91,9 +97,9 @@ public class HydraClient {
      *
      * @param packet the packet that is supposed to be send to the opponent of the session.
      */
-    public void send(Packet packet) {
+    public ChannelFuture send(Packet packet) {
         checkChannel();
-        clientSession.send(packet);
+        return clientSession.send(packet);
     }
 
     /**
@@ -104,9 +110,9 @@ public class HydraClient {
      *
      * @param object the object that is supposed to be send to the opponent of the session.
      */
-    public <T extends Serializable> void send(T object) {
+    public <T extends Serializable> ChannelFuture send(T object) {
         checkChannel();
-        clientSession.send(object);
+        return clientSession.send(object);
     }
 
     /**

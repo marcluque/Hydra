@@ -1,5 +1,7 @@
 package com.marcluque.hydra.client;
 
+import com.marcluque.hydra.HydraBasicTest;
+import com.marcluque.hydra.shared.FinishedPacket;
 import com.marcluque.hydra.shared.TestPacket;
 import com.marcluque.hydra.shared.handler.Session;
 import com.marcluque.hydra.shared.protocol.packets.StandardPacket;
@@ -12,19 +14,22 @@ import org.junit.jupiter.api.Assertions;
  */
 public class TestClientPacketListener implements HydraPacketListener {
 
-    public TestClientPacketListener() {
-
-    }
+    public TestClientPacketListener() {}
 
     @PacketHandler
-    public void onTestPacket(TestPacket examplePacket, Session session) {
+    public void onFinishedPacket(FinishedPacket finishedPacket, Session session) {
         Assertions.assertTrue(session.isConnected());
-        System.out.printf("Stage %d done!%n", examplePacket.getNumber());
+        System.out.printf("Phase %d done!%n", finishedPacket.getNumber());
+
+        synchronized (HydraBasicTest.LOCK) {
+            HydraBasicTest.phaseFinished = true;
+            HydraBasicTest.LOCK.notify();
+        }
     }
 
     @PacketHandler
     public void onStandardPacket(StandardPacket standardPacket, Session session) {
         Assertions.assertTrue(session.isConnected());
-        Assertions.assertEquals("#Received!", standardPacket.getObject().toString());
+        Assertions.assertEquals("#Received!", standardPacket.toString());
     }
 }

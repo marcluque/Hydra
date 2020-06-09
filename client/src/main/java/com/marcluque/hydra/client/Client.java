@@ -1,6 +1,5 @@
 package com.marcluque.hydra.client;
 
-import com.marcluque.hydra.shared.handler.impl.UDPSession;
 import com.marcluque.hydra.shared.handler.listener.HydraSessionListener;
 import com.marcluque.hydra.shared.initializer.HydraChannelInitializer;
 import com.marcluque.hydra.shared.protocol.Protocol;
@@ -13,7 +12,6 @@ import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.AttributeKey;
 
