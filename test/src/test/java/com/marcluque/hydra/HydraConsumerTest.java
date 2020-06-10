@@ -1,22 +1,19 @@
-package com.marcluque.hydra;
+package de.datasecs.hydra;
 
-import com.marcluque.hydra.client.Client;
-import com.marcluque.hydra.client.HydraClient;
-import com.marcluque.hydra.client.TestClientProtocol;
-import com.marcluque.hydra.server.HydraServer;
-import com.marcluque.hydra.server.Server;
-import com.marcluque.hydra.server.TestServerProtocol;
-import com.marcluque.hydra.shared.ArrayPacket;
-import com.marcluque.hydra.shared.FinishedPacket;
-import com.marcluque.hydra.shared.Logger;
-import com.marcluque.hydra.shared.TestPacket;
-import com.marcluque.hydra.shared.handler.Session;
-import com.marcluque.hydra.shared.handler.listener.HydraSessionListener;
-import com.marcluque.hydra.shared.protocol.packets.StandardPacket;
+import de.datasecs.hydra.client.Client;
+import de.datasecs.hydra.client.HydraClient;
+import de.datasecs.hydra.client.TestClientProtocol;
+import de.datasecs.hydra.server.HydraServer;
+import de.datasecs.hydra.server.Server;
+import de.datasecs.hydra.server.TestServerProtocol;
+import de.datasecs.hydra.shared.ArrayPacket;
+import de.datasecs.hydra.shared.FinishedPacket;
+import de.datasecs.hydra.shared.Logger;
+import de.datasecs.hydra.shared.TestPacket;
+import de.datasecs.hydra.shared.handler.Session;
+import de.datasecs.hydra.shared.handler.listener.HydraSessionListener;
 import io.netty.channel.ChannelOption;
-import io.netty.util.internal.SocketUtils;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -24,20 +21,13 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-/**
- * Created by marcluque on 28.03.2019.
- */
-public class HydraBasicTest {
+public class HydraConsumerTest {
 
     private static HydraServer server;
 
     private static HydraClient client;
 
-    public static final Object LOCK = new Object();
-
     private static boolean clientConnected;
-
-    public static boolean phaseFinished;
 
     public static long[] measures = new long[7];
 
@@ -48,7 +38,7 @@ public class HydraBasicTest {
     @Test
     public void testAll() {
         System.out.println("---------------------------");
-        System.out.println("Testing basic functionality");
+        System.out.println("Testing consumer functionality");
         System.out.println("---------------------------\n");
 
         // Phase 1 (epoll=false, connectAfterSetup=false)
@@ -57,7 +47,7 @@ public class HydraBasicTest {
         testServer();
         testClient(1);
         shutdown();
-        phaseFinished = false;
+        HydraBasicTest.phaseFinished = false;
         clientConnected = false;
 
         Logger.printMetrics(measures);
@@ -69,7 +59,7 @@ public class HydraBasicTest {
         testServer();
         testClient(2);
         shutdown();
-        phaseFinished = false;
+        HydraBasicTest.phaseFinished = false;
         clientConnected = false;
         Logger.printMetrics(measures);
 
@@ -91,26 +81,19 @@ public class HydraBasicTest {
                 .option(ChannelOption.SO_BACKLOG, 200)
                 .childOption(ChannelOption.TCP_NODELAY, true)
                 .childOption(ChannelOption.SO_KEEPALIVE, true)
-                .addListener(new HydraSessionListener() {
-                    @Override
-                    public void onConnected(Session session) {
-                        // Measure time the client takes to connect to server
-                        globalEnd = System.nanoTime();
-                        measures[1] = globalEnd - globalStart;
+                .onConnected(c -> {
+                    // Measure time the client takes to connect to server
+                    globalEnd = System.nanoTime();
+                    measures[1] = globalEnd - globalStart;
 
-                        Logger.logDebug("TestClient connected!");
+                    Logger.logDebug("TestClient connected!");
 
-                        synchronized(LOCK) {
-                            clientConnected = true;
-                            LOCK.notify();
-                        }
-                    }
-
-                    @Override
-                    public void onDisconnected(Session session) {
-                        Logger.logDebug("TestClient disconnected!");
+                    synchronized(HydraBasicTest.LOCK) {
+                        clientConnected = true;
+                        HydraBasicTest.LOCK.notify();
                     }
                 })
+                .onDisconnected(c -> Logger.logDebug("TestClient disconnected!"))
                 .build();
 
         Logger.logDebug("Server started successfully!");
@@ -153,9 +136,9 @@ public class HydraBasicTest {
 
         // It's necessary to wait until Netty built the connection up entirely
         try {
-            synchronized(LOCK) {
+            synchronized(HydraBasicTest.LOCK) {
                 while(!clientConnected) {
-                    LOCK.wait();
+                    HydraBasicTest.LOCK.wait();
                 }
 
                 // When the connection is established, there is one session registered
@@ -232,9 +215,9 @@ public class HydraBasicTest {
 
         // When "okay" is received, test is finished
         try {
-            synchronized(LOCK) {
-                while(!phaseFinished) {
-                    LOCK.wait();
+            synchronized(HydraBasicTest.LOCK) {
+                while(!HydraBasicTest.phaseFinished) {
+                    HydraBasicTest.LOCK.wait();
                 }
             }
         } catch (InterruptedException e) {
@@ -268,12 +251,11 @@ public class HydraBasicTest {
         Future<?>[] closingFutures = server.close();
         try {
             for (int i = 0; i < closingFutures.length; i++) {
-                closingFutures[i].get();
-
+                Future<?> future = closingFutures[i];
+                future.get();
                 long end = System.nanoTime();
                 measures[6] = end - start;
-
-                Logger.logDebug("Server thread group " + i + " shut down!");
+                Logger.logDebug("Server thread " + i + " shut down!");
             }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
