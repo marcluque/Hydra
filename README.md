@@ -19,14 +19,43 @@ Convince yourself by taking a look at the [client](https://github.com/marcluque/
 ## Wiki
 
 In case you would like to have an in-depth introduction to Hydra, please take a look at the [wiki](https://github.com/marcluque/Hydra/wiki).
-The wiki takes you step-by-step through the setup of a server and a client. Furthermore the wiki features example usages,
+The wiki takes you step-by-step through the setup of a server and a client. Furthermore, the wiki features example usages,
 like a [simple chat application](https://github.com/marcluque/Hydra/wiki/Building-a-simple-chat-application) and a [key-value store](https://github.com/marcluque/Hydra/wiki/Building-a-small-key-value-store).
 
 # Quantitative benefits over raw netty
-### Raw netty code for server setup:
-![original netty code](http://hydra.marcluque.de/images/original-netty-server-code_comparsion.png)
+### Netty code for server setup:
+```java
+EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+EventLoopGroup workerGroup = new NioEventLoopGroup();
+try {
+    ServerBootstrap b = new ServerBootstrap();
+    b.group(bossGroup, workerGroup)
+     .channel(NioServerSocketChannel.class)
+     .childHandler(new ChannelInitializer<SocketChannel>() {
+         @Override
+         public void initChannel(SocketChannel ch) throws Exception {
+             ch.pipeline().addLast(new ServerHandler());
+         }
+     })
+     .option(ChannelOption.SO_BACKLOG, 128);
+     .childOption(ChannelOption.SO_KEEPALIVE, true);
+     
+    ChannelFuture f = b.bind("localhost", 8888).sync();
+    f.channel().closeFuture().sync();
+} finally {
+    workerGroup.shutdownGracefully();
+    bossGroup.shutdownGracefully();
+}
+```
 ### Hydra code for server setup:
-![hydra code](http://hydra.marcluque.de/images/hydra-code_comparsion.png)
+```java
+HydraServer server = new Server.Builder("localhost", 8888, new SampleProtocol())
+                .option(ChannelOption.SO_BACKLOG, 128)
+                .childOption(ChannelOption.SO_KEEPALIVE, true)
+                .build();
+```
+
+Note that `ServerHandler` and `SampleProtocol` have approximately the same size/complexity.
 
 # Installing
 
@@ -71,7 +100,7 @@ HydraClient client = new Client.Builder("localhost", 8888, new SampleProtocol())
                 .build();
 ```
 
-This is an easy to understand example of how to create a client socket.
+This is an easy-to-understand example of how to create a client socket.
 In order to make the packet system work, you have to register your created packets and listeners.
 For detailed information on how to do that and examples see the [client example](https://github.com/marcluque/Hydra/tree/master/example/src/main/java/de/marcluque/hydra/example/client).
 
@@ -82,6 +111,7 @@ HydraServer server = new Server.Builder("localhost", 8888, new SampleProtocol())
                 .bossThreads(2)
                 .workerThreads(4)
                 .option(ChannelOption.TCP_NODELAY, true)
+                .childOption(ChannelOption.SO_KEEPALIVE, true)
                 .build();
 ```
 
@@ -96,6 +126,3 @@ The javadoc is always up-to-date and can be found on [hydra.marcluque.de/javadoc
 # License
 
 Licensed under the BSD 2-Clause License - see the [LICENSE](LICENSE) file for details.
-
-### Credits
-Special thanks go to [Aadi Bajpai](https://github.com/aadibajpai) for creating the awesome banner and logo!
