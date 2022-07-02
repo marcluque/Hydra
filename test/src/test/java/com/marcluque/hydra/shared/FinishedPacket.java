@@ -1,7 +1,7 @@
-package de.datasecs.hydra.shared;
+package com.marcluque.hydra.shared;
 
-import de.datasecs.hydra.shared.protocol.packets.Packet;
-import de.datasecs.hydra.shared.protocol.packets.PacketId;
+import com.marcluque.hydra.shared.protocol.packets.Packet;
+import com.marcluque.hydra.shared.protocol.packets.PacketId;
 import io.netty.buffer.ByteBuf;
 
 @PacketId(120)

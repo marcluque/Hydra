@@ -1,7 +1,7 @@
-package de.datasecs.hydra.client.udp;
+package com.marcluque.hydra.client.udp;
 
-import de.datasecs.hydra.shared.handler.impl.UDPSession;
-import de.datasecs.hydra.shared.protocol.packets.UDPPacket;
+import com.marcluque.hydra.shared.handler.impl.UDPSession;
+import com.marcluque.hydra.shared.protocol.packets.UDPPacket;
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
 

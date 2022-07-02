@@ -1,7 +1,7 @@
-package de.datasecs.hydra.server.udp;
+package com.marcluque.hydra.client.udp;
 
-import de.datasecs.hydra.shared.handler.impl.UDPSession;
-import de.datasecs.hydra.shared.protocol.Protocol;
+import com.marcluque.hydra.shared.handler.impl.UDPSession;
+import com.marcluque.hydra.shared.protocol.Protocol;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
@@ -15,7 +15,7 @@ import io.netty.util.AttributeKey;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UDPServer {
+public class UDPClient {
 
     public static class Builder {
 
@@ -25,15 +25,9 @@ public class UDPServer {
 
         private int workerThreads = 2;
 
-        private int bossThreads = 1;
-
         private Map<ChannelOption, Object> options = new HashMap<>();
 
-        private Map<ChannelOption, Object> childOptions = new HashMap<>();
-
         private Map<AttributeKey, Object> attributeKeys = new HashMap<>();
-
-        private Map<AttributeKey, Object> childAttributeKeys = new HashMap<>();
 
         private boolean useEpoll;
 
@@ -56,11 +50,11 @@ public class UDPServer {
         }
 
         /**
-         * Sets the number of worker threads for the server.
+         * Sets the number of worker threads for the client.
          * A worker thread performs non-blocking operations for one or more channels.
          * The standard amount is set to 2.
          *
-         * @param workerThreads the amount of worker threads for the server
+         * @param workerThreads the amount of worker threads for the client
          */
         public Builder workerThreads(int workerThreads) {
             this.workerThreads = workerThreads;
@@ -68,25 +62,12 @@ public class UDPServer {
         }
 
         /**
-         * Sets the number of boss threads for the server.
-         * The standard number is set to 1.
-         * Netty sets the standard amount to twice the amount of processors/cores.
-         *
-         * @param bossThreads the amount of boss threads for the server
-         */
-        public Builder bossThreads(int bossThreads) {
-            this.bossThreads = bossThreads;
-            return this;
-        }
-
-        /**
-         * Adds a specific option to the server that is added to the channel configuration.
-         * These options include a lot of possibilities.
+         * Adds a specific option to the client. These options include a lot of possibilities.
          *
          * @param channelOption the desired channel option
          * @param value the value that is supposed to be set for the desired channel option
          *
-         * @see <a href="https://netty.io/4.1/api/io/netty/channel/ChannelOption.html">channel options</a>
+         * @see <a href="https://netty.io/4.1/api/io/netty/channel/ChannelOption.html">Channel options</a>
          */
         public <T> Builder option(ChannelOption<T> channelOption, T value) {
             options.put(channelOption, value);
@@ -94,36 +75,13 @@ public class UDPServer {
         }
 
         /**
-         * Adds a specific option to the connections that are opened with the server's channel.
-         *
-         * @param channelOption the desired channel option
-         * @param value the value that is supposed to be set for the desired channel option
-         */
-        public <T> Builder childOption(ChannelOption<T> channelOption, T value) {
-            childOptions.put(channelOption, value);
-            return this;
-        }
-
-        /**
-         * Adds a specific attribute to the server. The attributes are saved in an attribute map by Netty.
+         * Adds a specific attribute to the client. The attributes are saved in an attribute map by Netty.
          *
          * @param attributeKey the attribute key that is supposed to be stored in the map.
          * @param value the value that is supposed to be mapped to the given attribute key.
          */
         public <T> Builder attribute(AttributeKey<T> attributeKey, T value) {
             attributeKeys.put(attributeKey, value);
-            return this;
-        }
-
-        /**
-         * Adds a specific child attribute to the server. Child attributes apply to the connections that the server creates,
-         * just like child options. The attributes are saved in an attribute map by Netty.
-         *
-         * @param attributeKey the attribute key that is supposed to be stored in the map.
-         * @param value the value that is supposed to be mapped to the given attribute key.
-         */
-        public <T> Builder childAttribute(AttributeKey<T> attributeKey, T value) {
-            childAttributeKeys.put(attributeKey, value);
             return this;
         }
 
@@ -139,34 +97,37 @@ public class UDPServer {
         }
 
         /**
-         * Builds the final server. Returns an instance of type HydraServer, not of type Server, as HydraServer includes
+         * Builds the final client. Returns an instance of type HydraClient, not of type Client, as HydraClient includes
          * all the useful methods for users.
          *
-         * @return Returns an instance of HydraServer that can e.g. be used to get the session created for the server and client.
+         * @return Returns an instance of HydraClient that can e.g. be used to get the session created for the client and server.
          */
-        public HydraUDPServer build() {
+        public HydraUDPClient build() {
             boolean epoll = useEpoll && Epoll.isAvailable();
-            EventLoopGroup group = epoll ? new EpollEventLoopGroup() : new NioEventLoopGroup();
+            EventLoopGroup workerGroup = epoll ? new EpollEventLoopGroup(workerThreads) : new NioEventLoopGroup(workerThreads);
 
-            // TODO: Serverbootstrap possible?
             Bootstrap bootstrap = new Bootstrap();
-
-            UDPSession session = new UDPSession(protocol, true);
-            bootstrap.handler(session);
-            bootstrap.group(group).channel(NioDatagramChannel.class);
+            bootstrap.group(workerGroup);
+            bootstrap.channel(NioDatagramChannel.class);
 
             options.forEach(bootstrap::option);
+            attributeKeys.forEach(bootstrap::attr);
 
+            UDPSession session = new UDPSession(protocol, false);
+            bootstrap.handler(session);
             Channel channel = null;
             try {
-                channel = host != null ? bootstrap.bind(host, port).sync().channel()
-                                        : bootstrap.bind(port).sync().channel();
+                if (host != null) {
+                    channel = bootstrap.bind(host, port).sync().channel();
+                } else {
+                    channel = bootstrap.bind(port).sync().channel();
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
             session.setChannel(channel);
-            return new HydraUDPServer(channel, group, session);
+
+            return new HydraUDPClient(channel, workerGroup, session);
         }
     }
 }

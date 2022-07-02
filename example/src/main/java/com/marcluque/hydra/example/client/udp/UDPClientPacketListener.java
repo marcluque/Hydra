@@ -1,9 +1,9 @@
-package de.datasecs.hydra.example.client.udp;
+package com.marcluque.hydra.example.client.udp;
 
 import com.marcluque.hydra.example.shared.udp.ExampleUDPPacket;
-import de.datasecs.hydra.shared.handler.impl.UDPSession;
-import de.datasecs.hydra.shared.protocol.packets.listener.HydraPacketListener;
-import de.datasecs.hydra.shared.protocol.packets.listener.PacketHandler;
+import com.marcluque.hydra.shared.handler.impl.UDPSession;
+import com.marcluque.hydra.shared.protocol.packets.listener.HydraPacketListener;
+import com.marcluque.hydra.shared.protocol.packets.listener.PacketHandler;
 
 /*
  * Created with love by DataSecs on 17.12.19

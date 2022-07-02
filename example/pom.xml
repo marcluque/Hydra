@@ -14,7 +14,7 @@
     <dependencies>
         <!-- Hydra client -->
         <dependency>
-            <groupId>de.datasecs</groupId>
+            <groupId>com.marcluque</groupId>
             <artifactId>hydra-client</artifactId>
             <version>1.6.5</version>
         </dependency>

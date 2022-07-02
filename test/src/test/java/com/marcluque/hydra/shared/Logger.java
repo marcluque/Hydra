@@ -1,4 +1,4 @@
-package de.datasecs.hydra.shared;
+package com.marcluque.hydra.shared;
 
 public class Logger {
 

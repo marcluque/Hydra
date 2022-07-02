@@ -3,7 +3,7 @@ package com.marcluque.hydra.example.client.udp;
 import com.marcluque.hydra.client.udp.HydraUDPClient;
 import com.marcluque.hydra.client.udp.UDPClient;
 import com.marcluque.hydra.example.shared.udp.ExampleUDPPacket;
-import de.datasecs.hydra.shared.handler.impl.UDPSession;
+import com.marcluque.hydra.shared.handler.impl.UDPSession;
 import io.netty.channel.ChannelOption;
 import io.netty.util.internal.SocketUtils;
 
