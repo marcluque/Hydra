@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class PacketDecoder extends MessageToMessageDecoder<ByteBuf> {
 
-    private Protocol protocol;
+    private final Protocol protocol;
 
     public PacketDecoder(Protocol protocol) {
         this.protocol = protocol;

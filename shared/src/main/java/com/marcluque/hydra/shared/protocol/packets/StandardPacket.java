@@ -10,7 +10,10 @@ public class StandardPacket extends Packet {
 
     private Object object;
 
-    public StandardPacket() {}
+    @SuppressWarnings("unused")
+    public StandardPacket() {
+        // Hydra needs an empty constructor for packet reconstruction at runtime
+    }
 
     public StandardPacket(Object object) {
         this.object = object;

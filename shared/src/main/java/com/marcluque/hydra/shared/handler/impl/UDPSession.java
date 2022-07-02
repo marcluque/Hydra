@@ -2,7 +2,6 @@ package com.marcluque.hydra.shared.handler.impl;
 
 import com.marcluque.hydra.shared.handler.Session;
 import com.marcluque.hydra.shared.protocol.Protocol;
-import com.marcluque.hydra.shared.protocol.packets.Packet;
 import com.marcluque.hydra.shared.protocol.packets.UDPPacket;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -11,18 +10,17 @@ import io.netty.channel.socket.DatagramPacket;
 
 import java.io.Serializable;
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
 
 /*
- * Created with love by DataSecs on 03.01.20
+ * Created with love by marcluque on 03.01.20
  */
 public class UDPSession extends SimpleChannelInboundHandler<DatagramPacket> {
 
     private Channel channel;
 
-    private Protocol protocol;
+    private final Protocol protocol;
 
-    private boolean isServer;
+    private final boolean isServer;
 
     private InetSocketAddress sender;
 
@@ -60,7 +58,7 @@ public class UDPSession extends SimpleChannelInboundHandler<DatagramPacket> {
     }
 
     public <T extends Serializable> void send(T object, InetSocketAddress recipient) {
-        // TODO: Standardpacket for udp
+        // TODO: StandardPacket for udp
         //channel.writeAndFlush();
     }
 

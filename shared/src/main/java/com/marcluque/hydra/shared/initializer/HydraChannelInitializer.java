@@ -15,9 +15,9 @@ import io.netty.handler.codec.LengthFieldPrepender;
  */
 public class HydraChannelInitializer<C extends Channel> extends ChannelInitializer<C> {
 
-    private Protocol protocol;
+    private final Protocol protocol;
 
-    private boolean isServer;
+    private final boolean isServer;
 
     public HydraChannelInitializer(Protocol protocol, boolean isServer) {
         this.protocol = protocol;

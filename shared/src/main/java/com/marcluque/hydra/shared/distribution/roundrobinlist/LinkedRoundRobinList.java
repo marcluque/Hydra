@@ -7,7 +7,7 @@ import com.marcluque.hydra.shared.handler.Session;
  */
 public class LinkedRoundRobinList implements RoundRobinList {
 
-    private Element start;
+    private final Element start;
 
     private int size;
 
@@ -69,15 +69,13 @@ public class LinkedRoundRobinList implements RoundRobinList {
                 e.prev.next = e.next;
                 e.next.prev = e.prev;
 
-                size--;
-                index--;
             } else {
                 e.prev.next = null;
 
-                size--;
-                index--;
             }
 
+            size--;
+            index--;
             robinIndex = (size != 0) ? (robinIndex + 1) % size : 0;
         }
     }

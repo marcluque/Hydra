@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class PacketEncoder extends MessageToMessageEncoder<Packet> {
 
-    private Protocol protocol;
+    private final Protocol protocol;
 
     public PacketEncoder(Protocol protocol) {
         this.protocol = protocol;

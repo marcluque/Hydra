@@ -4,7 +4,7 @@ import com.marcluque.hydra.example.shared.udp.ExampleUDPPacket;
 import com.marcluque.hydra.shared.protocol.impl.HydraProtocol;
 
 /*
- * Created with love by DataSecs on 17.12.19
+ * Created with love by marcluque on 17.12.19
  */
 public class UDPServerProtocol extends HydraProtocol {
 

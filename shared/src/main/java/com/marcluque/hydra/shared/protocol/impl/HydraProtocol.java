@@ -25,13 +25,13 @@ import java.util.Set;
  */
 public class HydraProtocol implements Protocol {
 
-    private Map<Byte, Class<? extends Packet>> packets = new HashMap<>();
+    private final Map<Byte, Class<? extends Packet>> packets = new HashMap<>();
 
-    private Map<Class<? extends Packet>, Byte> packetBytes = new HashMap<>();
+    private final Map<Class<? extends Packet>, Byte> packetBytes = new HashMap<>();
 
-    private Map<Class<?>, Method> packetListenerMethods = new HashMap<>();
+    private final Map<Class<?>, Method> packetListenerMethods = new HashMap<>();
 
-    private Set<Session> sessions = new HashSet<>();
+    private final Set<Session> sessions = new HashSet<>();
 
     private Session clientSession;
 
@@ -143,7 +143,7 @@ public class HydraProtocol implements Protocol {
             error.append("Casted packet: ").append(packet.getClass().cast(packet)).append("\n");
             error.append("Result from packetListener method search (if this is null you do not have a listener for the packet): ").append(packetListenerMethods.get(packet.getClass()));
 
-            System.err.println(error.toString());
+            System.err.println(error);
         }
     }
 
@@ -175,7 +175,7 @@ public class HydraProtocol implements Protocol {
             error.append("Casted packet: ").append(packet.getClass().cast(packet)).append("\n");
             error.append("Result from packetListener method search (if this is null you do not have a listener for the packet): ").append(packetListenerMethods.get(packet.getClass()));
 
-            System.err.println(error.toString());
+            System.err.println(error);
         }
     }
 

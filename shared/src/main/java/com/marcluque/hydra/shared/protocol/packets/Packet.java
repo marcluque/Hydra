@@ -1,6 +1,5 @@
 package com.marcluque.hydra.shared.protocol.packets;
 
-import com.marcluque.hydra.shared.serialization.IgnoreSerialization;
 import io.netty.buffer.ByteBuf;
 
 import java.io.*;
@@ -105,7 +104,7 @@ public abstract class Packet {
 
     private <T> void serializeField(ByteBuf byteBuf, Field declaredField, String prefix, T customObject) {
         if (!Modifier.isTransient(declaredField.getModifiers())) {
-            boolean isAccessible = declaredField.isAccessible();
+            boolean isAccessible = declaredField.canAccess(customObject);
             declaredField.setAccessible(true);
             try {
                 objectToSerialize = declaredField.get(customObject);
@@ -132,6 +131,8 @@ public abstract class Packet {
     protected <T> T readCustomObject(ByteBuf byteBuf) {
         T customObject = null;
         try {
+            // We let the user of the function determine the correct type
+            //noinspection unchecked
             customObject = (T) Class.forName(readString(byteBuf)).getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             e.printStackTrace();
@@ -168,6 +169,8 @@ public abstract class Packet {
 
     private <T> T getNewInstance(String path) {
         try {
+            // We let the user of the function determine the correct type
+            //noinspection unchecked
             return (T) Class.forName(path).getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             e.printStackTrace();
@@ -181,7 +184,7 @@ public abstract class Packet {
         Field field = null;
         try {
             field = customObject.getClass().getDeclaredField(fieldName);
-            isAccessible = field.isAccessible();
+            isAccessible = field.canAccess(customObject);
             field.setAccessible(true);
             field.set(customObject, fieldValue);
             field.setAccessible(isAccessible);
@@ -194,7 +197,7 @@ public abstract class Packet {
                     "Field value: " + fieldValue + "\n" +
                     "Found field by name: " + field + "\n" +
                     "Field Accessibility: "
-                    + (field == null ? "Could not print accessibility, field == null" : field.isAccessible())
+                    + (field == null ? "Could not print accessibility, field == null" : field.canAccess(customObject))
                     + "\n";
             System.err.println(stringBuilder);
         }
@@ -215,6 +218,8 @@ public abstract class Packet {
 
         try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
              ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
+            // We let the user of the function determine the correct type
+            //noinspection unchecked
             return (T[]) objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -236,6 +241,8 @@ public abstract class Packet {
         String path = readString(byteBuf);
         T[] array = null;
         try {
+            // We let the user of the function determine the correct type
+            //noinspection unchecked
             array = (T[]) Array.newInstance(Class.forName(path), length);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -260,6 +267,8 @@ public abstract class Packet {
 
         Collection<T> collection = null;
         try {
+            // We let the user of the function determine the correct type
+            //noinspection unchecked
             collection = (Collection<T>) Class.forName(readString(byteBuf)).getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             e.printStackTrace();

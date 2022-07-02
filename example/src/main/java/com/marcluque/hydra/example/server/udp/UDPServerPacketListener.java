@@ -6,7 +6,7 @@ import com.marcluque.hydra.shared.protocol.packets.listener.HydraPacketListener;
 import com.marcluque.hydra.shared.protocol.packets.listener.PacketHandler;
 
 /*
- * Created with love by DataSecs on 17.12.19
+ * Created with love by marcluque on 17.12.19
  */
 public class UDPServerPacketListener implements HydraPacketListener {
 
