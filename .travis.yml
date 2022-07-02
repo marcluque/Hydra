@@ -2,8 +2,7 @@ language: java
 
 sudo: false
 
-install: "mvn -P ci install"
-script: "mvn -P ci clean compile && mvn test"
+script: "mvn clean compile install"
 
 os:
 - linux
@@ -25,3 +24,6 @@ matrix:
     jdk: oraclejdk8
   - os: linux
     jdk: oraclejdk10
+
+after_success:
+  - mvn -P ci clean test jacoco:report-aggregate coveralls:report -DrepoToken=$COVERALLS_TOKEN

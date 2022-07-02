@@ -19,12 +19,9 @@ public class HydraChannelInitializer<C extends Channel> extends ChannelInitializ
 
     private boolean isServer;
 
-    private boolean useUDP;
-
-    public HydraChannelInitializer(Protocol protocol, boolean isServer, boolean useUDP) {
+    public HydraChannelInitializer(Protocol protocol, boolean isServer) {
         this.protocol = protocol;
         this.isServer = isServer;
-        this.useUDP = useUDP;
     }
 
     @Override
@@ -39,15 +36,7 @@ public class HydraChannelInitializer<C extends Channel> extends ChannelInitializ
         pipeline.addLast(new LengthFieldPrepender(4));
         pipeline.addLast(new PacketEncoder(protocol));
 
-        /*
-        if (!useUDP) {
-            TCPHydraSession session = new TCPHydraSession(channel, protocol);
-            pipeline.addLast(session);
-        } else {
-            UDPHydraSession session = new UDPHydraSession(channel, protocol);
-            pipeline.addLast(session);
-        }
-         */
+        // Create a SimpleChannelInboundHandler in form of a hydra session
         HydraSession session = new HydraSession(channel, protocol);
         pipeline.addLast(session);
 
@@ -58,14 +47,11 @@ public class HydraChannelInitializer<C extends Channel> extends ChannelInitializ
             protocol.setClientSession(session);
         }
 
-        if (!useUDP) {
-            if (protocol.getSessionListener() != null) {
-                // Inform SessionListener about new session
-                protocol.callSessionListener(true, session);
-            } else if (protocol.getSessionConsumer() != null) {
-                // Inform SessionConsumer about new session
-                protocol.callSessionConsumer(true, session);
-            }
+        // Inform about new session
+        if (protocol.getSessionListener() != null) {
+            protocol.callSessionListener(true, session);
+        } else if (protocol.getSessionConsumer() != null) {
+            protocol.callSessionConsumer(true, session);
         }
     }
 }

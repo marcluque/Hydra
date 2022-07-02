@@ -12,32 +12,24 @@ import java.util.Arrays;
 @PacketId(8)
 public class ArrayPacket extends Packet {
 
-    private int number;
-
     private String[] strings;
 
     public ArrayPacket() {}
 
-    public ArrayPacket(int number, String[] strings) {
-        this.number = number;
+    public ArrayPacket(String[] strings) {
         this.strings = strings;
     }
 
     @Override
     public void read(ByteBuf byteBuf) {
-        number = readInt(byteBuf);
         strings = readArray(byteBuf);
     }
 
     @Override
     public void write(ByteBuf byteBuf) {
-        writeInt(byteBuf, number);
         writeArray(byteBuf, strings);
     }
 
-    public int getNumber() {
-        return number;
-    }
 
     public String[] getStrings() {
         return strings;
@@ -46,8 +38,7 @@ public class ArrayPacket extends Packet {
     @Override
     public String toString() {
         return "TestPacket{" +
-                "number=" + number +
-                ", object=" + Arrays.toString(strings) +
+                "strings=" + Arrays.toString(strings) +
                 '}';
     }
 }

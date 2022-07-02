@@ -2,13 +2,15 @@ package com.marcluque.hydra.server;
 
 import com.marcluque.hydra.shared.distribution.Distribution;
 import com.marcluque.hydra.shared.handler.Session;
-import com.marcluque.hydra.shared.handler.impl.TCPHydraSession;
 import com.marcluque.hydra.shared.protocol.Protocol;
 import com.marcluque.hydra.shared.protocol.packets.Packet;
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
+import io.netty.util.concurrent.EventExecutorGroup;
+import io.netty.util.concurrent.Future;
 
 import java.net.SocketAddress;
+import java.util.Arrays;
 import java.util.Set;
 
 /**
@@ -39,11 +41,16 @@ public class HydraServer {
      * This method also shuts down the so called 'event loop groups'. The event loop groups are a grouping of threads.
      * In this case there is an array of event loop groups because the server has boss and worker groups.
      */
-    public void close() {
-        channel.close();
-        for (EventLoopGroup loopGroup : loopGroups) {
-            loopGroup.shutdownGracefully();
+    public Future<?>[] close() {
+        protocol.getSessions().forEach(Session::close);
+        protocol.getSessions().forEach(s -> s = null);
+        protocol = null;
+        Future<?>[] futures = new Future<?>[loopGroups.length];
+        for (int i = 0; i < loopGroups.length; i++) {
+            futures[i] = loopGroups[i].shutdownGracefully();
         }
+
+        return futures;
     }
 
     /**
@@ -100,7 +107,7 @@ public class HydraServer {
 
     /**
      * Returns the set of sessions that Hydra keeps track of. This is useful when e.g. an amount of clients is connected.
-     * See {@link TCPHydraSession} for more information what a session is.
+     * See {@link Session} for more information what a session is.
      *
      * @return the set of sessions that the server is connected with.
      */
@@ -108,12 +115,12 @@ public class HydraServer {
         return protocol.getSessions();
     }
 
-    /**
+    /*
      * Sends a packet to all clients that are connected to the server with the specified distribution type.
      *
      * @param packet the packet that is supposed to be send to all connected clients.
      * @param distributionType the type of distribution that is supposed to be used.
-     */
+
     public void send(Packet packet, Distribution distributionType) {
         switch (distributionType) {
             case SIMPLE_BROADCAST:
@@ -123,5 +130,5 @@ public class HydraServer {
                 }
                 break;
         }
-    }
+    }*/
 }

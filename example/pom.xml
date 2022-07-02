@@ -12,9 +12,17 @@
     <artifactId>hydra-example</artifactId>
 
     <dependencies>
+        <!-- Hydra client -->
         <dependency>
             <groupId>com.marcluque</groupId>
-            <artifactId>hydra-all</artifactId>
+            <artifactId>hydra-client</artifactId>
+            <version>1.6.5</version>
+        </dependency>
+
+        <!-- Hydra server -->
+        <dependency>
+            <groupId>com.marcluque</groupId>
+            <artifactId>hydra-server</artifactId>
             <version>1.6.5</version>
         </dependency>
     </dependencies>
@@ -28,6 +36,16 @@
                 <version>3.0.0-M2</version>
                 <configuration>
                     <!-- This configuration makes the plugin skip this module for deployment -->
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+
+            <!-- JaCoCo -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.5</version>
+                <configuration>
                     <skip>true</skip>
                 </configuration>
             </plugin>

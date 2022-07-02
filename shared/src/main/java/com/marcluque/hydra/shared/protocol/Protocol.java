@@ -1,13 +1,14 @@
 package com.marcluque.hydra.shared.protocol;
 
 import com.marcluque.hydra.shared.handler.Session;
+import com.marcluque.hydra.shared.handler.impl.UDPSession;
 import com.marcluque.hydra.shared.handler.listener.HydraSessionConsumer;
 import com.marcluque.hydra.shared.handler.listener.HydraSessionListener;
 import com.marcluque.hydra.shared.protocol.packets.Packet;
 import com.marcluque.hydra.shared.protocol.packets.listener.HydraPacketListener;
+import io.netty.channel.socket.DatagramPacket;
 
 import java.lang.reflect.Method;
-import java.net.DatagramPacket;
 import java.util.Map;
 import java.util.Set;
 
@@ -38,7 +39,7 @@ public interface Protocol {
 
     void callPacketListener(Packet packet, Session session);
 
-    void callPacketListener(DatagramPacket packet, Session session);
+    void callPacketListener(DatagramPacket packet, UDPSession session);
 
     void addSessionListener(HydraSessionListener sessionListener);
 
@@ -56,7 +57,7 @@ public interface Protocol {
 
     void removeSession(Session session);
 
-    public Map<Byte, Class<? extends Packet>> getRegisteredPackets();
+    Map<Byte, Class<? extends Packet>> getRegisteredPackets();
 
     Map<Class<?>, Method> getRegisteredPacketListenerMethods();
 

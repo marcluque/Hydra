@@ -1,30 +1,21 @@
-package com.marcluque.hydra.server;
+package com.marcluque.hydra.server.udp;
 
-import com.marcluque.hydra.shared.handler.Session;
-import com.marcluque.hydra.shared.handler.listener.HydraSessionConsumer;
-import com.marcluque.hydra.shared.handler.listener.HydraSessionListener;
-import com.marcluque.hydra.shared.initializer.HydraChannelInitializer;
+import com.marcluque.hydra.shared.handler.impl.UDPSession;
 import com.marcluque.hydra.shared.protocol.Protocol;
-import io.netty.bootstrap.ServerBootstrap;
+import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.Epoll;
 import io.netty.channel.epoll.EpollEventLoopGroup;
-import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.util.AttributeKey;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
-/**
- * Created with love by marcluque on 29.11.17
- */
-public class Server {
+public class UDPServer {
 
     public static class Builder {
 
@@ -48,15 +39,20 @@ public class Server {
 
         private Protocol protocol;
 
-        private HydraSessionConsumer hydraSessionConsumer;
-
-        public Builder(String host, int port, Protocol protocol) {
-            this.host = host;
+        public Builder(int port, Protocol protocol) {
             this.port = port;
             this.protocol = protocol;
+        }
 
-            hydraSessionConsumer = new HydraSessionConsumer();
-            protocol.addSessionConsumer(hydraSessionConsumer);
+        /**
+         * If the socket has no wildcard address it can't receive broadcast packets.
+         * You may set {@link ChannelOption} SO_BROADCAST to false and then use a host address.
+         *
+         * @param host host the server will be bound to.
+         */
+        public Builder host(String host) {
+            this.host = host;
+            return this;
         }
 
         /**
@@ -143,62 +139,34 @@ public class Server {
         }
 
         /**
-         * This method adds a session listener to the client. The session listener has 2 methods.
-         * The first one is 'onConnected', which gets triggered when the client is successfully connected to the aimed server.
-         * The second on is 'onDisconnected', which gets fired when the client is disconnected from the server it was
-         * connected to.
-         *
-         * @param sessionListener this method takes an instance of the session listener interface HydraSessionListener.
-         */
-        public Builder addListener(HydraSessionListener sessionListener) {
-            protocol.addSessionListener(sessionListener);
-            return this;
-        }
-
-        public Builder onConnected(Consumer<Session> onConnectedConsumer) {
-            hydraSessionConsumer.setOnConnectedConsumer(onConnectedConsumer);
-            return this;
-        }
-
-        public Builder onDisconnected(Consumer<Session> onDisconnectedConsumer) {
-            hydraSessionConsumer.setOnDisconnectedConsumer(onDisconnectedConsumer);
-            return this;
-        }
-
-        /**
          * Builds the final server. Returns an instance of type HydraServer, not of type Server, as HydraServer includes
          * all the useful methods for users.
          *
          * @return Returns an instance of HydraServer that can e.g. be used to get the session created for the server and client.
          */
-        public HydraServer build() {
-            return setUpServer();
-        }
-
-        private HydraServer setUpServer() {
+        public HydraUDPServer build() {
             boolean epoll = useEpoll && Epoll.isAvailable();
-            EventLoopGroup workerGroup = epoll ? new EpollEventLoopGroup(workerThreads) : new NioEventLoopGroup(workerThreads);
-            EventLoopGroup bossGroup = epoll ? new EpollEventLoopGroup(bossThreads) : new NioEventLoopGroup(bossThreads);
+            EventLoopGroup group = epoll ? new EpollEventLoopGroup() : new NioEventLoopGroup();
 
-            ServerBootstrap serverBootstrap = new ServerBootstrap();
-            serverBootstrap.channel(epoll ? EpollServerSocketChannel.class : NioServerSocketChannel.class);
-            serverBootstrap.childHandler(new HydraChannelInitializer<SocketChannel>(protocol, true));
-            serverBootstrap.group(bossGroup, workerGroup);
+            // TODO: Serverbootstrap possible?
+            Bootstrap bootstrap = new Bootstrap();
 
-            options.forEach(serverBootstrap::option);
-            childOptions.forEach(serverBootstrap::childOption);
+            UDPSession session = new UDPSession(protocol, true);
+            bootstrap.handler(session);
+            bootstrap.group(group).channel(NioDatagramChannel.class);
 
-            attributeKeys.forEach(serverBootstrap::attr);
-            childAttributeKeys.forEach(serverBootstrap::childAttr);
+            options.forEach(bootstrap::option);
 
             Channel channel = null;
             try {
-                channel = serverBootstrap.bind(host, port).sync().channel();
+                channel = host != null ? bootstrap.bind(host, port).sync().channel()
+                                        : bootstrap.bind(port).sync().channel();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-            return new HydraServer(channel, protocol, new EventLoopGroup[]{bossGroup, workerGroup});
+            session.setChannel(channel);
+            return new HydraUDPServer(channel, group, session);
         }
     }
 }

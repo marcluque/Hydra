@@ -5,6 +5,7 @@ import com.marcluque.hydra.shared.protocol.Protocol;
 import com.marcluque.hydra.shared.protocol.packets.Packet;
 import com.marcluque.hydra.shared.protocol.packets.StandardPacket;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -41,6 +42,8 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> implements
         }
 
         protocol.removeSession(this);
+
+        protocol = null;
     }
 
     @Override
@@ -49,18 +52,18 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> implements
     }
 
     @Override
-    public void send(Packet packet) {
-        channel.writeAndFlush(packet);
+    public ChannelFuture send(Packet packet) {
+        return channel.writeAndFlush(packet);
     }
 
     @Override
-    public <T extends Serializable> void send(T object) {
-        channel.writeAndFlush(new StandardPacket(object));
+    public <T extends Serializable> ChannelFuture send(T object) {
+        return channel.writeAndFlush(new StandardPacket(object));
     }
 
     @Override
-    public void close() {
-        channel.disconnect();
+    public ChannelFuture close() {
+        return channel.disconnect();
     }
 
     @Override

@@ -1,18 +1,20 @@
 package com.marcluque.hydra.shared.protocol.impl;
 
 import com.marcluque.hydra.shared.handler.Session;
+import com.marcluque.hydra.shared.handler.impl.UDPSession;
 import com.marcluque.hydra.shared.handler.listener.HydraSessionConsumer;
 import com.marcluque.hydra.shared.handler.listener.HydraSessionListener;
 import com.marcluque.hydra.shared.protocol.Protocol;
 import com.marcluque.hydra.shared.protocol.packets.Packet;
 import com.marcluque.hydra.shared.protocol.packets.PacketId;
 import com.marcluque.hydra.shared.protocol.packets.StandardPacket;
+import com.marcluque.hydra.shared.protocol.packets.UDPPacket;
 import com.marcluque.hydra.shared.protocol.packets.listener.HydraPacketListener;
 import com.marcluque.hydra.shared.protocol.packets.listener.PacketHandler;
+import io.netty.channel.socket.DatagramPacket;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.DatagramPacket;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -47,9 +49,15 @@ public class HydraProtocol implements Protocol {
     @Override
     public Packet createPacket(byte id) {
         try {
-            return packets.get(id).newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+            return packets.get(id).getDeclaredConstructor().newInstance();
+        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
             System.err.printf("Packet %s.class might hasn't got an empty constructor!%n\n", packets.get(id).getSimpleName());
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            String errMessage = "Packet with id %s is not in the packets registry.\n" +
+                                "Packets registry: " + packets + "\n" +
+                                "Entry for Packet id %s: " + packets.get(id);
+            System.err.printf(errMessage, id);
             e.printStackTrace();
         }
 
@@ -94,7 +102,7 @@ public class HydraProtocol implements Protocol {
         for (Method method : packetListener.getClass().getMethods()) {
             if (method.isAnnotationPresent(PacketHandler.class)) {
                 if (method.getParameterCount() == 2) {
-                    Class clazz = method.getParameterTypes()[0];
+                    Class<?> clazz = method.getParameterTypes()[0];
                     if (Packet.class.isAssignableFrom(clazz)) {
                         if (!packetListenerMethods.containsKey(clazz)) {
                             packetListenerMethods.put(clazz, method);
@@ -140,8 +148,35 @@ public class HydraProtocol implements Protocol {
     }
 
     @Override
-    public void callPacketListener(DatagramPacket packet, Session session) {
+    public void callPacketListener(DatagramPacket packet, UDPSession session) {
+        try {
+            session.setSender(packet.sender());
+            UDPPacket receivedPacket = (UDPPacket) createPacket(packet.content().readByte());
+            receivedPacket.read(packet.content());
+            receivedPacket.setRecipient(packet.sender());
+            packetListenerMethods.get(receivedPacket.getClass()).invoke(packetListener, receivedPacket, session);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
 
+            StringBuilder error = new StringBuilder("\n\nThe following packets are registered, but do not have a listener:\n");
+            for (Class<? extends Packet> p : packets.values()) {
+                if (!packetListenerMethods.containsKey(p)) {
+                    error.append(" - ").append(p.getSimpleName()).append(".class").append("\n");
+                }
+            }
+            error.append("Not using a listener for a packet may cause an exception.\n");
+
+            error.append("Other important data:\n");
+            error.append("Packet: ").append(packet).append("\n");
+            error.append("Packet class: ").append(packet.getClass()).append("\n");
+            error.append("Packet listener: ").append(packetListener).append("\n");
+            error.append("Casted packet: ").append(packet.getClass().cast(packet)).append("\n");
+            error.append("Result from packetListener method search (if this is null you do not have a listener for the packet): ").append(packetListenerMethods.get(packet.getClass()));
+
+            System.err.println(error.toString());
+        }
     }
 
     @Override

@@ -9,8 +9,8 @@
 ## Description
 
 Hydra is built upon Netty. It is supposed to simplify the process of socket setup in Java. Netty allows high performances and good maintainability of programs built upon it.
-And here comes Hydra in. Hydra uses the builder-pattern in order to make the process of socket setup even simpler. Hydra comes with a handy packet system
-that allows you to easily create your own packets and send them via the session Hydra creates for you. Furthermore you have the ability to create packets and
+And here comes Hydra in. Hydra uses the builder-pattern in order to make the process of socket setup even simpler. It comes with a handy packet system
+that allows you to easily create your own packets and send them via the session Hydra creates for you. Furthermore, you have the ability to create packets and
 listener which just need a simple annotation and will be invoked by Hydra when a packet is received.
 Convince yourself by taking a look at the [client](https://github.com/marcluque/Hydra/tree/master/example/src/main/java/de/marcluque/hydra/example/client) and [server](https://github.com/marcluque/Hydra/tree/master/example/src/main/java/de/marcluque/hydra/example/server) examples.
 
@@ -50,7 +50,7 @@ like a [simple chat application](https://github.com/marcluque/Hydra/wiki/Buildin
 <dependency>
     <groupId>com.marcluque</groupId>
     <artifactId>hydra-all</artifactId>
-    <version>1.6.0</version>
+    <version>1.6.5</version>
 </dependency>
 ```
 

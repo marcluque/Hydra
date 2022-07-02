@@ -1,7 +1,6 @@
-package com.marcluque.hydra.client;
+package com.marcluque.hydra.client.udp;
 
-import com.marcluque.hydra.shared.handler.listener.HydraSessionListener;
-import com.marcluque.hydra.shared.initializer.HydraChannelInitializer;
+import com.marcluque.hydra.shared.handler.impl.UDPSession;
 import com.marcluque.hydra.shared.protocol.Protocol;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -9,53 +8,44 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.Epoll;
 import io.netty.channel.epoll.EpollEventLoopGroup;
-import io.netty.channel.epoll.EpollSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.util.AttributeKey;
 
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created with love by marcluque on 30.11.17.
- */
-public class Client {
+public class UDPClient {
 
     public static class Builder {
 
-        private final String host;
+        private String host;
 
-        private final int port;
-
-        private boolean connectAfterSetup = true;
+        private int port;
 
         private int workerThreads = 2;
 
-        private final Map<ChannelOption, Object> options = new HashMap<>();
+        private Map<ChannelOption, Object> options = new HashMap<>();
 
-        private final Map<AttributeKey, Object> attributeKeys = new HashMap<>();
+        private Map<AttributeKey, Object> attributeKeys = new HashMap<>();
 
         private boolean useEpoll;
 
-        private final Protocol protocol;
+        private Protocol protocol;
 
-        public Builder(String host, int port, Protocol protocol) {
-            this.host = host;
+        public Builder(int port, Protocol protocol) {
             this.port = port;
             this.protocol = protocol;
         }
 
         /**
-         * This attribute determines whether the client connects instantly or just when the 'connect()' method
-         * from {@link HydraClient} is called. The standard value is true, so the standard setting makes the client
-         * connect instantly after setup.
+         * If the socket has no wildcard address it can't receive broadcast packets.
+         * You may set {@link ChannelOption} SO_BROADCAST to false and then use a host address.
          *
-         * @param connectAfterSetup determines whether the client connects instantly or just when 'connect()' method is called
+         * @param host host the server will be bound to.
          */
-        public Builder connectAfterSetup(boolean connectAfterSetup) {
-            this.connectAfterSetup = connectAfterSetup;
+        public Builder host(String host) {
+            this.host = host;
             return this;
         }
 
@@ -107,50 +97,37 @@ public class Client {
         }
 
         /**
-         * This method adds a session listener to the client. The session listener has 2 methods.
-         * The first one is 'onConnected', which gets triggered when the client is successfully connected to the aimed server.
-         * The second on is 'onDisconnected', which gets fired when the client is disconnected from the server it was
-         * connected to.
-         *
-         * @param sessionListener this method takes an instance of the session listener interface HydraSessionListener.
-         */
-        public Builder addSessionListener(HydraSessionListener sessionListener) {
-            protocol.addSessionListener(sessionListener);
-            return this;
-        }
-
-        /**
          * Builds the final client. Returns an instance of type HydraClient, not of type Client, as HydraClient includes
          * all the useful methods for users.
          *
          * @return Returns an instance of HydraClient that can e.g. be used to get the session created for the client and server.
          */
-        public HydraClient build() {
-            return setUpClient();
-        }
-
-        private HydraClient setUpClient() {
+        public HydraUDPClient build() {
             boolean epoll = useEpoll && Epoll.isAvailable();
             EventLoopGroup workerGroup = epoll ? new EpollEventLoopGroup(workerThreads) : new NioEventLoopGroup(workerThreads);
 
             Bootstrap bootstrap = new Bootstrap();
-            bootstrap.channel(epoll ? EpollSocketChannel.class : NioSocketChannel.class);
-            bootstrap.group(workerGroup).remoteAddress(host, port);
+            bootstrap.group(workerGroup);
+            bootstrap.channel(NioDatagramChannel.class);
 
             options.forEach(bootstrap::option);
             attributeKeys.forEach(bootstrap::attr);
 
+            UDPSession session = new UDPSession(protocol, false);
+            bootstrap.handler(session);
             Channel channel = null;
             try {
-                if (connectAfterSetup) {
-                    bootstrap.handler(new HydraChannelInitializer<SocketChannel>(protocol, false));
-                    channel = bootstrap.connect().sync().channel();
+                if (host != null) {
+                    channel = bootstrap.bind(host, port).sync().channel();
+                } else {
+                    channel = bootstrap.bind(port).sync().channel();
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            session.setChannel(channel);
 
-            return connectAfterSetup ? new HydraClient(channel, protocol, workerGroup) : new HydraClient(protocol, workerGroup, bootstrap);
+            return new HydraUDPClient(channel, workerGroup, session);
         }
     }
 }

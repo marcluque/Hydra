@@ -30,8 +30,8 @@ public class ExampleSerializationPacket extends Packet {
 
     @Override
     public void write(ByteBuf byteBuf) {
-        writeCustomObject(byteBuf, customClass, "com.marcluque.hydra.shared.serialization");
-        writeCustomClassArray(byteBuf, new CustomClass[]{customClass, customClass}, "com.marcluque.hydra.shared.serialization");
+        writeCustomObject(byteBuf, customClass);
+        writeCustomClassArray(byteBuf, new CustomClass[]{customClass, customClass});
     }
 
     @Override

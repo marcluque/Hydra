@@ -2,6 +2,7 @@ package com.marcluque.hydra.shared.handler;
 
 import com.marcluque.hydra.shared.protocol.packets.Packet;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 
 import java.io.Serializable;
 import java.net.SocketAddress;
@@ -28,7 +29,7 @@ public interface Session {
      *
      * @param packet the packet that is supposed to be send to the opponent of the session.
      */
-    void send(Packet packet);
+    <T extends Packet> ChannelFuture send(T packet);
 
     /**
      * Sends a packet to the opponent that is connected with this session. With the difference that the param not is a
@@ -38,12 +39,12 @@ public interface Session {
      *
      * @param object the object that is supposed to be send to the opponent of the session.
      */
-    <T extends Serializable> void send(T object);
+    <T extends Serializable> ChannelFuture send(T object);
 
     /**
      * Closes the session of the server and client and therefore disconnects from the channel
      */
-    void close();
+    ChannelFuture close();
 
     /**
      * Returns whether the calling opponent is connected the other one. More precise this method checks whether
@@ -72,10 +73,10 @@ public interface Session {
     SocketAddress getAddress();
 
     /**
+     * Returns true if sessions are equal. Comparision happens based on netty channel id.
      *
-     *
-     * @param s
-     * @return
+     * @param s a session to compare to this session
+     * @return true, if passed session equals this session
      */
     boolean compare(Session s);
 }
