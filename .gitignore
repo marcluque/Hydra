@@ -15,5 +15,6 @@ javadoc/
 *.iws
 *.txt
 target
+docs
 
 .directory

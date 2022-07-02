@@ -121,7 +121,7 @@ For detailed information on how to do that and examples see the [server example]
 
 # Javadoc
 
-The javadoc is always up-to-date and can be found on [hydra.marcluque.de/javadoc](http://hydra.marcluque.de/javadoc)
+The javadoc is always up-to-date and can be found on [marcluque.com/hydra/javadoc/](https://marcluque.com/hydra/javadoc/)
 
 # License
 
