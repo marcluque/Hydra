@@ -14,5 +14,6 @@ javadoc/
 *.iml
 *.iws
 *.txt
+target
 
 .directory

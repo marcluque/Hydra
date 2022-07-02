@@ -3,10 +3,10 @@ languages:
 - name: java
   production:
     exclude:
-      - .*/test/java/de/datasecs/hydra/.*\.java
+      - .*/test/java/com/marcluque/hydra/.*\.java
   test:
     include:
-      - .*/test/java/de/datasecs/hydra/.*\.java
+      - .*/test/java/com/marcluque/hydra/.*\.java
 
 exclude:
 - .*/Packet\.java
