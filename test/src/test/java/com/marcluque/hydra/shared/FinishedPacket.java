@@ -9,6 +9,7 @@ public class FinishedPacket extends Packet {
 
     private int number;
 
+    @SuppressWarnings("unused")
     public FinishedPacket() {}
 
     public FinishedPacket(int number) {

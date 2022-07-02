@@ -16,6 +16,7 @@ public class TestClientPacketListener implements HydraPacketListener {
 
     public TestClientPacketListener() {}
 
+    @SuppressWarnings("unused") // Methods annotated with @PacketHandler are called at runtime by Hydra
     @PacketHandler
     public void onFinishedPacket(FinishedPacket finishedPacket, Session session) {
         Assertions.assertTrue(session.isConnected());
@@ -27,6 +28,7 @@ public class TestClientPacketListener implements HydraPacketListener {
         }
     }
 
+    @SuppressWarnings("unused") // Methods annotated with @PacketHandler are called at runtime by Hydra
     @PacketHandler
     public void onStandardPacket(StandardPacket standardPacket, Session session) {
         Assertions.assertTrue(session.isConnected());

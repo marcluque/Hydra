@@ -14,6 +14,7 @@ public class ArrayPacket extends Packet {
 
     private String[] strings;
 
+    @SuppressWarnings("unused")
     public ArrayPacket() {}
 
     public ArrayPacket(String[] strings) {

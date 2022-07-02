@@ -14,6 +14,7 @@ public class TestPacket extends Packet {
 
     private Object object;
 
+    @SuppressWarnings("unused")
     public TestPacket() {}
 
     public TestPacket(int number, Object object) {

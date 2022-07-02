@@ -33,7 +33,7 @@ public class Client {
 
         private int workerThreads = 2;
 
-        private final Map<ChannelOption<?>, Object> options = new HashMap<>();
+        private final Map<ChannelOption, Object> options = new HashMap<>();
 
         private final Map<AttributeKey, Object> attributeKeys = new HashMap<>();
 
