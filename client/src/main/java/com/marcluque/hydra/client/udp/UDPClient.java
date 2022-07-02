@@ -21,17 +21,17 @@ public class UDPClient {
 
         private String host;
 
-        private int port;
+        private final int port;
 
         private int workerThreads = 2;
 
-        private Map<ChannelOption, Object> options = new HashMap<>();
+        private final Map<ChannelOption, Object> options = new HashMap<>();
 
-        private Map<AttributeKey, Object> attributeKeys = new HashMap<>();
+        private final Map<AttributeKey, Object> attributeKeys = new HashMap<>();
 
         private boolean useEpoll;
 
-        private Protocol protocol;
+        private final Protocol protocol;
 
         public Builder(int port, Protocol protocol) {
             this.port = port;

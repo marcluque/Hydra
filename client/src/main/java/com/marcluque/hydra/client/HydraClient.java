@@ -1,7 +1,6 @@
 package com.marcluque.hydra.client;
 
 import com.marcluque.hydra.shared.handler.Session;
-import com.marcluque.hydra.shared.handler.impl.UDPSession;
 import com.marcluque.hydra.shared.initializer.HydraChannelInitializer;
 import com.marcluque.hydra.shared.protocol.Protocol;
 import com.marcluque.hydra.shared.protocol.packets.Packet;
@@ -14,7 +13,6 @@ import io.netty.util.concurrent.Future;
 
 import java.io.Serializable;
 import java.net.SocketAddress;
-import java.util.Objects;
 
 /**
  * Created with love by marcluque on 29.09.2017.
@@ -31,7 +29,7 @@ public class HydraClient {
 
     private Protocol protocol;
 
-    private EventLoopGroup workerGroup;
+    private final EventLoopGroup workerGroup;
 
     private Session clientSession;
 
@@ -95,7 +93,7 @@ public class HydraClient {
     /**
      * Sends a packet to the opponent that is connected with this session.
      *
-     * @param packet the packet that is supposed to be send to the opponent of the session.
+     * @param packet the packet that is supposed to be sent to the opponent of the session.
      */
     public ChannelFuture send(Packet packet) {
         checkChannel();
@@ -105,10 +103,10 @@ public class HydraClient {
     /**
      * Sends a packet to the opponent that is connected with this session. With the difference that the param not is a
      * packet. The packet is created internally and then send to the opponent, so the user doesn't have to bother with
-     * the packet creation. Therefore the object that is passed to the method has to be serializable.
+     * the packet creation. Therefore, the object that is passed to the method has to be serializable.
      * See {@link com.marcluque.hydra.shared.protocol.packets.StandardPacket} for the structure of the standard packet.
      *
-     * @param object the object that is supposed to be send to the opponent of the session.
+     * @param object the object that is supposed to be sent to the opponent of the session.
      */
     public <T extends Serializable> ChannelFuture send(T object) {
         checkChannel();

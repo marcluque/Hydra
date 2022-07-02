@@ -8,19 +8,7 @@ import io.netty.channel.EventLoopGroup;
 import java.io.Serializable;
 import java.net.SocketAddress;
 
-public class HydraUDPClient {
-
-    private Channel channel;
-
-    private EventLoopGroup workerGroup;
-
-    private UDPSession udpSession;
-
-    public HydraUDPClient(Channel channel, EventLoopGroup workerGroup, UDPSession udpSession) {
-        this.channel = channel;
-        this.workerGroup = workerGroup;
-        this.udpSession = udpSession;
-    }
+public record HydraUDPClient(Channel channel, EventLoopGroup workerGroup, UDPSession udpSession) {
 
     /**
      * Closes the channel of the client, so that the session is closed and can't be reused.
@@ -56,32 +44,31 @@ public class HydraUDPClient {
      *
      * @return the local address of the server.
      */
-    public SocketAddress getLocalAdress() {
+    public SocketAddress getLocalAddress() {
         return channel.localAddress();
     }
 
     /**
      * Sends a packet to the recipient that is specified in the packet.
      *
-     * @param packet the packet that is supposed to be send to the recipient.
+     * @param packet the packet that is supposed to be sent to the recipient.
      */
     public void send(UDPPacket packet) {
         udpSession.send(packet);
     }
 
     /**
-     *
-     * @param object the object that is supposed to be send to the opponent of the session.
+     * @param object the object that is supposed to be sent to the opponent of the session.
      */
     public <T extends Serializable> void send(T object) {
         // TODO
     }
 
     /**
-     *
      * @return the channel that is created for the server.
      */
-    public Channel getChannel() {
+    @Override
+    public Channel channel() {
         return channel;
     }
 
@@ -91,11 +78,8 @@ public class HydraUDPClient {
      *
      * @return the worker group that handles the I/O operations (traffic).
      */
-    public EventLoopGroup getWorkerGroup() {
+    @Override
+    public EventLoopGroup workerGroup() {
         return workerGroup;
-    }
-
-    public UDPSession getUdpSession() {
-        return udpSession;
     }
 }

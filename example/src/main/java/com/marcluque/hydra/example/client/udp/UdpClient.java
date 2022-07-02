@@ -20,10 +20,10 @@ public class UdpClient {
                                                 .build();
 
         System.out.printf("Client is active: %s%n", udpClient.isActive());
-        System.out.printf("Client's channel: %s%n", udpClient.getChannel());
-        System.out.printf("Address the client is bound to: %s%n", udpClient.getLocalAdress());
+        System.out.printf("Client's channel: %s%n", udpClient.channel());
+        System.out.printf("Address the client is bound to: %s%n", udpClient.getLocalAddress());
 
-        UDPSession session = udpClient.getUdpSession();
+        UDPSession session = udpClient.udpSession();
         System.out.printf("Session is active: %s%n", session.isActive());
         // Note that the session's channel is the same as the client's channel
         System.out.println("Session's channel: " + session.getChannel());
