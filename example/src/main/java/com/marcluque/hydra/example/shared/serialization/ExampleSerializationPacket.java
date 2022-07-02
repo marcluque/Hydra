@@ -19,7 +19,10 @@ public class ExampleSerializationPacket extends Packet {
 
     private CustomClass[] customClasses;
 
-    public ExampleSerializationPacket() {}
+    @SuppressWarnings("unused")
+    public ExampleSerializationPacket() {
+        // Hydra needs an empty constructor for packet reconstruction at runtime
+    }
 
     public ExampleSerializationPacket(CustomClass customClass) {
         this.customClass = customClass;
@@ -32,6 +35,7 @@ public class ExampleSerializationPacket extends Packet {
         // This method allows the user to receive an array of custom classes
         customClasses = readCustomClassArray(byteBuf);
         // This method allows the user to receive a collection of custom classes
+        @SuppressWarnings("unused")
         Collection<CustomClass> l = readCustomClassCollection(byteBuf);
     }
 

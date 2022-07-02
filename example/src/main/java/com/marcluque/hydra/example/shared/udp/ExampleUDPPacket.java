@@ -11,8 +11,9 @@ public class ExampleUDPPacket extends UDPPacket {
 
     private String testString;
 
+    @SuppressWarnings("unused")
     public ExampleUDPPacket() {
-        // Empty constructor is obligatory
+        // Hydra needs an empty constructor for packet reconstruction at runtime
     }
 
     public ExampleUDPPacket(String testString, InetSocketAddress recipient) {

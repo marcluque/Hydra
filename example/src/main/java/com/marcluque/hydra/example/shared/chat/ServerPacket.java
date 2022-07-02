@@ -12,7 +12,10 @@ public class ServerPacket extends Packet {
 
     private String message;
 
-    public ServerPacket() {}
+    @SuppressWarnings("unused")
+    public ServerPacket() {
+        // Hydra needs an empty constructor for packet reconstruction at runtime
+    }
 
     public ServerPacket(String message) {
         this.message = message;

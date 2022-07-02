@@ -17,6 +17,7 @@ public class ExampleClientPacketListener implements HydraPacketListener {
     /* Use the @PacketHandler annotation on methods that are supposed to handle packets.
      * The amount of parameters has always to be equal 2 and in the given order. (Packet class and then the session)
      */
+    @SuppressWarnings("unused") // Methods annotated with @PacketHandler are called at runtime by Hydra
     @PacketHandler
     public void onSamplePacket(ExamplePacket examplePacket, Session session) {
         System.out.println("\n---PACKET-LISTENER OUTPUT---");
@@ -30,7 +31,7 @@ public class ExampleClientPacketListener implements HydraPacketListener {
         // Returns if the session is active
         System.out.println("\nIs session active?: " + session.isConnected());
 
-        // Returns the local or remote address, depending if it's the server or the client
+        // Returns the local or remote address, depending on if it's the server or the client
         System.out.println("Remote address (client is connected to): " + session.getAddress());
 
         // Closes the session, this does not stop the client. It just closes the channel!

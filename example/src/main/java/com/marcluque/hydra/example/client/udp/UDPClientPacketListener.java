@@ -10,6 +10,7 @@ import com.marcluque.hydra.shared.protocol.packets.listener.PacketHandler;
  */
 public class UDPClientPacketListener implements HydraPacketListener {
 
+    @SuppressWarnings("unused") // Methods annotated with @PacketHandler are called at runtime by Hydra
     @PacketHandler
     public void onExampleUDPPacket(ExampleUDPPacket exampleUDPPacket, UDPSession session) {
         System.out.println("\n---PACKET-LISTENER OUTPUT---");
@@ -21,7 +22,7 @@ public class UDPClientPacketListener implements HydraPacketListener {
         System.out.printf("Sender address: %s%n", session.getSender());
         System.out.printf("Channel: %s%n%n", session.getChannel());
 
-        //session.close();
-        //System.out.println("\nSession closed!");
+        // session.close();
+        // System.out.println("\nSession closed!");
     }
 }

@@ -10,6 +10,7 @@ import com.marcluque.hydra.shared.protocol.packets.listener.PacketHandler;
  */
 public class ChatServerPacketListener implements HydraPacketListener {
 
+    @SuppressWarnings("unused") // Methods annotated with @PacketHandler are called at runtime by Hydra
     @PacketHandler
     public void onMessagePacket(MessagePacket messagePacket, Session session) {
         for (Session s : ChatServer.sessions) {

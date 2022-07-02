@@ -15,15 +15,16 @@ import java.util.Arrays;
  * The PacketId annotation is used to internally handle the variety of packets. The default
  * value for it is 0. Each packet is supposed to have a different id, the system of assignment is up to the user.
  */
-@PacketId(0)
+@PacketId()
 public class ExamplePacket extends Packet {
 
     private Object sampleObject;
 
     private String[] sampleStringArray;
 
+    @SuppressWarnings("unused")
     public ExamplePacket() {
-        // Empty constructor is always necessary!
+        // Hydra needs an empty constructor for packet reconstruction at runtime
     }
 
     // This constructor is not obligatory! Just the empty one.

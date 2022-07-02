@@ -14,6 +14,7 @@ public class UDPServerPacketListener implements HydraPacketListener {
         // Do something
     }
 
+    @SuppressWarnings("unused") // Methods annotated with @PacketHandler are called at runtime by Hydra
     @PacketHandler
     public void onExampleUDPPacket(ExampleUDPPacket exampleUDPPacket, UDPSession session) {
         System.out.println("\n---PACKET-LISTENER OUTPUT---");
@@ -26,7 +27,7 @@ public class UDPServerPacketListener implements HydraPacketListener {
         System.out.printf("Sender address: %s%n", session.getSender());
         System.out.printf("Channel: %s%n%n", session.getChannel());
 
-        //session.close();
-        //System.out.println("\nSession closed!");
+        // session.close();
+        // System.out.println("\nSession closed!");
     }
 }

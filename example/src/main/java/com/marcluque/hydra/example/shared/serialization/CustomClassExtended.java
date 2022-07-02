@@ -17,8 +17,10 @@ public class CustomClassExtended {
 
     private Class<?> testClass;
 
+    @SuppressWarnings("unused")
     public CustomClassExtended() {
-        // Obligatory construcotr
+        // This constructor is obligatory!
+        // It is necessary to rebuild (deserialize) the class after the serialization
     }
 
     // Optional constructor

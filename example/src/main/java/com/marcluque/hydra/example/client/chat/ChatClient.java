@@ -48,7 +48,7 @@ public class ChatClient {
                     return;
                 }
 
-                messagePacket.setMessage(String.format("%s;%s;%s", hydraClient.getLocalAddress(), Calendar.getInstance().getTime().toString(), input));
+                messagePacket.setMessage(String.format("%s;%s;%s", hydraClient.getLocalAddress(), Calendar.getInstance().getTime(), input));
                 hydraClient.send(messagePacket);
             } catch (IOException e) {
                 e.printStackTrace();

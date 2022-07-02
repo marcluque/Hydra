@@ -13,7 +13,7 @@ import io.netty.util.internal.SocketUtils;
 public class UdpClient {
 
     public static void main(String[] args) {
-        // A UDP client behaves different than a normal Hydra client; a udp client is a socket and
+        // A UDP client behaves different from a normal Hydra client; a udp client is a socket and
         // a hydra client merely a connection (session)
         HydraUDPClient udpClient = new UDPClient.Builder(8889, new UDPClientProtocol())
                                                 .option(ChannelOption.SO_BROADCAST, true)

@@ -14,6 +14,7 @@ public class ExampleSerializationServerPacketListener implements HydraPacketList
         // Do something
     }
 
+    @SuppressWarnings("unused") // Methods annotated with @PacketHandler are called at runtime by Hydra
     @PacketHandler
     public void onSampleSerializationPacket(ExampleSerializationPacket exampleSerializationPacket, Session session) {
         System.out.println("\n---PACKET-LISTENER OUTPUT---");

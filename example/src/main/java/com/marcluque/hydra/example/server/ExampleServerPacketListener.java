@@ -19,6 +19,7 @@ public class ExampleServerPacketListener implements HydraPacketListener {
     /* Use the @PacketHandler annotation on methods that are supposed to handle packets.
      * The amount of parameters has always to be equal 2 and in the given order. (Packet class and then the session)
      */
+    @SuppressWarnings("unused") // Methods annotated with @PacketHandler are called at runtime by Hydra
     @PacketHandler
     public void onSamplePacket(ExamplePacket examplePacket, Session session) {
         System.out.println("\n---PACKET-LISTENER OUTPUT---");
@@ -32,7 +33,7 @@ public class ExampleServerPacketListener implements HydraPacketListener {
         // Returns whether the session is active
         System.out.println("\nIs session active?: " + session.isConnected());
 
-        // Returns the local or remote address, depending if it's the server or the client
+        // Returns the local or remote address, depending on if it's the server or the client
         System.out.println("Local server address: " + session.getAddress());
 
         // TODO: See if it can be checked whether the session is already closed and return a boolean for that
@@ -44,6 +45,7 @@ public class ExampleServerPacketListener implements HydraPacketListener {
         System.out.println("Is session active?: " + session.isConnected());
     }
 
+    @SuppressWarnings("unused") // Methods annotated with @PacketHandler are called at runtime by Hydra
     @PacketHandler
     public void onSampleSerializationPacket(ExampleSerializationPacket exampleSerializationPacket, Session session) {
         System.out.println("\n---PACKET-LISTENER OUTPUT---");
@@ -54,6 +56,7 @@ public class ExampleServerPacketListener implements HydraPacketListener {
         System.out.println("\nSession closed!");
     }
 
+    @SuppressWarnings("unused") // Methods annotated with @PacketHandler are called at runtime by Hydra
     @PacketHandler
     public void onStandardPacket(StandardPacket standardPacket, Session session) {
         System.out.println("\n---PACKET-LISTENER OUTPUT---");

@@ -11,6 +11,7 @@ import com.marcluque.hydra.shared.protocol.packets.listener.PacketHandler;
  */
 public class ChatClientPacketListener implements HydraPacketListener {
 
+    @SuppressWarnings("unused") // Methods annotated with @PacketHandler are called at runtime by Hydra
     @PacketHandler
     public void onMessagePacket(MessagePacket messagePacket, Session session) {
         // Message structure is: "ip;date;message" -> displayed as: date | [ip]: message
@@ -18,6 +19,7 @@ public class ChatClientPacketListener implements HydraPacketListener {
         System.out.println(messages[1] + " | [" + messages[0] + "]: " + messages[2]);
     }
 
+    @SuppressWarnings("unused") // Methods annotated with @PacketHandler are called at runtime by Hydra
     @PacketHandler
     public void onServerPacket(ServerPacket serverPacket, Session session) {
         System.out.println("[SERVER]: " + serverPacket.getMessage());

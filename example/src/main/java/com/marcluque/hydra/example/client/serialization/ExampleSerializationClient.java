@@ -67,7 +67,7 @@ public class ExampleSerializationClient {
                                                             testStringList,
                                                             "this is a random object");
 
-        // Sends the instance of a custom class, that is create and filled with data above
+        // Sends the instance of a custom class, that is created and filled with data above
         session.send(new ExampleSerializationPacket(customClass));
     }
 }

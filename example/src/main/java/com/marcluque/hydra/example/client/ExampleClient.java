@@ -53,13 +53,13 @@ public class ExampleClient {
         }
 
         /* Send a packet to the server via the session the client has saved */
-        // Sends a String, that is converted to a Object and an array, the type of the array is defined in ExamplePacket.class
+        // Sends a String, that is converted to an object and an array, the type of the array is defined in ExamplePacket.class
         session.send(new ExamplePacket("This is a message", new String[]{"This", "is", "a", "message in an array"}));
-        // Sends a list, that is converted to a Object and the array, like above
+        // Sends a list, that is converted to an object and the array, like above
         session.send(new ExamplePacket(Arrays.asList("This", "is", "a", "message", "in a list"), new String[]{"This", "is", "a", "message", "in an array"}));
         /* Sends an object the user wants to send with the limitation that the object has to be serializable.
          * Hydra internally uses a standard packet that comes ready out of the box. The only thing that is important to notice
-         * is the fact, that the Handler for the packet still has to be created by the user itself. Therefore see
+         * is the fact, that the Handler for the packet still has to be created by the user itself. See
          * the ExampleClientPacketListener of the server example classes.
          */
         session.send("This is a String and dealt with as object by Hydra");

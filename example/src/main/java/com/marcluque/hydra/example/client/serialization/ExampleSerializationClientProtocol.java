@@ -9,7 +9,7 @@ import com.marcluque.hydra.shared.protocol.impl.HydraProtocol;
 public class ExampleSerializationClientProtocol extends HydraProtocol {
 
     public ExampleSerializationClientProtocol() {
-        // Register your packets and listeners. This is a very important step! Otherwise Hydra can't work with them!
+        // Register your packets and listeners. This is a very important step! Otherwise, Hydra can't work with them!
         registerPacket(ExampleSerializationPacket.class);
         // No listeners are registered as they are not needed in this case
     }
