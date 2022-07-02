@@ -28,27 +28,27 @@ public class Server {
 
     public static class Builder {
 
-        private String host;
+        private final String host;
 
-        private int port;
+        private final int port;
 
         private int workerThreads = 2;
 
         private int bossThreads = 1;
 
-        private Map<ChannelOption, Object> options = new HashMap<>();
+        private final Map<ChannelOption, Object> options = new HashMap<>();
 
-        private Map<ChannelOption, Object> childOptions = new HashMap<>();
+        private final Map<ChannelOption, Object> childOptions = new HashMap<>();
 
-        private Map<AttributeKey, Object> attributeKeys = new HashMap<>();
+        private final Map<AttributeKey, Object> attributeKeys = new HashMap<>();
 
-        private Map<AttributeKey, Object> childAttributeKeys = new HashMap<>();
+        private final Map<AttributeKey, Object> childAttributeKeys = new HashMap<>();
 
         private boolean useEpoll;
 
-        private Protocol protocol;
+        private final Protocol protocol;
 
-        private HydraSessionConsumer hydraSessionConsumer;
+        private final HydraSessionConsumer hydraSessionConsumer;
 
         public Builder(String host, int port, Protocol protocol) {
             this.host = host;

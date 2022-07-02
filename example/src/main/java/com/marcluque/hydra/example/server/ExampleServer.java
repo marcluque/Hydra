@@ -43,7 +43,7 @@ public class ExampleServer {
         if (server.isActive()) {
             System.out.println("Server is online!");
             // Returns the local address of the server that was set in the constructor
-            System.out.printf("Socket address: %s%n", server.getLocalAdress());
+            System.out.printf("Socket address: %s%n", server.getLocalAddress());
         }
 
         // As soon as a channel with a client is initialized it is added to the set of sessions

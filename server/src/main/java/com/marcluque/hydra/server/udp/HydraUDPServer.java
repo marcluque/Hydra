@@ -9,19 +9,7 @@ import io.netty.channel.EventLoopGroup;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
-public class HydraUDPServer {
-
-    private Channel channel;
-
-    private EventLoopGroup eventLoopGroup;
-
-    private UDPSession udpSession;
-
-    public HydraUDPServer(Channel channel, EventLoopGroup eventLoopGroup, UDPSession udpSession) {
-        this.channel = channel;
-        this.eventLoopGroup = eventLoopGroup;
-        this.udpSession = udpSession;
-    }
+public record HydraUDPServer(Channel channel, EventLoopGroup eventLoopGroup, UDPSession udpSession) {
 
     /**
      * Closes the channel of the server, so that also the session is closed and both can't be reused.
@@ -50,15 +38,16 @@ public class HydraUDPServer {
      *
      * @return the channel that is created for the server.
      */
-    public Channel getChannel() {
+    @Override
+    public Channel channel() {
         return channel;
     }
 
     /**
-     *
-     * @return
+     * TODO
      */
-    public EventLoopGroup getEventLoopGroup() {
+    @Override
+    public EventLoopGroup eventLoopGroup() {
         return eventLoopGroup;
     }
 
@@ -69,25 +58,22 @@ public class HydraUDPServer {
      *
      * @return the local address of the server.
      */
-    public SocketAddress getLocalAdress() {
+    public SocketAddress getLocalAddress() {
         return channel.localAddress();
     }
 
     /**
-     *
-     * @param packet
+     * TODO
      */
     public void send(UDPPacket packet) {
         udpSession.send(packet);
     }
 
     /**
-     *
-     * @param packet
-     * @param recipients
+     * TODO
      */
     public void send(UDPPacket packet, InetSocketAddress... recipients) {
-       // TODO
+        // TODO
     }
 
     /**
@@ -96,7 +82,8 @@ public class HydraUDPServer {
      *
      * @return the set of sessions that the server is connected with.
      */
-    public UDPSession getUdpSession() {
+    @Override
+    public UDPSession udpSession() {
         return udpSession;
     }
 }

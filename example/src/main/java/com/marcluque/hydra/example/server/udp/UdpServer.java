@@ -15,8 +15,8 @@ public class UdpServer {
                                                 .build();
 
         System.out.printf("Server is active: %s%n", udpServer.isActive());
-        System.out.printf("Address server was bound to: %s%n", udpServer.getLocalAdress());
-        System.out.printf("Server's channel: %s%n", udpServer.getChannel());
-        System.out.printf("Server's session: %s%n", udpServer.getUdpSession());
+        System.out.printf("Address server was bound to: %s%n", udpServer.getLocalAddress());
+        System.out.printf("Server's channel: %s%n", udpServer.channel());
+        System.out.printf("Server's session: %s%n", udpServer.udpSession());
     }
 }

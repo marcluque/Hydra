@@ -12,11 +12,8 @@ import com.marcluque.hydra.shared.Logger;
 import com.marcluque.hydra.shared.TestPacket;
 import com.marcluque.hydra.shared.handler.Session;
 import com.marcluque.hydra.shared.handler.listener.HydraSessionListener;
-import com.marcluque.hydra.shared.protocol.packets.StandardPacket;
 import io.netty.channel.ChannelOption;
-import io.netty.util.internal.SocketUtils;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -149,7 +146,7 @@ public class HydraBasicTest {
         Assertions.assertTrue(server.isActive());
         Assertions.assertTrue(server.getChannel().isWritable());
         Assertions.assertTrue(server.getChannel().isOpen());
-        Assertions.assertEquals(server.getLocalAdress().toString(), "/127.0.0.1:8888");
+        Assertions.assertEquals(server.getLocalAddress().toString(), "/127.0.0.1:8888");
 
         // It's necessary to wait until Netty built the connection up entirely
         try {

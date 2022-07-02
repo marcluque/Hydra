@@ -132,7 +132,7 @@ public class HydraConsumerTest {
         Assertions.assertTrue(server.isActive());
         Assertions.assertTrue(server.getChannel().isWritable());
         Assertions.assertTrue(server.getChannel().isOpen());
-        Assertions.assertEquals(server.getLocalAdress().toString(), "/127.0.0.1:8888");
+        Assertions.assertEquals(server.getLocalAddress().toString(), "/127.0.0.1:8888");
 
         // It's necessary to wait until Netty built the connection up entirely
         try {

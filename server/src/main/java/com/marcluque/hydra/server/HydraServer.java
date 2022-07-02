@@ -1,16 +1,12 @@
 package com.marcluque.hydra.server;
 
-import com.marcluque.hydra.shared.distribution.Distribution;
 import com.marcluque.hydra.shared.handler.Session;
 import com.marcluque.hydra.shared.protocol.Protocol;
-import com.marcluque.hydra.shared.protocol.packets.Packet;
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
-import io.netty.util.concurrent.EventExecutorGroup;
 import io.netty.util.concurrent.Future;
 
 import java.net.SocketAddress;
-import java.util.Arrays;
 import java.util.Set;
 
 /**
@@ -24,11 +20,11 @@ import java.util.Set;
  */
 public class HydraServer {
 
-    private Channel channel;
+    private final Channel channel;
 
     private Protocol protocol;
 
-    private EventLoopGroup[] loopGroups;
+    private final EventLoopGroup[] loopGroups;
 
     public HydraServer(Channel channel, Protocol protocol, EventLoopGroup[] loopGroups) {
         this.channel = channel;
@@ -101,7 +97,7 @@ public class HydraServer {
      *
      * @return the local address of the server.
      */
-    public SocketAddress getLocalAdress() {
+    public SocketAddress getLocalAddress() {
         return channel.localAddress();
     }
 
@@ -114,21 +110,4 @@ public class HydraServer {
     public Set<Session> getSessions() {
         return protocol.getSessions();
     }
-
-    /*
-     * Sends a packet to all clients that are connected to the server with the specified distribution type.
-     *
-     * @param packet the packet that is supposed to be send to all connected clients.
-     * @param distributionType the type of distribution that is supposed to be used.
-
-    public void send(Packet packet, Distribution distributionType) {
-        switch (distributionType) {
-            case SIMPLE_BROADCAST:
-                Set<Session> sessions = protocol.getSessions();
-                for (Session s : sessions) {
-                    s.send(packet);
-                }
-                break;
-        }
-    }*/
 }
