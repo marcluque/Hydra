@@ -1,7 +1,7 @@
 package com.marcluque.hydra.example.client;
 
-import com.marcluque.hydra.client.Client;
-import com.marcluque.hydra.client.HydraClient;
+import com.marcluque.hydra.client.tcp.TCPClient;
+import com.marcluque.hydra.client.tcp.HydraTCPClient;
 import com.marcluque.hydra.example.shared.ExamplePacket;
 import com.marcluque.hydra.shared.handler.Session;
 import com.marcluque.hydra.shared.handler.listener.HydraSessionListener;
@@ -35,7 +35,7 @@ public class ExampleClient {
          */
 
         // The builder returns a session which you can use for several things
-        HydraClient client = new Client.Builder("localhost", 8888, new ExampleClientProtocol())
+        HydraTCPClient client = new TCPClient.TCPClientBuilder("localhost", 8888, new ExampleClientProtocol())
                 .workerThreads(4)
                 .option(ChannelOption.TCP_NODELAY, true)
                 .option(ChannelOption.SO_KEEPALIVE, true)

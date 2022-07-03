@@ -1,7 +1,7 @@
 package com.marcluque.hydra.example.client.chat;
 
-import com.marcluque.hydra.client.Client;
-import com.marcluque.hydra.client.HydraClient;
+import com.marcluque.hydra.client.tcp.TCPClient;
+import com.marcluque.hydra.client.tcp.HydraTCPClient;
 import com.marcluque.hydra.example.shared.chat.MessagePacket;
 import com.marcluque.hydra.example.shared.chat.ServerPacket;
 import com.marcluque.hydra.shared.handler.Session;
@@ -24,7 +24,7 @@ public class ChatClient {
     private static final Logger LOGGER = LogManager.getLogger(ChatClient.class.getName());
 
     public static void main(String[] args) {
-        HydraClient hydraClient = new Client.Builder("localhost", 8888, new ChatClientProtocol())
+        HydraTCPClient hydraTCPClient = new TCPClient.TCPClientBuilder("localhost", 8888, new ChatClientProtocol())
                 .addSessionListener(new HydraSessionListener() {
                     @Override
                     public void onConnected(Session session) {
@@ -48,14 +48,14 @@ public class ChatClient {
                 input = bufferedReader.readLine();
                 if (input.equalsIgnoreCase("#end")) {
                     LOGGER.log(Level.INFO, "Disconnecting from chat...%n");
-                    hydraClient.send(new ServerPacket("disconnect"));
-                    hydraClient.close();
+                    hydraTCPClient.send(new ServerPacket("disconnect"));
+                    hydraTCPClient.close();
                     LOGGER.log(Level.INFO, "Disconnected!%n");
                     return;
                 }
 
-                messagePacket.setMessage("%s;%s;%s".formatted(hydraClient.getLocalAddress(), Calendar.getInstance().getTime(), input));
-                hydraClient.send(messagePacket);
+                messagePacket.setMessage("%s;%s;%s".formatted(hydraTCPClient.getLocalAddress(), Calendar.getInstance().getTime(), input));
+                hydraTCPClient.send(messagePacket);
             } catch (IOException e) {
                 LOGGER.log(Level.WARN, e);
             }

@@ -1,7 +1,7 @@
 package com.marcluque.hydra.example.client.serialization;
 
-import com.marcluque.hydra.client.Client;
-import com.marcluque.hydra.client.HydraClient;
+import com.marcluque.hydra.client.tcp.TCPClient;
+import com.marcluque.hydra.client.tcp.HydraTCPClient;
 import com.marcluque.hydra.example.shared.serialization.CustomClass;
 import com.marcluque.hydra.example.shared.serialization.CustomClassExtended;
 import com.marcluque.hydra.example.shared.serialization.ExampleSerializationPacket;
@@ -26,7 +26,7 @@ public class ExampleSerializationClient {
     private static Session session;
 
     public static void main(String[] args) {
-        HydraClient client = new Client.Builder("localhost", 8888, new ExampleSerializationClientProtocol())
+        HydraTCPClient client = new TCPClient.TCPClientBuilder("localhost", 8888, new ExampleSerializationClientProtocol())
                 .workerThreads(4)
                 .option(ChannelOption.TCP_NODELAY, true)
                 .option(ChannelOption.SO_KEEPALIVE, true)

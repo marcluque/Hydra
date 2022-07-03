@@ -1,4 +1,4 @@
-package com.marcluque.hydra.client;
+package com.marcluque.hydra.client.tcp;
 
 import com.marcluque.hydra.shared.handler.Session;
 import com.marcluque.hydra.shared.initializer.HydraChannelInitializer;
@@ -26,9 +26,9 @@ import java.net.SocketAddress;
  * For an example of how to work with the client, visit
  * <a href="https://github.com/marcluque/Hydra/tree/master/client/src/test/java/client">client example</a>.
  */
-public class HydraClient {
+public class HydraTCPClient {
 
-    private static final Logger LOGGER = LogManager.getLogger(HydraClient.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(HydraTCPClient.class.getName());
 
     private Channel channel;
 
@@ -40,21 +40,21 @@ public class HydraClient {
 
     private Bootstrap bootstrap;
 
-    public HydraClient(Channel channel, Protocol protocol, EventLoopGroup workerGroup) {
+    public HydraTCPClient(Channel channel, Protocol protocol, EventLoopGroup workerGroup) {
         this.channel = channel;
         this.protocol = protocol;
         this.workerGroup = workerGroup;
         clientSession = protocol.getClientSession();
     }
 
-    public HydraClient(Protocol protocol, EventLoopGroup workerGroup, Bootstrap bootstrap) {
+    public HydraTCPClient(Protocol protocol, EventLoopGroup workerGroup, Bootstrap bootstrap) {
         this.protocol = protocol;
         this.workerGroup = workerGroup;
         this.bootstrap = bootstrap;
     }
 
     /**
-     * In case that the attribute 'connectAfterSetup' from {@link Client} is set to false via the corresponding method,
+     * In case that the attribute 'connectAfterSetup' from {@link TCPClient} is set to false via the corresponding method,
      * the 'connect()' method can be invoked in order to connect the client to the server not instantly after setup,
      * but at the desired moment.
      */

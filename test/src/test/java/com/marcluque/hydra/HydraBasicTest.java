@@ -1,7 +1,7 @@
 package com.marcluque.hydra;
 
-import com.marcluque.hydra.client.Client;
-import com.marcluque.hydra.client.HydraClient;
+import com.marcluque.hydra.client.tcp.TCPClient;
+import com.marcluque.hydra.client.tcp.HydraTCPClient;
 import com.marcluque.hydra.client.TestClientProtocol;
 import com.marcluque.hydra.server.HydraServer;
 import com.marcluque.hydra.server.Server;
@@ -28,7 +28,7 @@ public class HydraBasicTest {
 
     private static HydraServer server;
 
-    private static HydraClient client;
+    private static HydraTCPClient client;
 
     public static final Object LOCK = new Object();
 
@@ -112,7 +112,7 @@ public class HydraBasicTest {
 
         Logger.logDebug("Server started successfully!");
 
-        client = new Client.Builder("localhost", 8888, new TestClientProtocol())
+        client = new TCPClient.TCPClientBuilder("localhost", 8888, new TestClientProtocol())
                 .useEpoll(epoll)
                 .connectAfterSetup(connectAfterSetup)
                 .workerThreads(4)
