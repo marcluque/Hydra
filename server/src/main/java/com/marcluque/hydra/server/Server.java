@@ -36,13 +36,13 @@ public class Server {
 
         private int bossThreads = 1;
 
-        private final Map<ChannelOption, Object> options = new HashMap<>();
+        private final Map<ChannelOption<?>, Object> options = new HashMap<>();
 
-        private final Map<ChannelOption, Object> childOptions = new HashMap<>();
+        private final Map<ChannelOption<?>, Object> childOptions = new HashMap<>();
 
-        private final Map<AttributeKey, Object> attributeKeys = new HashMap<>();
+        private final Map<AttributeKey<?>, Object> attributeKeys = new HashMap<>();
 
-        private final Map<AttributeKey, Object> childAttributeKeys = new HashMap<>();
+        private final Map<AttributeKey<?>, Object> childAttributeKeys = new HashMap<>();
 
         private boolean useEpoll;
 
@@ -185,11 +185,15 @@ public class Server {
             serverBootstrap.childHandler(new HydraChannelInitializer<SocketChannel>(protocol, true));
             serverBootstrap.group(bossGroup, workerGroup);
 
-            options.forEach(serverBootstrap::option);
-            childOptions.forEach(serverBootstrap::childOption);
+            //noinspection unchecked
+            options.forEach((option, value) -> serverBootstrap.option((ChannelOption<? super Object>) option, value));
+            //noinspection unchecked
+            childOptions.forEach((childOption, value) -> serverBootstrap.childOption((ChannelOption<? super Object>) childOption, value));
 
-            attributeKeys.forEach(serverBootstrap::attr);
-            childAttributeKeys.forEach(serverBootstrap::childAttr);
+            //noinspection unchecked
+            attributeKeys.forEach((key, value) -> serverBootstrap.attr((AttributeKey<? super Object>) key, value));
+            //noinspection unchecked
+            childAttributeKeys.forEach((childKey, value) -> serverBootstrap.childAttr((AttributeKey<? super Object>) childKey, value));
 
             Channel channel = null;
             try {

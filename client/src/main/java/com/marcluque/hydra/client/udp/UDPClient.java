@@ -25,9 +25,9 @@ public class UDPClient {
 
         private int workerThreads = 2;
 
-        private final Map<ChannelOption, Object> options = new HashMap<>();
+        private final Map<ChannelOption<?>, Object> options = new HashMap<>();
 
-        private final Map<AttributeKey, Object> attributeKeys = new HashMap<>();
+        private final Map<AttributeKey<?>, Object> attributeKeys = new HashMap<>();
 
         private boolean useEpoll;
 
@@ -110,8 +110,10 @@ public class UDPClient {
             bootstrap.group(workerGroup);
             bootstrap.channel(NioDatagramChannel.class);
 
-            options.forEach(bootstrap::option);
-            attributeKeys.forEach(bootstrap::attr);
+            //noinspection unchecked
+            options.forEach((option, value) -> bootstrap.option((ChannelOption<? super Object>) option, value));
+            //noinspection unchecked
+            attributeKeys.forEach((key, value) -> bootstrap.attr((AttributeKey<? super Object>) key, value));
 
             UDPSession session = new UDPSession(protocol, false);
             bootstrap.handler(session);

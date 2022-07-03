@@ -33,9 +33,9 @@ public class Client {
 
         private int workerThreads = 2;
 
-        private final Map<ChannelOption, Object> options = new HashMap<>();
+        private final Map<ChannelOption<?>, Object> options = new HashMap<>();
 
-        private final Map<AttributeKey, Object> attributeKeys = new HashMap<>();
+        private final Map<AttributeKey<?>, Object> attributeKeys = new HashMap<>();
 
         private boolean useEpoll;
 
@@ -137,8 +137,10 @@ public class Client {
             bootstrap.channel(epoll ? EpollSocketChannel.class : NioSocketChannel.class);
             bootstrap.group(workerGroup).remoteAddress(host, port);
 
-            options.forEach(bootstrap::option);
-            attributeKeys.forEach(bootstrap::attr);
+            //noinspection unchecked
+            options.forEach((option, value) -> bootstrap.option((ChannelOption<? super Object>) option, value));
+            //noinspection unchecked
+            attributeKeys.forEach((key, value) -> bootstrap.attr((AttributeKey<? super Object>) key, value));
 
             Channel channel = null;
             try {

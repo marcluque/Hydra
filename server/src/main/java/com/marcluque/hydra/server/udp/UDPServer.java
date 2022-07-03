@@ -27,9 +27,9 @@ public class UDPServer {
 
         private int bossThreads = 1;
 
-        private final Map<ChannelOption, Object> options = new HashMap<>();
+        private final Map<ChannelOption<?>, Object> options = new HashMap<>();
 
-        private final Map<AttributeKey, Object> attributeKeys = new HashMap<>();
+        private final Map<AttributeKey<?>, Object> attributeKeys = new HashMap<>();
 
         private boolean useEpoll;
 
@@ -128,9 +128,11 @@ public class UDPServer {
             bootstrap.handler(session);
             bootstrap.group(group).channel(NioDatagramChannel.class);
 
-            options.forEach(bootstrap::option);
+            //noinspection unchecked
+            options.forEach((option, value) -> bootstrap.option((ChannelOption<? super Object>) option, value));
 
-            attributeKeys.forEach(bootstrap::attr);
+            //noinspection unchecked
+            attributeKeys.forEach((key, value) -> bootstrap.attr((AttributeKey<? super Object>) key, value));
 
             Channel channel = null;
             try {
