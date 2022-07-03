@@ -25,25 +25,25 @@ public class ExampleClientPacketListener implements HydraPacketListener {
     @SuppressWarnings("unused") // Methods annotated with @PacketHandler are called at runtime by Hydra
     @PacketHandler
     public void onSamplePacket(ExamplePacket examplePacket, Session session) {
-        LOGGER.log(Level.INFO, "%n---PACKET-LISTENER OUTPUT---");
+        LOGGER.log(Level.INFO, "%n---PACKET-LISTENER OUTPUT---%n");
 
         // Process received packet
-        LOGGER.log(Level.INFO, String.format("Received from server: %s%n", examplePacket));
+        LOGGER.log(Level.INFO, "Received from server: {}%n", examplePacket);
 
         // Send response
         //session.send(new ExamplePacket("This is a response", new String[]{"This", "is", "a", "response"}));
 
         // Returns if the session is active
-        LOGGER.log(Level.INFO, "%nIs session active?: %s".formatted(session.isConnected()));
+        LOGGER.log(Level.INFO, "%nIs session active?: {}%n", session.isConnected());
 
         // Returns the local or remote address, depending on if it's the server or the client
-        LOGGER.log(Level.INFO, "Remote address (client is connected to): %s".formatted(session.getAddress()));
+        LOGGER.log(Level.INFO, "Remote address (client is connected to): {}%n", session.getAddress());
 
         // Closes the session, this does not stop the client. It just closes the channel!
         session.close();
-        LOGGER.log(Level.INFO, "%nSession closed!");
+        LOGGER.log(Level.INFO, "%nSession closed!%n");
 
         // Check again if session is active
-        LOGGER.log(Level.INFO, "Is session active?: %s".formatted(session.isConnected()));
+        LOGGER.log(Level.INFO, "Is session active?: {}%n", session.isConnected());
     }
 }

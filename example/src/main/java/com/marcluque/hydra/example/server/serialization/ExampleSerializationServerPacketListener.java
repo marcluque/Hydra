@@ -22,11 +22,11 @@ public class ExampleSerializationServerPacketListener implements HydraPacketList
     @SuppressWarnings("unused") // Methods annotated with @PacketHandler are called at runtime by Hydra
     @PacketHandler
     public void onSampleSerializationPacket(ExampleSerializationPacket exampleSerializationPacket, Session session) {
-        LOGGER.log(Level.INFO, "%n---PACKET-LISTENER OUTPUT---");
+        LOGGER.log(Level.INFO, "%n---PACKET-LISTENER OUTPUT---%n");
 
-        LOGGER.log(Level.INFO, String.format("Received from client: %s%n", exampleSerializationPacket));
+        LOGGER.log(Level.INFO, "Received from client: {}%n", exampleSerializationPacket);
 
         session.close();
-        LOGGER.log(Level.INFO, "%nSession closed!");
+        LOGGER.log(Level.INFO, "%nSession closed!%n");
     }
 }

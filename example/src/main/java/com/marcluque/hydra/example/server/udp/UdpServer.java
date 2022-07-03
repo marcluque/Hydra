@@ -19,9 +19,9 @@ public class UdpServer {
                                                 .option(ChannelOption.SO_BROADCAST, true)
                                                 .build();
 
-        LOGGER.log(Level.INFO, String.format("Server is active: %s%n", udpServer.isActive()));
-        LOGGER.log(Level.INFO, String.format("Address server was bound to: %s%n", udpServer.getLocalAddress()));
-        LOGGER.log(Level.INFO, String.format("Server's channel: %s%n", udpServer.channel()));
-        LOGGER.log(Level.INFO, String.format("Server's session: %s%n", udpServer.udpSession()));
+        LOGGER.log(Level.INFO, "Server is active: {}%n", udpServer.isActive());
+        LOGGER.log(Level.INFO, "Address server was bound to: {}%n", udpServer.getLocalAddress());
+        LOGGER.log(Level.INFO, "Server's channel: {}%n", udpServer.channel());
+        LOGGER.log(Level.INFO, "Server's session: {}%n", udpServer.udpSession());
     }
 }

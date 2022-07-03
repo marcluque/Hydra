@@ -25,20 +25,20 @@ public class ExampleSerializationServer {
                 .addListener(new HydraSessionListener() {
                     @Override
                     public void onConnected(Session session) {
-                        LOGGER.log(Level.INFO, "%nClient connected!");
+                        LOGGER.log(Level.INFO, "%nClient connected!%n");
                     }
 
                     @Override
                     public void onDisconnected(Session session) {
-                        LOGGER.log(Level.INFO, "%nClient disconnected!");
+                        LOGGER.log(Level.INFO, "%nClient disconnected!%n");
                     }
                 })
                 .build();
 
         if (server.isActive()) {
-            LOGGER.log(Level.INFO, "Server is online!");
+            LOGGER.log(Level.INFO, "Server is online!%n");
             // Returns the local address of the server that was set in the constructor
-            LOGGER.log(Level.INFO, String.format("Socket address: %s%n", server.getLocalAddress()));
+            LOGGER.log(Level.INFO, "Socket address: {}%n", server.getLocalAddress());
         }
     }
 }

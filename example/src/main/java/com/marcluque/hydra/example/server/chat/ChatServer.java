@@ -27,7 +27,7 @@ public class ChatServer {
                 .addListener(new HydraSessionListener() {
                     @Override
                     public void onConnected(Session session) {
-                        LOGGER.log(Level.INFO, String.format("User with ip %s connected!%n", session.getAddress()));
+                        LOGGER.log(Level.INFO, "User with ip {} connected!%n", session.getAddress());
                         session.send(new ServerPacket("Welcome at localhost user!"));
                         for (Session s : SESSIONS) {
                             if (!s.equals(session)) {
@@ -39,7 +39,7 @@ public class ChatServer {
 
                     @Override
                     public void onDisconnected(Session session) {
-                        LOGGER.log(Level.INFO, String.format("User with ip %s disconnected!%n", session.getAddress()));
+                        LOGGER.log(Level.INFO, "User with ip {} disconnected!%n", session.getAddress());
                         for (Session s : SESSIONS) {
                             if (!s.equals(session)) {
                                 s.send(new ServerPacket("Client with ip %s left the chat!".formatted(session.getAddress())));
@@ -53,6 +53,6 @@ public class ChatServer {
                 .childOption(ChannelOption.SO_KEEPALIVE, true)
                 .build();
 
-        LOGGER.log(Level.INFO, "Server started!");
+        LOGGER.log(Level.INFO, "Server started!%n");
     }
 }

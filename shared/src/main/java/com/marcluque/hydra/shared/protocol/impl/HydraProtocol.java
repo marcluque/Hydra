@@ -56,15 +56,14 @@ public class HydraProtocol implements Protocol {
         try {
             return packets.get(id).getDeclaredConstructor().newInstance();
         } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
-
-            LOGGER.log(Level.WARN, String.format("Packet %s.class might hasn't got an empty constructor!%n%n",
-                    packets.get(id).getSimpleName()));
+            LOGGER.log(Level.WARN, "Packet {}.class might hasn't got an empty constructor!%n%n",
+                    packets.get(id).getSimpleName());
             LOGGER.log(Level.WARN, e);
         } catch (NullPointerException e) {
             String errMessage = "Packet with id %s is not in the packets registry.%n" +
                                 "Packets registry: " + packets + "%n" +
                                 "Entry for Packet id %s: " + packets.get(id);
-            LOGGER.log(Level.WARN, String.format(errMessage, id));
+            LOGGER.log(Level.WARN, errMessage, id);
             LOGGER.log(Level.WARN, e);
         }
 

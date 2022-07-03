@@ -21,12 +21,12 @@ public class ChatClientPacketListener implements HydraPacketListener {
     public void onMessagePacket(MessagePacket messagePacket, Session session) {
         // Message structure is: "ip;date;message" -> displayed as: date | [ip]: message
         String[] messages = messagePacket.getMessage().split(";");
-        LOGGER.log(Level.INFO, "%s | [%s]: %s".formatted(messages[1], messages[0], messages[2]));
+        LOGGER.log(Level.INFO, "{} | [{}]: {}%n", messages[1], messages[0], messages[2]);
     }
 
     @SuppressWarnings("unused") // Methods annotated with @PacketHandler are called at runtime by Hydra
     @PacketHandler
     public void onServerPacket(ServerPacket serverPacket, Session session) {
-        LOGGER.log(Level.INFO, "[SERVER]: %s".formatted(serverPacket.getMessage()));
+        LOGGER.log(Level.INFO, "[SERVER]: {}%n", serverPacket.getMessage());
     }
 }

@@ -33,20 +33,20 @@ public class ExampleSerializationClient {
                 .addSessionListener(new HydraSessionListener() {
                     @Override
                     public void onConnected(Session session) {
-                        LOGGER.log(Level.INFO, "Connected to server!");
+                        LOGGER.log(Level.INFO, "Connected to server!%n");
                     }
 
                     @Override
                     public void onDisconnected(Session session) {
-                        LOGGER.log(Level.INFO, "%nDisconnected from server!");
+                        LOGGER.log(Level.INFO, "%nDisconnected from server!%n");
                     }
                 })
                 .build();
 
         if (client.isConnected()) {
             session = client.getSession();
-            LOGGER.log(Level.INFO, "%nClient is online!");
-            LOGGER.log(Level.INFO, String.format("Socket address: %s%n", session.getAddress()));
+            LOGGER.log(Level.INFO, "%nClient is online!%n");
+            LOGGER.log(Level.INFO, "Socket address: {}%n", session.getAddress());
         }
 
         // Create custom classes and necessary stuff for example serialization
