@@ -63,6 +63,8 @@ public class HydraClient {
             channel = bootstrap.connect().sync().channel();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            // Restore interrupted state...
+            Thread.currentThread().interrupt();
         }
         clientSession = protocol.getClientSession();
     }

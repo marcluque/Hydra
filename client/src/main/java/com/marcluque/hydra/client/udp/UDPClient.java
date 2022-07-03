@@ -126,6 +126,8 @@ public class UDPClient {
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                // Restore interrupted state...
+                Thread.currentThread().interrupt();
             }
             session.setChannel(channel);
 

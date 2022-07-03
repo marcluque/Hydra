@@ -150,6 +150,8 @@ public class Client {
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                // Restore interrupted state...
+                Thread.currentThread().interrupt();
             }
 
             return connectAfterSetup ? new HydraClient(channel, protocol, workerGroup) : new HydraClient(protocol, workerGroup, bootstrap);

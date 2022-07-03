@@ -140,6 +140,8 @@ public class UDPServer {
                                         : bootstrap.bind(port).sync().channel();
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                // Restore interrupted state...
+                Thread.currentThread().interrupt();
             }
 
             session.setChannel(channel);

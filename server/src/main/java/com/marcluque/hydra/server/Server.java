@@ -200,6 +200,8 @@ public class Server {
                 channel = serverBootstrap.bind(host, port).sync().channel();
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                // Restore interrupted state...
+                Thread.currentThread().interrupt();
             }
 
             return new HydraServer(channel, protocol, new EventLoopGroup[]{bossGroup, workerGroup});

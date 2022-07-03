@@ -146,6 +146,8 @@ public class HydraConsumerTest {
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
+            // Restore interrupted state...
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -222,6 +224,8 @@ public class HydraConsumerTest {
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
+            // Restore interrupted state...
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -236,6 +240,8 @@ public class HydraConsumerTest {
             Logger.logDebug("Client shut down!");
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
+            // Restore interrupted state...
+            Thread.currentThread().interrupt();
         }
 
         Assertions.assertFalse(client.isConnected());
@@ -259,6 +265,8 @@ public class HydraConsumerTest {
             }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
+            // Restore interrupted state...
+            Thread.currentThread().interrupt();
         }
 
         Assertions.assertFalse(server.isActive());
