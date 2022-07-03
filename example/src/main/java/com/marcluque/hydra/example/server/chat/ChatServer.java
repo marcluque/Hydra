@@ -1,11 +1,15 @@
 package com.marcluque.hydra.example.server.chat;
 
+import com.marcluque.hydra.example.client.chat.ChatClient;
 import com.marcluque.hydra.example.shared.chat.ServerPacket;
 import com.marcluque.hydra.server.HydraServer;
 import com.marcluque.hydra.server.Server;
 import com.marcluque.hydra.shared.handler.Session;
 import com.marcluque.hydra.shared.handler.listener.HydraSessionListener;
 import io.netty.channel.ChannelOption;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,6 +18,8 @@ import java.util.Set;
  * Created with love by marcluque on 11.04.18
  */
 public class ChatServer {
+
+    private static final Logger LOGGER = LogManager.getLogger(ChatServer.class.getName());
 
     public static Set<Session> sessions = new HashSet<>();
 
@@ -48,6 +54,6 @@ public class ChatServer {
                 .childOption(ChannelOption.SO_KEEPALIVE, true)
                 .build();
 
-        System.out.println("Server started!");
+        LOGGER.log(Level.INFO, "Server started!");
     }
 }

@@ -28,12 +28,13 @@ public class ChatClient {
                 .addSessionListener(new HydraSessionListener() {
                     @Override
                     public void onConnected(Session session) {
-                        System.out.println("You are connected to the server!");
+                        LOGGER.log(Level.INFO, "You are connected to the server!");
                     }
 
                     @Override
                     public void onDisconnected(Session session) {
-                        System.out.printf("You were disconnected from the server with ip: %s%n", session.getAddress());
+                        LOGGER.log(Level.INFO, String.format("You were disconnected from the server with ip: %s%n",
+                                session.getAddress()));
                     }
                 })
                 .option(ChannelOption.TCP_NODELAY, true)
@@ -46,10 +47,10 @@ public class ChatClient {
             try {
                 input = bufferedReader.readLine();
                 if (input.equalsIgnoreCase("#end")) {
-                    System.out.println("Disconnecting from chat...");
+                    LOGGER.log(Level.INFO, "Disconnecting from chat...");
                     hydraClient.send(new ServerPacket("disconnect"));
                     hydraClient.close();
-                    System.out.println("Disconnected!");
+                    LOGGER.log(Level.INFO, "Disconnected!");
                     return;
                 }
 

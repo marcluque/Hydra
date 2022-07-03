@@ -22,6 +22,8 @@ public class UDPClient {
 
     private static final Logger LOGGER = LogManager.getLogger(UDPClient.class.getName());
 
+    private UDPClient() {}
+
     public static class Builder {
 
         private String host;

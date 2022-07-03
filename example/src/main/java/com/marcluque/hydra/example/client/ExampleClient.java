@@ -2,10 +2,14 @@ package com.marcluque.hydra.example.client;
 
 import com.marcluque.hydra.client.Client;
 import com.marcluque.hydra.client.HydraClient;
+import com.marcluque.hydra.example.server.chat.ChatServer;
 import com.marcluque.hydra.example.shared.ExamplePacket;
 import com.marcluque.hydra.shared.handler.Session;
 import com.marcluque.hydra.shared.handler.listener.HydraSessionListener;
 import io.netty.channel.ChannelOption;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
 
@@ -13,6 +17,8 @@ import java.util.Arrays;
  * Created with love by marcluque on 02.11.2017.
  */
 public class ExampleClient {
+
+    private static final Logger LOGGER = LogManager.getLogger(ExampleClient.class.getName());
 
     private static Session session;
 
@@ -34,12 +40,12 @@ public class ExampleClient {
                 .addSessionListener(new HydraSessionListener() {
                     @Override
                     public void onConnected(Session session) {
-                        System.out.println("Connected to server!");
+                        LOGGER.log(Level.INFO, "Connected to server!");
                     }
 
                     @Override
                     public void onDisconnected(Session session) {
-                        System.out.println("\nDisconnected from server!");
+                        LOGGER.log(Level.INFO, "\nDisconnected from server!");
                     }
                 })
                 .build();
@@ -48,7 +54,7 @@ public class ExampleClient {
         if (client.isConnected()) {
             // Returns the session that was created for the client and its remote host
             session = client.getSession();
-            System.out.println("\nClient is online!");
+            LOGGER.log(Level.INFO, "\nClient is online!");
             System.out.printf("Socket address: %s%n", session.getAddress());
         }
 

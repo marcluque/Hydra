@@ -1,15 +1,21 @@
 package com.marcluque.hydra.example.server;
 
+import com.marcluque.hydra.example.server.udp.UDPServerPacketListener;
 import com.marcluque.hydra.server.HydraServer;
 import com.marcluque.hydra.server.Server;
 import com.marcluque.hydra.shared.handler.Session;
 import com.marcluque.hydra.shared.handler.listener.HydraSessionListener;
 import io.netty.channel.ChannelOption;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Created with love by marcluque on 02.11.2017.
  */
 public class ExampleServer {
+
+    private static final Logger LOGGER = LogManager.getLogger(ExampleServer.class.getName());
 
     public static void main(String[] args) {
         /*
@@ -29,26 +35,26 @@ public class ExampleServer {
                 .addListener(new HydraSessionListener() {
                     @Override
                     public void onConnected(Session session) {
-                        System.out.println("\nClient connected!");
+                        LOGGER.log(Level.INFO, "\nClient connected!");
                     }
 
                     @Override
                     public void onDisconnected(Session session) {
-                        System.out.println("\nClient disconnected!");
+                        LOGGER.log(Level.INFO, "\nClient disconnected!");
                     }
                 })
                 .build();
 
         // Check if server is actively running (not obligatory)
         if (server.isActive()) {
-            System.out.println("Server is online!");
+            LOGGER.log(Level.INFO, "Server is online!");
             // Returns the local address of the server that was set in the constructor
             System.out.printf("Socket address: %s%n", server.getLocalAddress());
         }
 
         // As soon as a channel with a client is initialized it is added to the set of sessions
         // If no clients are connected the set is empty
-        System.out.println("Sessions: " + server.getSessions());
+        LOGGER.log(Level.INFO, "Sessions: " + server.getSessions());
 
         // Closes the server and releases the occupied resources
         //server.close();
