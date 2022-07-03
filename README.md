@@ -1,4 +1,6 @@
-![hydra banner](http://hydra.marcluque.de/images/hydra_banner.png)
+![default_cropped-cropped](https://user-images.githubusercontent.com/33261455/177019658-1cec9876-022c-45b4-82f5-3a90aedcb4b1.svg)
+
+
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.marcluque/hydra/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.marcluque/hydra-all)
 [![BCH compliance](https://bettercodehub.com/edge/badge/marcluque/Hydra?branch=master)](https://marcluque.de)
