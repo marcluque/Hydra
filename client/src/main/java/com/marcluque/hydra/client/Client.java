@@ -29,6 +29,8 @@ public class Client {
 
     private static final Logger LOGGER = LogManager.getLogger(Client.class.getName());
 
+    private Client() {}
+
     public static class Builder {
 
         private final String host;

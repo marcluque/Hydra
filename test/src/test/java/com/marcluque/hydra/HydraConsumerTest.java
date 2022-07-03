@@ -36,7 +36,7 @@ public class HydraConsumerTest {
     public static long globalEnd;
 
     @Test
-    public void testAll() {
+    void testAll() {
         System.out.println("---------------------------");
         System.out.println("Testing consumer functionality");
         System.out.println("---------------------------\n");
@@ -132,7 +132,7 @@ public class HydraConsumerTest {
         Assertions.assertTrue(server.isActive());
         Assertions.assertTrue(server.getChannel().isWritable());
         Assertions.assertTrue(server.getChannel().isOpen());
-        Assertions.assertEquals(server.getLocalAddress().toString(), "/127.0.0.1:8888");
+        Assertions.assertEquals("/127.0.0.1:8888", server.getLocalAddress().toString());
 
         // It's necessary to wait until Netty built the connection up entirely
         try {
@@ -155,7 +155,7 @@ public class HydraConsumerTest {
         Assertions.assertTrue(client.isConnected());
         Assertions.assertTrue(client.getChannel().isWritable());
         Assertions.assertTrue(client.getChannel().isOpen());
-        Assertions.assertEquals(client.getRemoteAddress().toString(), "localhost/127.0.0.1:8888");
+        Assertions.assertEquals("localhost/127.0.0.1:8888", client.getRemoteAddress().toString());
         Assertions.assertNotNull(client.getLocalAddress());
         Assertions.assertFalse(client.getWorkerGroup().isTerminated());
         Assertions.assertThrows(IllegalStateException.class, client::connect);
