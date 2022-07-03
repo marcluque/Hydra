@@ -7,6 +7,9 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.DatagramPacket;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.Serializable;
 import java.net.InetSocketAddress;
@@ -15,6 +18,8 @@ import java.net.InetSocketAddress;
  * Created with love by marcluque on 03.01.20
  */
 public class UDPSession extends SimpleChannelInboundHandler<DatagramPacket> {
+
+    private static final Logger LOGGER = LogManager.getLogger(UDPSession.class.getName());
 
     private Channel channel;
 
@@ -46,7 +51,7 @@ public class UDPSession extends SimpleChannelInboundHandler<DatagramPacket> {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext context, Throwable cause) {
-        cause.printStackTrace();
+        LOGGER.log(Level.WARN, cause);
 
         if (!isServer) {
             context.close();

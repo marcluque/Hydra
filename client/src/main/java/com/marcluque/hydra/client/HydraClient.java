@@ -1,6 +1,7 @@
 package com.marcluque.hydra.client;
 
 import com.marcluque.hydra.shared.handler.Session;
+import com.marcluque.hydra.shared.handler.impl.HydraSession;
 import com.marcluque.hydra.shared.initializer.HydraChannelInitializer;
 import com.marcluque.hydra.shared.protocol.Protocol;
 import com.marcluque.hydra.shared.protocol.packets.Packet;
@@ -10,6 +11,9 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.util.concurrent.Future;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.Serializable;
 import java.net.SocketAddress;
@@ -24,6 +28,8 @@ import java.net.SocketAddress;
  * <a href="https://github.com/marcluque/Hydra/tree/master/client/src/test/java/client">client example</a>.
  */
 public class HydraClient {
+
+    private static final Logger LOGGER = LogManager.getLogger(HydraClient.class.getName());
 
     private Channel channel;
 
@@ -62,7 +68,7 @@ public class HydraClient {
         try {
             channel = bootstrap.connect().sync().channel();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.ERROR, e);
             // Restore interrupted state...
             Thread.currentThread().interrupt();
         }

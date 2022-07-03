@@ -73,7 +73,7 @@ public interface Session {
     SocketAddress getAddress();
 
     /**
-     * Returns true if sessions are equal. Comparision happens based on netty channel id.
+     * Returns true if sessions are equal. Comparison happens based on netty channel id.
      *
      * @param s a session to compare to this session
      * @return true, if passed session equals this session

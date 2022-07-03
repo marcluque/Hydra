@@ -1,6 +1,9 @@
 package com.marcluque.hydra.shared.protocol.packets;
 
 import io.netty.buffer.ByteBuf;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.lang.reflect.Array;
@@ -14,6 +17,8 @@ import java.util.Objects;
  * Created with love by marcluque on 29.09.2017.
  */
 public abstract class Packet {
+
+    private static final Logger LOGGER = LogManager.getLogger(Packet.class.getName());
 
     private Object objectToSerialize;
 
@@ -55,7 +60,7 @@ public abstract class Packet {
             byteBuf.writeInt(bytes.length);
             byteBuf.writeBytes(bytes);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARN, e);
         }
     }
 
@@ -74,7 +79,7 @@ public abstract class Packet {
              ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
             object = objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARN, e);
         }
 
         return object;
@@ -109,7 +114,7 @@ public abstract class Packet {
             try {
                 objectToSerialize = declaredField.get(customObject);
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.WARN, e);
             }
 
             // Ignore if object is null
@@ -135,7 +140,7 @@ public abstract class Packet {
             //noinspection unchecked
             customObject = (T) Class.forName(readString(byteBuf)).getDeclaredConstructor().newInstance();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARN, e);
         }
 
         return readCustomObject(byteBuf, customObject);
@@ -173,7 +178,7 @@ public abstract class Packet {
             //noinspection unchecked
             return (T) Class.forName(path).getDeclaredConstructor().newInstance();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARN, e);
         }
 
         return null;
@@ -189,9 +194,8 @@ public abstract class Packet {
             field.set(customObject, fieldValue);
             field.setAccessible(isAccessible);
         } catch (Exception e) {
-            e.printStackTrace();
-
-            String stringBuilder = "\nAdditional information:\n" +
+            LOGGER.log(Level.WARN, e);
+            String additionalInformation = "\nAdditional information:\n" +
                     "customObject: " + customObject + "\n" +
                     "Field name: " + fieldName + "\n" +
                     "Field value: " + fieldValue + "\n" +
@@ -199,7 +203,7 @@ public abstract class Packet {
                     "Field Accessibility: "
                     + (field == null ? "Could not print accessibility, field == null" : field.canAccess(customObject))
                     + "\n";
-            System.err.println(stringBuilder);
+            LOGGER.log(Level.WARN, additionalInformation);
         }
     }
 
@@ -222,7 +226,7 @@ public abstract class Packet {
             //noinspection unchecked
             return (T[]) objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARN, e);
         }
 
         return null;
@@ -245,7 +249,7 @@ public abstract class Packet {
             //noinspection unchecked
             array = (T[]) Array.newInstance(Class.forName(path), length);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARN, e);
         }
 
         Objects.requireNonNull(array, "Array could not be instantiated.");
@@ -271,7 +275,7 @@ public abstract class Packet {
             //noinspection unchecked
             collection = (Collection<T>) Class.forName(readString(byteBuf)).getDeclaredConstructor().newInstance();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARN, e);
         }
 
         Objects.requireNonNull(collection);

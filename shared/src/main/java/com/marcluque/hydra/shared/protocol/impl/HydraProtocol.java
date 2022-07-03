@@ -1,6 +1,7 @@
 package com.marcluque.hydra.shared.protocol.impl;
 
 import com.marcluque.hydra.shared.handler.Session;
+import com.marcluque.hydra.shared.handler.impl.HydraSession;
 import com.marcluque.hydra.shared.handler.impl.UDPSession;
 import com.marcluque.hydra.shared.handler.listener.HydraSessionConsumer;
 import com.marcluque.hydra.shared.handler.listener.HydraSessionListener;
@@ -12,6 +13,9 @@ import com.marcluque.hydra.shared.protocol.packets.UDPPacket;
 import com.marcluque.hydra.shared.protocol.packets.listener.HydraPacketListener;
 import com.marcluque.hydra.shared.protocol.packets.listener.PacketHandler;
 import io.netty.channel.socket.DatagramPacket;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -24,6 +28,8 @@ import java.util.Set;
  * Created with love by marcluque on 29.09.2017.
  */
 public class HydraProtocol implements Protocol {
+
+    private static final Logger LOGGER = LogManager.getLogger(HydraProtocol.class.getName());
 
     private final Map<Byte, Class<? extends Packet>> packets = new HashMap<>();
 
@@ -51,14 +57,16 @@ public class HydraProtocol implements Protocol {
         try {
             return packets.get(id).getDeclaredConstructor().newInstance();
         } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
-            System.err.printf("Packet %s.class might hasn't got an empty constructor!%n\n", packets.get(id).getSimpleName());
-            e.printStackTrace();
+
+            LOGGER.log(Level.WARN, String.format("Packet %s.class might hasn't got an empty constructor!%n\n",
+                    packets.get(id).getSimpleName()));
+            LOGGER.log(Level.WARN, e);
         } catch (NullPointerException e) {
             String errMessage = "Packet with id %s is not in the packets registry.\n" +
                                 "Packets registry: " + packets + "\n" +
                                 "Entry for Packet id %s: " + packets.get(id);
-            System.err.printf(errMessage, id);
-            e.printStackTrace();
+            LOGGER.log(Level.WARN, String.format(errMessage, id));
+            LOGGER.log(Level.WARN, e);
         }
 
         return null;
@@ -124,9 +132,9 @@ public class HydraProtocol implements Protocol {
         try {
             packetListenerMethods.get(packet.getClass()).invoke(packetListener, packet.getClass().cast(packet), session);
         } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARN, e);
         } catch (NullPointerException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARN, e);
 
             StringBuilder error = new StringBuilder("\n\nThe following packets are registered, but do not have a listener:\n");
             for (Class<? extends Packet> p : packets.values()) {
@@ -156,9 +164,9 @@ public class HydraProtocol implements Protocol {
             receivedPacket.setRecipient(packet.sender());
             packetListenerMethods.get(receivedPacket.getClass()).invoke(packetListener, receivedPacket, session);
         } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARN, e);
         } catch (NullPointerException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARN, e);
 
             StringBuilder error = new StringBuilder("\n\nThe following packets are registered, but do not have a listener:\n");
             for (Class<? extends Packet> p : packets.values()) {
@@ -175,7 +183,7 @@ public class HydraProtocol implements Protocol {
             error.append("Casted packet: ").append(packet.getClass().cast(packet)).append("\n");
             error.append("Result from packetListener method search (if this is null you do not have a listener for the packet): ").append(packetListenerMethods.get(packet.getClass()));
 
-            System.err.println(error);
+            LOGGER.log(Level.WARN, error);
         }
     }
 

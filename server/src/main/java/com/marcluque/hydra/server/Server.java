@@ -1,6 +1,7 @@
 package com.marcluque.hydra.server;
 
 import com.marcluque.hydra.shared.handler.Session;
+import com.marcluque.hydra.shared.handler.impl.HydraSession;
 import com.marcluque.hydra.shared.handler.listener.HydraSessionConsumer;
 import com.marcluque.hydra.shared.handler.listener.HydraSessionListener;
 import com.marcluque.hydra.shared.initializer.HydraChannelInitializer;
@@ -16,6 +17,9 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.AttributeKey;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +29,8 @@ import java.util.function.Consumer;
  * Created with love by marcluque on 29.11.17
  */
 public class Server {
+
+    private static final Logger LOGGER = LogManager.getLogger(Server.class.getName());
 
     public static class Builder {
 
@@ -199,7 +205,7 @@ public class Server {
             try {
                 channel = serverBootstrap.bind(host, port).sync().channel();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.ERROR, e);
                 // Restore interrupted state...
                 Thread.currentThread().interrupt();
             }

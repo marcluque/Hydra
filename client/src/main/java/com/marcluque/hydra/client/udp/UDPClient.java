@@ -1,5 +1,6 @@
 package com.marcluque.hydra.client.udp;
 
+import com.marcluque.hydra.client.Client;
 import com.marcluque.hydra.shared.handler.impl.UDPSession;
 import com.marcluque.hydra.shared.protocol.Protocol;
 import io.netty.bootstrap.Bootstrap;
@@ -11,11 +12,16 @@ import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.util.AttributeKey;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class UDPClient {
+
+    private static final Logger LOGGER = LogManager.getLogger(UDPClient.class.getName());
 
     public static class Builder {
 
@@ -125,7 +131,7 @@ public class UDPClient {
                     channel = bootstrap.bind(port).sync().channel();
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.ERROR, e);
                 // Restore interrupted state...
                 Thread.currentThread().interrupt();
             }

@@ -11,11 +11,16 @@ import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.util.AttributeKey;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class UDPServer {
+
+    private static final Logger LOGGER = LogManager.getLogger(UDPServer.class.getName());
 
     public static class Builder {
 
@@ -139,7 +144,7 @@ public class UDPServer {
                 channel = host != null ? bootstrap.bind(host, port).sync().channel()
                                         : bootstrap.bind(port).sync().channel();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.ERROR, e);
                 // Restore interrupted state...
                 Thread.currentThread().interrupt();
             }
