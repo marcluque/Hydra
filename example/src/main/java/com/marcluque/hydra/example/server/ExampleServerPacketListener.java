@@ -1,6 +1,5 @@
 package com.marcluque.hydra.example.server;
 
-import com.marcluque.hydra.example.client.chat.ChatClientPacketListener;
 import com.marcluque.hydra.example.shared.ExamplePacket;
 import com.marcluque.hydra.example.shared.serialization.ExampleSerializationPacket;
 import com.marcluque.hydra.shared.handler.Session;
@@ -18,6 +17,7 @@ public class ExampleServerPacketListener implements HydraPacketListener {
 
     private static final Logger LOGGER = LogManager.getLogger(ExampleServerPacketListener.class.getName());
 
+    private static final String OUTPUT_HEADER = "%n---PACKET-LISTENER OUTPUT---";
 
     public ExampleServerPacketListener() {
         // Do something
@@ -29,7 +29,7 @@ public class ExampleServerPacketListener implements HydraPacketListener {
     @SuppressWarnings("unused") // Methods annotated with @PacketHandler are called at runtime by Hydra
     @PacketHandler
     public void onSamplePacket(ExamplePacket examplePacket, Session session) {
-        LOGGER.log(Level.INFO, "%n---PACKET-LISTENER OUTPUT---");
+        LOGGER.log(Level.INFO, OUTPUT_HEADER);
 
         // Process received packet
         LOGGER.log(Level.INFO, String.format("Received from client: %s%n", examplePacket));
@@ -55,7 +55,7 @@ public class ExampleServerPacketListener implements HydraPacketListener {
     @SuppressWarnings("unused") // Methods annotated with @PacketHandler are called at runtime by Hydra
     @PacketHandler
     public void onSampleSerializationPacket(ExampleSerializationPacket exampleSerializationPacket, Session session) {
-        LOGGER.log(Level.INFO, "%n---PACKET-LISTENER OUTPUT---");
+        LOGGER.log(Level.INFO, OUTPUT_HEADER);
 
         LOGGER.log(Level.INFO, String.format("Received from client: %s%n", exampleSerializationPacket));
 
@@ -66,7 +66,7 @@ public class ExampleServerPacketListener implements HydraPacketListener {
     @SuppressWarnings("unused") // Methods annotated with @PacketHandler are called at runtime by Hydra
     @PacketHandler
     public void onStandardPacket(StandardPacket standardPacket, Session session) {
-        LOGGER.log(Level.INFO, "%n---PACKET-LISTENER OUTPUT---");
+        LOGGER.log(Level.INFO, OUTPUT_HEADER);
 
         LOGGER.log(Level.INFO, String.format("Received from client using the StandardPacket: %s%n", standardPacket));
 

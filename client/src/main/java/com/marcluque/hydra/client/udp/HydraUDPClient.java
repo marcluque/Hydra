@@ -8,6 +8,19 @@ import io.netty.channel.EventLoopGroup;
 import java.io.Serializable;
 import java.net.SocketAddress;
 
+/**
+ *
+ * @param channel Returns the channel (a connection/pipeline) that was created for the client.
+ *                The channel allows a lot of functionality.
+ *                It provides information about the channel configuration,
+ *                the channel state, the channel pipeline and much more.
+ *                The user is not required to work with the channel.
+ *                This method is supposed to allow in-depth work.
+ * @param workerGroup TODO
+ * @param udpSession Returns the set of sessions that Hydra keeps track of.
+ *                   This is useful when e.g. an amount of clients is connected.
+ *                   See {@link UDPSession} for more information what a session is.
+ */
 public record HydraUDPClient(Channel channel, EventLoopGroup workerGroup, UDPSession udpSession) {
 
     /**
@@ -62,24 +75,5 @@ public record HydraUDPClient(Channel channel, EventLoopGroup workerGroup, UDPSes
      */
     public <T extends Serializable> void send(T object) {
         // TODO
-    }
-
-    /**
-     * @return the channel that is created for the server.
-     */
-    @Override
-    public Channel channel() {
-        return channel;
-    }
-
-    /**
-     * Returns the worker group that handles I/O operations and allows to register channels. The worker group handles
-     * traffic.
-     *
-     * @return the worker group that handles the I/O operations (traffic).
-     */
-    @Override
-    public EventLoopGroup workerGroup() {
-        return workerGroup;
     }
 }

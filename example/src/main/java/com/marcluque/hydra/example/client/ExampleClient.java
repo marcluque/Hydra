@@ -2,7 +2,6 @@ package com.marcluque.hydra.example.client;
 
 import com.marcluque.hydra.client.Client;
 import com.marcluque.hydra.client.HydraClient;
-import com.marcluque.hydra.example.server.chat.ChatServer;
 import com.marcluque.hydra.example.shared.ExamplePacket;
 import com.marcluque.hydra.shared.handler.Session;
 import com.marcluque.hydra.shared.handler.listener.HydraSessionListener;

@@ -1,6 +1,5 @@
 package com.marcluque.hydra.example.client.chat;
 
-import com.marcluque.hydra.example.client.serialization.ExampleSerializationClient;
 import com.marcluque.hydra.example.shared.chat.MessagePacket;
 import com.marcluque.hydra.example.shared.chat.ServerPacket;
 import com.marcluque.hydra.shared.handler.Session;

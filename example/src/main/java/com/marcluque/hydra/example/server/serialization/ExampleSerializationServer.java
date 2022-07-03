@@ -1,6 +1,5 @@
 package com.marcluque.hydra.example.server.serialization;
 
-import com.marcluque.hydra.example.client.udp.UDPClientPacketListener;
 import com.marcluque.hydra.server.HydraServer;
 import com.marcluque.hydra.server.Server;
 import com.marcluque.hydra.shared.handler.Session;

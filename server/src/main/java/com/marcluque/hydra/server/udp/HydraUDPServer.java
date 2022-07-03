@@ -14,9 +14,9 @@ import java.net.SocketAddress;
  *
  * @param channel Returns the channel (a connection/pipeline) that was created for the server.
  *                The channel allows a lot of functionality.
- *                The channel provides information about the channel configuration,
+ *                It provides information about the channel configuration,
  *                the channel state, the channel pipeline and much more.
- *                The user is not required to use the channel for "casual" use.
+ *                The user is not required to work with the channel.
  *                This method is supposed to allow in-depth work.
  * @param eventLoopGroup TODO
  * @param udpSession Returns the set of sessions that Hydra keeps track of.

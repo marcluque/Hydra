@@ -1,6 +1,5 @@
 package com.marcluque.hydra.example.server.chat;
 
-import com.marcluque.hydra.example.client.chat.ChatClient;
 import com.marcluque.hydra.example.shared.chat.ServerPacket;
 import com.marcluque.hydra.server.HydraServer;
 import com.marcluque.hydra.server.Server;
@@ -21,7 +20,7 @@ public class ChatServer {
 
     private static final Logger LOGGER = LogManager.getLogger(ChatServer.class.getName());
 
-    public static Set<Session> sessions = new HashSet<>();
+    public static final Set<Session> SESSIONS = new HashSet<>();
 
     public static void main(String[] args) {
         HydraServer hydraServer = new Server.Builder("localhost", 8888, new ChatServerProtocol())
@@ -30,23 +29,23 @@ public class ChatServer {
                     public void onConnected(Session session) {
                         LOGGER.log(Level.INFO, String.format("User with ip %s connected!%n", session.getAddress()));
                         session.send(new ServerPacket("Welcome at localhost user!"));
-                        for (Session s : sessions) {
+                        for (Session s : SESSIONS) {
                             if (!s.equals(session)) {
                                 s.send(new ServerPacket("Client with ip %s connected to the chat!".formatted(session.getAddress())));
                             }
                         }
-                        sessions.add(session);
+                        SESSIONS.add(session);
                     }
 
                     @Override
                     public void onDisconnected(Session session) {
                         LOGGER.log(Level.INFO, String.format("User with ip %s disconnected!%n", session.getAddress()));
-                        for (Session s : sessions) {
+                        for (Session s : SESSIONS) {
                             if (!s.equals(session)) {
                                 s.send(new ServerPacket("Client with ip %s left the chat!".formatted(session.getAddress())));
                             }
                         }
-                        sessions.remove(session);
+                        SESSIONS.remove(session);
                     }
                 })
                 .option(ChannelOption.SO_BACKLOG, 200)

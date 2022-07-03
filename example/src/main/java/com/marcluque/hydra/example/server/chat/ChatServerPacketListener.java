@@ -13,7 +13,7 @@ public class ChatServerPacketListener implements HydraPacketListener {
     @SuppressWarnings("unused") // Methods annotated with @PacketHandler are called at runtime by Hydra
     @PacketHandler
     public void onMessagePacket(MessagePacket messagePacket, Session session) {
-        for (Session s : ChatServer.sessions) {
+        for (Session s : ChatServer.SESSIONS) {
             if (!s.equals(session)) {
                 s.send(messagePacket);
             }

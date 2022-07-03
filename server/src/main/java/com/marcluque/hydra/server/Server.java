@@ -31,6 +31,8 @@ public class Server {
 
     private static final Logger LOGGER = LogManager.getLogger(Server.class.getName());
 
+    private Server() {}
+
     public static class Builder {
 
         private final String host;
