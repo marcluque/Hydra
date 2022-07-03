@@ -102,7 +102,7 @@ public abstract class Packet {
             serializeField(byteBuf, declaredFields[i], prefix, customObject);
         }
 
-        prefix = prefix.startsWith("#") ? "§" + prefix : prefix;
+        prefix = prefix.startsWith("#") ? "§%s".formatted(prefix) : prefix;
         serializeField(byteBuf, declaredFields[declaredFields.length - 1], prefix, customObject);
     }
 

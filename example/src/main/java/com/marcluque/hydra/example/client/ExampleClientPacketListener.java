@@ -34,16 +34,16 @@ public class ExampleClientPacketListener implements HydraPacketListener {
         //session.send(new ExamplePacket("This is a response", new String[]{"This", "is", "a", "response"}));
 
         // Returns if the session is active
-        LOGGER.log(Level.INFO, "\nIs session active?: " + session.isConnected());
+        LOGGER.log(Level.INFO, "\nIs session active?: %s".formatted(session.isConnected()));
 
         // Returns the local or remote address, depending on if it's the server or the client
-        LOGGER.log(Level.INFO, "Remote address (client is connected to): " + session.getAddress());
+        LOGGER.log(Level.INFO, "Remote address (client is connected to): %s".formatted(session.getAddress()));
 
         // Closes the session, this does not stop the client. It just closes the channel!
         session.close();
         LOGGER.log(Level.INFO, "\nSession closed!");
 
         // Check again if session is active
-        LOGGER.log(Level.INFO, "Is session active?: " + session.isConnected());
+        LOGGER.log(Level.INFO, "Is session active?: %s".formatted(session.isConnected()));
     }
 }

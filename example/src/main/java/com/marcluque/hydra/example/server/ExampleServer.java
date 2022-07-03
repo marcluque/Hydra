@@ -54,7 +54,7 @@ public class ExampleServer {
 
         // As soon as a channel with a client is initialized it is added to the set of sessions
         // If no clients are connected the set is empty
-        LOGGER.log(Level.INFO, "Sessions: " + server.getSessions());
+        LOGGER.log(Level.INFO, "Sessions: %s".formatted(server.getSessions()));
 
         // Closes the server and releases the occupied resources
         //server.close();

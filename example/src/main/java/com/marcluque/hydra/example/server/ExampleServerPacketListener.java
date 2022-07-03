@@ -38,10 +38,10 @@ public class ExampleServerPacketListener implements HydraPacketListener {
         session.send(new ExamplePacket("This is a response", new String[]{"This", "is", "a", "response"}));
 
         // Returns whether the session is active
-        LOGGER.log(Level.INFO, "\nIs session active?: " + session.isConnected());
+        LOGGER.log(Level.INFO, "\nIs session active?: %s".formatted(session.isConnected()));
 
         // Returns the local or remote address, depending on if it's the server or the client
-        LOGGER.log(Level.INFO, "Local server address: " + session.getAddress());
+        LOGGER.log(Level.INFO, "Local server address: %s".formatted(session.getAddress()));
 
         // TODO: See if it can be checked whether the session is already closed and return a boolean for that
         // Closes the session, this does not stop the server. It just closes the channel!
@@ -49,7 +49,7 @@ public class ExampleServerPacketListener implements HydraPacketListener {
         LOGGER.log(Level.INFO, "\nSession closed!");
 
         // Check again if session is active
-        LOGGER.log(Level.INFO, "Is session active?: " + session.isConnected());
+        LOGGER.log(Level.INFO, "Is session active?: %s".formatted(session.isConnected()));
     }
 
     @SuppressWarnings("unused") // Methods annotated with @PacketHandler are called at runtime by Hydra

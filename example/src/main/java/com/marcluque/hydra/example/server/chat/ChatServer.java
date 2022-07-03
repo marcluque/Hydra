@@ -32,7 +32,7 @@ public class ChatServer {
                         session.send(new ServerPacket("Welcome at localhost user!"));
                         for (Session s : sessions) {
                             if (!s.equals(session)) {
-                                s.send(new ServerPacket("Client with ip " + session.getAddress() + " connected to the chat!"));
+                                s.send(new ServerPacket("Client with ip %s connected to the chat!".formatted(session.getAddress())));
                             }
                         }
                         sessions.add(session);
@@ -43,7 +43,7 @@ public class ChatServer {
                         LOGGER.log(Level.INFO, String.format("User with ip %s disconnected!%n", session.getAddress()));
                         for (Session s : sessions) {
                             if (!s.equals(session)) {
-                                s.send(new ServerPacket("Client with ip " + session.getAddress() + " left the chat!"));
+                                s.send(new ServerPacket("Client with ip %s left the chat!".formatted(session.getAddress())));
                             }
                         }
                         sessions.remove(session);
