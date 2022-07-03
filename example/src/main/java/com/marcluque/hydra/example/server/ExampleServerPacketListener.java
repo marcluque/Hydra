@@ -19,6 +19,8 @@ public class ExampleServerPacketListener implements HydraPacketListener {
 
     private static final String OUTPUT_HEADER = "%n---PACKET-LISTENER OUTPUT---";
 
+    private static final String OUTPUT_FOOTER = "%nSession closed!%n";
+
     public ExampleServerPacketListener() {
         // Do something
     }
@@ -46,7 +48,7 @@ public class ExampleServerPacketListener implements HydraPacketListener {
         // TODO: See if it can be checked whether the session is already closed and return a boolean for that
         // Closes the session, this does not stop the server. It just closes the channel!
         session.close();
-        LOGGER.log(Level.INFO, "%nSession closed!%n");
+        LOGGER.log(Level.INFO, OUTPUT_FOOTER);
 
         // Check again if session is active
         LOGGER.log(Level.INFO, "Is session active?: {}%n", session.isConnected());
@@ -60,7 +62,7 @@ public class ExampleServerPacketListener implements HydraPacketListener {
         LOGGER.log(Level.INFO, "Received from client: {}%n", exampleSerializationPacket);
 
         session.close();
-        LOGGER.log(Level.INFO, "%nSession closed!%n");
+        LOGGER.log(Level.INFO, OUTPUT_FOOTER);
     }
 
     @SuppressWarnings("unused") // Methods annotated with @PacketHandler are called at runtime by Hydra
@@ -71,6 +73,6 @@ public class ExampleServerPacketListener implements HydraPacketListener {
         LOGGER.log(Level.INFO, "Received from client using the StandardPacket: {}%n", standardPacket);
 
         session.close();
-        LOGGER.log(Level.INFO, "%nSession closed!%n");
+        LOGGER.log(Level.INFO, OUTPUT_FOOTER);
     }
 }

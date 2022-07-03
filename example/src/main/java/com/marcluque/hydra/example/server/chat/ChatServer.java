@@ -20,10 +20,10 @@ public class ChatServer {
 
     private static final Logger LOGGER = LogManager.getLogger(ChatServer.class.getName());
 
-    public static final Set<Session> SESSIONS = new HashSet<>();
+    protected static final Set<Session> SESSIONS = new HashSet<>();
 
     public static void main(String[] args) {
-        HydraServer hydraServer = new Server.Builder("localhost", 8888, new ChatServerProtocol())
+        new Server.Builder("localhost", 8888, new ChatServerProtocol())
                 .addListener(new HydraSessionListener() {
                     @Override
                     public void onConnected(Session session) {
