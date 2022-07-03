@@ -7,17 +7,43 @@ import com.marcluque.hydra.shared.handler.Session;
  */
 public class Element {
 
-    public int index;
+    private int index;
 
-    public Element next, prev;
+    private Element next;
 
-    public Session node;
+    private Element prev;
 
-    public Element() {
-        // For start element
-    }
+    private final Session node;
 
     public Element(Session node) {
         this.node = node;
+    }
+
+    public Element getPrev() {
+        return prev;
+    }
+
+    public void setPrev(Element prev) {
+        this.prev = prev;
+    }
+
+    public Element getNext() {
+        return next;
+    }
+
+    public void setNext(Element next) {
+        this.next = next;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public Session getNode() {
+        return node;
     }
 }

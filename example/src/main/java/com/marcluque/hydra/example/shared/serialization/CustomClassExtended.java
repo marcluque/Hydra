@@ -11,7 +11,7 @@ public class CustomClassExtended {
 
     private UUID testUUID;
 
-    private CustomClassExtended customClassExtended;
+    private CustomClassExtended customClassExtendedObject;
 
     private long testLong;
 
@@ -24,10 +24,10 @@ public class CustomClassExtended {
     }
 
     // Optional constructor
-    public CustomClassExtended(String testStringExtended, UUID testUUID, CustomClassExtended customClassExtended, long testLong, Class<?> testClass) {
+    public CustomClassExtended(String testStringExtended, UUID testUUID, CustomClassExtended customClassExtendedObject, long testLong, Class<?> testClass) {
         this.testStringExtended = testStringExtended;
         this.testUUID = testUUID;
-        this.customClassExtended = customClassExtended;
+        this.customClassExtendedObject = customClassExtendedObject;
         this.testLong = testLong;
         this.testClass = testClass;
     }
@@ -38,7 +38,7 @@ public class CustomClassExtended {
         return "CustomClassExtended {" + "\n" +
                 "testStringExtended='" + testStringExtended + '\'' + ",\n" +
                 "testUUID=" + testUUID + ",\n" +
-                "customClassExtended=" + customClassExtended + ",\n" +
+                "customClassExtended=" + customClassExtendedObject + ",\n" +
                 "testLong=" + testLong + ",\n" +
                 "testClass=" + testClass + "\n" +
                 "}";

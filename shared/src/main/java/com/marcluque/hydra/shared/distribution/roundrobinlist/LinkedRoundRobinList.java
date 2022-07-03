@@ -16,8 +16,10 @@ public class LinkedRoundRobinList implements RoundRobinList {
     private int robinIndex;
 
     public LinkedRoundRobinList() {
-        start = new Element();
-        size = robinIndex = index = 0;
+        start = new Element(null);
+        size = 0;
+        robinIndex = 0;
+        index = 0;
     }
 
     @Override
@@ -28,13 +30,13 @@ public class LinkedRoundRobinList implements RoundRobinList {
     @Override
     public Session get() {
         Element e = start;
-        while (e.next != null) {
-            if (e.next.index == robinIndex) {
+        while (e.getNext() != null) {
+            if (e.getNext().getIndex() == robinIndex) {
                 robinIndex = (robinIndex + 1) % size;
-                return e.next.node;
+                return e.getNext().getNode();
             }
 
-            e = e.next;
+            e = e.getNext();
         }
 
         return null;
@@ -46,9 +48,9 @@ public class LinkedRoundRobinList implements RoundRobinList {
             Element e = new Element(o);
             Element pointer = getLastElement();
 
-            pointer.next = e;
-            e.prev = pointer;
-            e.index = index;
+            pointer.setNext(e);
+            e.setPrev(pointer);
+            e.setIndex(index);
 
             index++;
             size++;
@@ -63,15 +65,13 @@ public class LinkedRoundRobinList implements RoundRobinList {
     public void remove(Session o) {
         Element e = findObject(o);
         if (e != null) {
-            if (e.next != null) {
+            if (e.getNext() != null) {
                 reduceIndex(e);
 
-                e.prev.next = e.next;
-                e.next.prev = e.prev;
-
+                e.getPrev().setNext(e.getNext());
+                e.getNext().setPrev(e.getPrev());
             } else {
-                e.prev.next = null;
-
+                e.getPrev().setNext(null);
             }
 
             size--;
@@ -82,28 +82,28 @@ public class LinkedRoundRobinList implements RoundRobinList {
 
     private Element getLastElement() {
         Element e = start;
-        while (e.next != null) {
-            e = e.next;
+        while (e.getNext() != null) {
+            e = e.getNext();
         }
 
         return e;
     }
 
     private void reduceIndex(Element e) {
-        while (e.next != null) {
-            e.next.index--;
-            e = e.next;
+        while (e.getNext() != null) {
+            e.setIndex(e.getNext().getIndex() - 1);
+            e = e.getNext();
         }
     }
 
     private Element findObject(Session node) {
         Element e = start;
-        while (e.next != null) {
-            if (e.next.node.equals(node)) {
-                return e.next;
+        while (e.getNext() != null) {
+            if (e.getNext().getNode().equals(node)) {
+                return e.getNext();
             }
 
-            e = e.next;
+            e = e.getNext();
         }
 
         return null;
