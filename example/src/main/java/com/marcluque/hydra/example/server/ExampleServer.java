@@ -35,12 +35,12 @@ public class ExampleServer {
                 .addListener(new HydraSessionListener() {
                     @Override
                     public void onConnected(Session session) {
-                        LOGGER.log(Level.INFO, "\nClient connected!");
+                        LOGGER.log(Level.INFO, "%nClient connected!");
                     }
 
                     @Override
                     public void onDisconnected(Session session) {
-                        LOGGER.log(Level.INFO, "\nClient disconnected!");
+                        LOGGER.log(Level.INFO, "%nClient disconnected!");
                     }
                 })
                 .build();
@@ -49,7 +49,7 @@ public class ExampleServer {
         if (server.isActive()) {
             LOGGER.log(Level.INFO, "Server is online!");
             // Returns the local address of the server that was set in the constructor
-            LOGGER.log(Level.INFO, String.format("Socket address: %s\n", server.getLocalAddress()));
+            LOGGER.log(Level.INFO, String.format("Socket address: %s%n", server.getLocalAddress()));
         }
 
         // As soon as a channel with a client is initialized it is added to the set of sessions

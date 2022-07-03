@@ -33,7 +33,7 @@ public class ChatClient {
 
                     @Override
                     public void onDisconnected(Session session) {
-                        LOGGER.log(Level.INFO, String.format("You were disconnected from the server with ip: %s\n",
+                        LOGGER.log(Level.INFO, String.format("You were disconnected from the server with ip: %s%n",
                                 session.getAddress()));
                     }
                 })

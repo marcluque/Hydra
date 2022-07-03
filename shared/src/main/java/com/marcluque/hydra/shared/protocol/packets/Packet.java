@@ -196,12 +196,12 @@ public abstract class Packet {
             field.setAccessible(isAccessible);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             LOGGER.log(Level.WARN, e);
-            String additionalInformation = "\nAdditional information:\n" +
-                    "customObject: " + customObject + "\n" +
-                    "Field name: " + fieldName + "\n" +
-                    "Field value: " + fieldValue + "\n" +
-                    "Found field by name: " + field + "\n" +
-                    "Could not print accessibility: field == null" + "\n";
+            String additionalInformation = "%nAdditional information:%n" +
+                    "customObject: " + customObject + "%n" +
+                    "Field name: " + fieldName + "%n" +
+                    "Field value: " + fieldValue + "%n" +
+                    "Found field by name: " + field + "%n" +
+                    "Could not print accessibility: field == null" + "%n";
             LOGGER.log(Level.WARN, additionalInformation);
         }
     }

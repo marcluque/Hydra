@@ -23,17 +23,17 @@ public class UDPServerPacketListener implements HydraPacketListener {
     @SuppressWarnings("unused") // Methods annotated with @PacketHandler are called at runtime by Hydra
     @PacketHandler
     public void onExampleUDPPacket(ExampleUDPPacket exampleUDPPacket, UDPSession session) {
-        LOGGER.log(Level.INFO, "\n---PACKET-LISTENER OUTPUT---");
-        LOGGER.log(Level.INFO, String.format("Received from client using the ExampleUDPPacket: %s\nSession: %s", exampleUDPPacket, session));
+        LOGGER.log(Level.INFO, "%n---PACKET-LISTENER OUTPUT---");
+        LOGGER.log(Level.INFO, String.format("Received from client using the ExampleUDPPacket: %s%nSession: %s", exampleUDPPacket, session));
 
         session.send(new ExampleUDPPacket("Received!", session.getSender()));
 
-        LOGGER.log(Level.INFO, String.format("Session: %s\n", session));
-        LOGGER.log(Level.INFO, String.format("Session active: %s\n", session.isActive()));
-        LOGGER.log(Level.INFO, String.format("Sender address: %s\n", session.getSender()));
-        LOGGER.log(Level.INFO, String.format("Channel: %s\n\n", session.getChannel()));
+        LOGGER.log(Level.INFO, String.format("Session: %s%n", session));
+        LOGGER.log(Level.INFO, String.format("Session active: %s%n", session.isActive()));
+        LOGGER.log(Level.INFO, String.format("Sender address: %s%n", session.getSender()));
+        LOGGER.log(Level.INFO, String.format("Channel: %s%n%n", session.getChannel()));
 
         // session.close();
-        // LOGGER.log(Level.INFO, "\nSession closed!");
+        // LOGGER.log(Level.INFO, "%nSession closed!");
     }
 }

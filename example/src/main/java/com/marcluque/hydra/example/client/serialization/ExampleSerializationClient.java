@@ -39,15 +39,15 @@ public class ExampleSerializationClient {
 
                     @Override
                     public void onDisconnected(Session session) {
-                        LOGGER.log(Level.INFO, "\nDisconnected from server!");
+                        LOGGER.log(Level.INFO, "%nDisconnected from server!");
                     }
                 })
                 .build();
 
         if (client.isConnected()) {
             session = client.getSession();
-            LOGGER.log(Level.INFO, "\nClient is online!");
-            LOGGER.log(Level.INFO, String.format("Socket address: %s\n", session.getAddress()));
+            LOGGER.log(Level.INFO, "%nClient is online!");
+            LOGGER.log(Level.INFO, String.format("Socket address: %s%n", session.getAddress()));
         }
 
         // Create custom classes and necessary stuff for example serialization

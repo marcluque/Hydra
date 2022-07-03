@@ -57,12 +57,12 @@ public class HydraProtocol implements Protocol {
             return packets.get(id).getDeclaredConstructor().newInstance();
         } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
 
-            LOGGER.log(Level.WARN, String.format("Packet %s.class might hasn't got an empty constructor!\n\n",
+            LOGGER.log(Level.WARN, String.format("Packet %s.class might hasn't got an empty constructor!%n%n",
                     packets.get(id).getSimpleName()));
             LOGGER.log(Level.WARN, e);
         } catch (NullPointerException e) {
-            String errMessage = "Packet with id %s is not in the packets registry.\n" +
-                                "Packets registry: " + packets + "\n" +
+            String errMessage = "Packet with id %s is not in the packets registry.%n" +
+                                "Packets registry: " + packets + "%n" +
                                 "Entry for Packet id %s: " + packets.get(id);
             LOGGER.log(Level.WARN, String.format(errMessage, id));
             LOGGER.log(Level.WARN, e);
@@ -135,19 +135,19 @@ public class HydraProtocol implements Protocol {
         } catch (NullPointerException e) {
             LOGGER.log(Level.WARN, e);
 
-            StringBuilder error = new StringBuilder("\n\nThe following packets are registered, but do not have a listener:\n");
+            StringBuilder error = new StringBuilder("%n%nThe following packets are registered, but do not have a listener:%n");
             for (Class<? extends Packet> p : packets.values()) {
                 if (!packetListenerMethods.containsKey(p)) {
-                    error.append(" - ").append(p.getSimpleName()).append(".class").append("\n");
+                    error.append(" - ").append(p.getSimpleName()).append(".class").append("%n");
                 }
             }
-            error.append("Not using a listener for a packet may cause an exception.\n");
+            error.append("Not using a listener for a packet may cause an exception.%n");
 
-            error.append("Other important data:\n");
-            error.append("Packet: ").append(packet).append("\n");
-            error.append("Packet class: ").append(packet.getClass()).append("\n");
-            error.append("Packet listener: ").append(packetListener).append("\n");
-            error.append("Casted packet: ").append(packet.getClass().cast(packet)).append("\n");
+            error.append("Other important data:%n");
+            error.append("Packet: ").append(packet).append("%n");
+            error.append("Packet class: ").append(packet.getClass()).append("%n");
+            error.append("Packet listener: ").append(packetListener).append("%n");
+            error.append("Casted packet: ").append(packet.getClass().cast(packet)).append("%n");
             error.append("Result from packetListener method search (if this is null you do not have a listener for the packet): ").append(packetListenerMethods.get(packet.getClass()));
 
             LOGGER.log(Level.WARN, error);
@@ -167,19 +167,19 @@ public class HydraProtocol implements Protocol {
         } catch (NullPointerException e) {
             LOGGER.log(Level.WARN, e);
 
-            StringBuilder error = new StringBuilder("\n\nThe following packets are registered, but do not have a listener:\n");
+            StringBuilder error = new StringBuilder("%n%nThe following packets are registered, but do not have a listener:%n");
             for (Class<? extends Packet> p : packets.values()) {
                 if (!packetListenerMethods.containsKey(p)) {
-                    error.append(" - ").append(p.getSimpleName()).append(".class").append("\n");
+                    error.append(" - ").append(p.getSimpleName()).append(".class").append("%n");
                 }
             }
-            error.append("Not using a listener for a packet may cause an exception.\n");
+            error.append("Not using a listener for a packet may cause an exception.%n");
 
-            error.append("Other important data:\n");
-            error.append("Packet: ").append(packet).append("\n");
-            error.append("Packet class: ").append(packet.getClass()).append("\n");
-            error.append("Packet listener: ").append(packetListener).append("\n");
-            error.append("Casted packet: ").append(packet.getClass().cast(packet)).append("\n");
+            error.append("Other important data:%n");
+            error.append("Packet: ").append(packet).append("%n");
+            error.append("Packet class: ").append(packet.getClass()).append("%n");
+            error.append("Packet listener: ").append(packetListener).append("%n");
+            error.append("Casted packet: ").append(packet.getClass().cast(packet)).append("%n");
             error.append("Result from packetListener method search (if this is null you do not have a listener for the packet): ").append(packetListenerMethods.get(packet.getClass()));
 
             LOGGER.log(Level.WARN, error);

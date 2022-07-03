@@ -40,10 +40,10 @@ public class UDPSession extends SimpleChannelInboundHandler<DatagramPacket> {
             channel = context.channel();
             protocol.callPacketListener(packet, this);
         } else {
-            String errorMessage = "There is no packet listener registered!\n\n" +
-                        "Additional information:\n" +
-                        "Protocol: " + protocol + "\n" +
-                        "Packet: " + packet + "\n" +
+            String errorMessage = "There is no packet listener registered!%n%n" +
+                        "Additional information:%n" +
+                        "Protocol: " + protocol + "%n" +
+                        "Packet: " + packet + "%n" +
                         "Channel: " + channel;
             throw new IllegalStateException(errorMessage);
         }

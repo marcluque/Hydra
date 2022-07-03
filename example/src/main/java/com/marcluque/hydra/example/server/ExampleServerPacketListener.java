@@ -29,16 +29,16 @@ public class ExampleServerPacketListener implements HydraPacketListener {
     @SuppressWarnings("unused") // Methods annotated with @PacketHandler are called at runtime by Hydra
     @PacketHandler
     public void onSamplePacket(ExamplePacket examplePacket, Session session) {
-        LOGGER.log(Level.INFO, "\n---PACKET-LISTENER OUTPUT---");
+        LOGGER.log(Level.INFO, "%n---PACKET-LISTENER OUTPUT---");
 
         // Process received packet
-        LOGGER.log(Level.INFO, String.format("Received from client: %s\n", examplePacket));
+        LOGGER.log(Level.INFO, String.format("Received from client: %s%n", examplePacket));
 
         // Send response
         session.send(new ExamplePacket("This is a response", new String[]{"This", "is", "a", "response"}));
 
         // Returns whether the session is active
-        LOGGER.log(Level.INFO, "\nIs session active?: %s".formatted(session.isConnected()));
+        LOGGER.log(Level.INFO, "%nIs session active?: %s".formatted(session.isConnected()));
 
         // Returns the local or remote address, depending on if it's the server or the client
         LOGGER.log(Level.INFO, "Local server address: %s".formatted(session.getAddress()));
@@ -46,7 +46,7 @@ public class ExampleServerPacketListener implements HydraPacketListener {
         // TODO: See if it can be checked whether the session is already closed and return a boolean for that
         // Closes the session, this does not stop the server. It just closes the channel!
         session.close();
-        LOGGER.log(Level.INFO, "\nSession closed!");
+        LOGGER.log(Level.INFO, "%nSession closed!");
 
         // Check again if session is active
         LOGGER.log(Level.INFO, "Is session active?: %s".formatted(session.isConnected()));
@@ -55,22 +55,22 @@ public class ExampleServerPacketListener implements HydraPacketListener {
     @SuppressWarnings("unused") // Methods annotated with @PacketHandler are called at runtime by Hydra
     @PacketHandler
     public void onSampleSerializationPacket(ExampleSerializationPacket exampleSerializationPacket, Session session) {
-        LOGGER.log(Level.INFO, "\n---PACKET-LISTENER OUTPUT---");
+        LOGGER.log(Level.INFO, "%n---PACKET-LISTENER OUTPUT---");
 
-        LOGGER.log(Level.INFO, String.format("Received from client: %s\n", exampleSerializationPacket));
+        LOGGER.log(Level.INFO, String.format("Received from client: %s%n", exampleSerializationPacket));
 
         session.close();
-        LOGGER.log(Level.INFO, "\nSession closed!");
+        LOGGER.log(Level.INFO, "%nSession closed!");
     }
 
     @SuppressWarnings("unused") // Methods annotated with @PacketHandler are called at runtime by Hydra
     @PacketHandler
     public void onStandardPacket(StandardPacket standardPacket, Session session) {
-        LOGGER.log(Level.INFO, "\n---PACKET-LISTENER OUTPUT---");
+        LOGGER.log(Level.INFO, "%n---PACKET-LISTENER OUTPUT---");
 
-        LOGGER.log(Level.INFO, String.format("Received from client using the StandardPacket: %s\n", standardPacket));
+        LOGGER.log(Level.INFO, String.format("Received from client using the StandardPacket: %s%n", standardPacket));
 
         session.close();
-        LOGGER.log(Level.INFO, "\nSession closed!");
+        LOGGER.log(Level.INFO, "%nSession closed!");
     }
 }

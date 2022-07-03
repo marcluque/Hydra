@@ -35,12 +35,12 @@ public class CustomClassExtended {
     // Auto-generated toString method by IntelliJ for example purposes
     @Override
     public String toString() {
-        return "CustomClassExtended {" + "\n" +
-                "testStringExtended='" + testStringExtended + '\'' + ",\n" +
-                "testUUID=" + testUUID + ",\n" +
-                "customClassExtended=" + customClassExtendedObject + ",\n" +
-                "testLong=" + testLong + ",\n" +
-                "testClass=" + testClass + "\n" +
+        return "CustomClassExtended {" + "%n" +
+                "testStringExtended='" + testStringExtended + '\'' + ",%n" +
+                "testUUID=" + testUUID + ",%n" +
+                "customClassExtended=" + customClassExtendedObject + ",%n" +
+                "testLong=" + testLong + ",%n" +
+                "testClass=" + testClass + "%n" +
                 "}";
     }
 }

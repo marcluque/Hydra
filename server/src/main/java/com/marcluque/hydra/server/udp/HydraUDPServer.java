@@ -9,6 +9,20 @@ import io.netty.channel.EventLoopGroup;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
+/**
+ * TODO
+ *
+ * @param channel Returns the channel (a connection/pipeline) that was created for the server.
+ *                The channel allows a lot of functionality.
+ *                The channel provides information about the channel configuration,
+ *                the channel state, the channel pipeline and much more.
+ *                The user is not required to use the channel for "casual" use.
+ *                This method is supposed to allow in-depth work.
+ * @param eventLoopGroup TODO
+ * @param udpSession Returns the set of sessions that Hydra keeps track of.
+ *                   This is useful when e.g. an amount of clients is connected.
+ *                   See {@link Session} for more information what a session is.
+ */
 public record HydraUDPServer(Channel channel, EventLoopGroup eventLoopGroup, UDPSession udpSession) {
 
     /**
@@ -29,26 +43,6 @@ public record HydraUDPServer(Channel channel, EventLoopGroup eventLoopGroup, UDP
      */
     public boolean isActive() {
         return channel.isActive();
-    }
-
-    /**
-     * Returns the channel (a connection/pipeline) that was created for the server. The channel allows a lot of functionality.
-     * The channel provides information about the channel configuration, the channel state, the channel pipeline and much
-     * more. The user is not required to use the channel for "casual" use. This method is supposed to allow in-depth work.
-     *
-     * @return the channel that is created for the server.
-     */
-    @Override
-    public Channel channel() {
-        return channel;
-    }
-
-    /**
-     * TODO
-     */
-    @Override
-    public EventLoopGroup eventLoopGroup() {
-        return eventLoopGroup;
     }
 
     /**
@@ -74,16 +68,5 @@ public record HydraUDPServer(Channel channel, EventLoopGroup eventLoopGroup, UDP
      */
     public void send(UDPPacket packet, InetSocketAddress... recipients) {
         // TODO
-    }
-
-    /**
-     * Returns the set of sessions that Hydra keeps track of. This is useful when e.g. an amount of clients is connected.
-     * See {@link Session} for more information what a session is.
-     *
-     * @return the set of sessions that the server is connected with.
-     */
-    @Override
-    public UDPSession udpSession() {
-        return udpSession;
     }
 }

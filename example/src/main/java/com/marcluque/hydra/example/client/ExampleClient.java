@@ -45,7 +45,7 @@ public class ExampleClient {
 
                     @Override
                     public void onDisconnected(Session session) {
-                        LOGGER.log(Level.INFO, "\nDisconnected from server!");
+                        LOGGER.log(Level.INFO, "%nDisconnected from server!");
                     }
                 })
                 .build();
@@ -54,8 +54,8 @@ public class ExampleClient {
         if (client.isConnected()) {
             // Returns the session that was created for the client and its remote host
             session = client.getSession();
-            LOGGER.log(Level.INFO, "\nClient is online!");
-            LOGGER.log(Level.INFO, String.format("Socket address: %s\n", session.getAddress()));
+            LOGGER.log(Level.INFO, "%nClient is online!");
+            LOGGER.log(Level.INFO, String.format("Socket address: %s%n", session.getAddress()));
         }
 
         /* Send a packet to the server via the session the client has saved */

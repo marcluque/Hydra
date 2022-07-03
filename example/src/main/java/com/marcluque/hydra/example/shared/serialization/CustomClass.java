@@ -42,12 +42,12 @@ public class CustomClass {
     // Auto-generated toString method by IntelliJ for example purposes
     @Override
     public String toString() {
-        return "CustomClass{\n" +
-                "testString='" + testString + '\'' + ",\n" +
-                "testStringArray=" + Arrays.toString(testStringArray) + ",\n" +
-                "testStringList=" + testStringList + ",\n" +
-                "testObject=" + testObject + ",\n" +
-                "customClassExtended=" + customClassExtended + "\n" +
+        return "CustomClass{%n" +
+                "testString='" + testString + '\'' + ",%n" +
+                "testStringArray=" + Arrays.toString(testStringArray) + ",%n" +
+                "testStringList=" + testStringList + ",%n" +
+                "testObject=" + testObject + ",%n" +
+                "customClassExtended=" + customClassExtended + "%n" +
                 "}";
     }
 }

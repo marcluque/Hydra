@@ -46,7 +46,7 @@ public class HydraBasicTest {
     void testAll() {
         System.out.println("---------------------------");
         System.out.println("Testing basic functionality");
-        System.out.println("---------------------------\n");
+        System.out.println("---------------------------%n");
 
         // Phase 1 (epoll=false, connectAfterSetup=false)
         Logger.logInfo("Starting phase 1...");
@@ -60,7 +60,7 @@ public class HydraBasicTest {
         Logger.printMetrics(measures);
 
         // Phase 2 (epoll=false, connectAfterSetup=true)
-        System.out.printf("\n\n");
+        System.out.printf("%n%n");
         Logger.logInfo("Starting phase 2...");
         init(false, true);
         testServer();
@@ -71,7 +71,7 @@ public class HydraBasicTest {
         Logger.printMetrics(measures);
 
         // Phase 3 (epoll=true, connectAfterSetup=true)
-        System.out.printf("\n\n");
+        System.out.printf("%n%n");
         Logger.logInfo("Starting phase 3...");
         init(true, true);
         testServer();
