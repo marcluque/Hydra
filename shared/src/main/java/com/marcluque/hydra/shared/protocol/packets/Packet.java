@@ -8,8 +8,10 @@ import org.apache.logging.log4j.Logger;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -65,8 +67,6 @@ public abstract class Packet {
     }
 
     protected Object readObject(ByteBuf byteBuf) {
-        Object object = null;
-
         int length = byteBuf.readInt();
         if (length > byteBuf.readableBytes()) {
             throw new IllegalStateException("length cannot be larger than the readable bytes");
@@ -77,12 +77,11 @@ public abstract class Packet {
 
         try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
              ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
-            object = objectInputStream.readObject();
+            return objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
             LOGGER.log(Level.WARN, e);
+            return new Object();
         }
-
-        return object;
     }
 
     protected <T> void writeCustomObject(ByteBuf byteBuf, T customObject) {
@@ -134,16 +133,17 @@ public abstract class Packet {
     }
 
     protected <T> T readCustomObject(ByteBuf byteBuf) {
-        T customObject = null;
         try {
             // We let the user of the function determine the correct type
             //noinspection unchecked
-            customObject = (T) Class.forName(readString(byteBuf)).getDeclaredConstructor().newInstance();
-        } catch (Exception e) {
+            T customObject = (T) Class.forName(readString(byteBuf)).getDeclaredConstructor().newInstance();
+            return readCustomObject(byteBuf, customObject);
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException |
+                 ClassNotFoundException e) {
             LOGGER.log(Level.WARN, e);
+            //noinspection unchecked
+            return (T) new Object();
         }
-
-        return readCustomObject(byteBuf, customObject);
     }
 
     protected <T> T readCustomObject(ByteBuf byteBuf, T object) {
@@ -177,11 +177,12 @@ public abstract class Packet {
             // We let the user of the function determine the correct type
             //noinspection unchecked
             return (T) Class.forName(path).getDeclaredConstructor().newInstance();
-        } catch (Exception e) {
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException |
+                 ClassNotFoundException e) {
             LOGGER.log(Level.WARN, e);
+            //noinspection unchecked
+            return (T) new Object();
         }
-
-        return null;
     }
 
     private <T> void setField(T customObject, String fieldName, Object fieldValue) {
@@ -193,16 +194,14 @@ public abstract class Packet {
             field.setAccessible(true);
             field.set(customObject, fieldValue);
             field.setAccessible(isAccessible);
-        } catch (Exception e) {
+        } catch (NoSuchFieldException | IllegalAccessException e) {
             LOGGER.log(Level.WARN, e);
             String additionalInformation = "\nAdditional information:\n" +
                     "customObject: " + customObject + "\n" +
                     "Field name: " + fieldName + "\n" +
                     "Field value: " + fieldValue + "\n" +
                     "Found field by name: " + field + "\n" +
-                    "Field Accessibility: "
-                    + (field == null ? "Could not print accessibility, field == null" : field.canAccess(customObject))
-                    + "\n";
+                    "Could not print accessibility: field == null" + "\n";
             LOGGER.log(Level.WARN, additionalInformation);
         }
     }
@@ -227,9 +226,9 @@ public abstract class Packet {
             return (T[]) objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
             LOGGER.log(Level.WARN, e);
+            //noinspection unchecked
+            return (T[]) new Object[1];
         }
-
-        return null;
     }
 
     protected <T> void writeCustomClassArray(ByteBuf byteBuf, T[] array) {
@@ -243,21 +242,21 @@ public abstract class Packet {
     protected <T> T[] readCustomClassArray(ByteBuf byteBuf) {
         int length = readInt(byteBuf);
         String path = readString(byteBuf);
-        T[] array = null;
         try {
             // We let the user of the function determine the correct type
             //noinspection unchecked
-            array = (T[]) Array.newInstance(Class.forName(path), length);
+            T[] array = (T[]) Array.newInstance(Class.forName(path), length);
+
+            for (int i = 0; i < length; i++) {
+                array[i] = readCustomObject(byteBuf);
+            }
+
+            return array;
         } catch (ClassNotFoundException e) {
             LOGGER.log(Level.WARN, e);
+            //noinspection unchecked
+            return (T[]) new Object[1];
         }
-
-        Objects.requireNonNull(array, "Array could not be instantiated.");
-        for (int i = 0; i < length; i++) {
-            array[i] = readCustomObject(byteBuf);
-        }
-
-        return array;
     }
 
     protected <T> void writeCustomClassCollection(ByteBuf byteBuf, Collection<T> collection) {
@@ -269,20 +268,23 @@ public abstract class Packet {
     protected <T> Collection<T> readCustomClassCollection(ByteBuf byteBuf) {
         int length = readInt(byteBuf);
 
-        Collection<T> collection = null;
         try {
             // We let the user of the function determine the correct type
             //noinspection unchecked
-            collection = (Collection<T>) Class.forName(readString(byteBuf)).getDeclaredConstructor().newInstance();
-        } catch (Exception e) {
+            Collection<T> collection = (Collection<T>) Class.forName(readString(byteBuf))
+                    .getDeclaredConstructor()
+                    .newInstance();
+
+            Objects.requireNonNull(collection);
+            for (int i = 0; i < length; i++) {
+                collection.add(readCustomObject(byteBuf));
+            }
+
+            return collection;
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException |
+                 ClassNotFoundException e) {
             LOGGER.log(Level.WARN, e);
+            return new ArrayList<>();
         }
-
-        Objects.requireNonNull(collection);
-        for (int i = 0; i < length; i++) {
-            collection.add(readCustomObject(byteBuf));
-        }
-
-        return collection;
     }
 }
