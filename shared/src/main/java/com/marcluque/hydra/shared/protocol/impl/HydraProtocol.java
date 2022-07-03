@@ -57,7 +57,7 @@ public class HydraProtocol implements Protocol {
             return packets.get(id).getDeclaredConstructor().newInstance();
         } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
 
-            LOGGER.log(Level.WARN, String.format("Packet %s.class might hasn't got an empty constructor!%n\n",
+            LOGGER.log(Level.WARN, String.format("Packet %s.class might hasn't got an empty constructor!\n\n",
                     packets.get(id).getSimpleName()));
             LOGGER.log(Level.WARN, e);
         } catch (NullPointerException e) {
@@ -150,7 +150,7 @@ public class HydraProtocol implements Protocol {
             error.append("Casted packet: ").append(packet.getClass().cast(packet)).append("\n");
             error.append("Result from packetListener method search (if this is null you do not have a listener for the packet): ").append(packetListenerMethods.get(packet.getClass()));
 
-            System.err.println(error);
+            LOGGER.log(Level.WARN, error);
         }
     }
 

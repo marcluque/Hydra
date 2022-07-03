@@ -24,12 +24,12 @@ public class UdpClient {
                                                 .option(ChannelOption.SO_BROADCAST, true)
                                                 .build();
 
-        LOGGER.log(Level.INFO, String.format("Client is active: %s%n", udpClient.isActive()));
-        LOGGER.log(Level.INFO, String.format("Client's channel: %s%n", udpClient.channel()));
-        LOGGER.log(Level.INFO, String.format("Address the client is bound to: %s%n", udpClient.getLocalAddress()));
+        LOGGER.log(Level.INFO, String.format("Client is active: %s\n", udpClient.isActive()));
+        LOGGER.log(Level.INFO, String.format("Client's channel: %s\n", udpClient.channel()));
+        LOGGER.log(Level.INFO, String.format("Address the client is bound to: %s\n", udpClient.getLocalAddress()));
 
         UDPSession session = udpClient.udpSession();
-        LOGGER.log(Level.INFO, String.format("Session is active: %s%n", session.isActive()));
+        LOGGER.log(Level.INFO, String.format("Session is active: %s\n", session.isActive()));
         // Note that the session's channel is the same as the client's channel
         LOGGER.log(Level.INFO, "Session's channel: %s".formatted(session.getChannel()));
 

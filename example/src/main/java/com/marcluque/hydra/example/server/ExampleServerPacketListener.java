@@ -32,7 +32,7 @@ public class ExampleServerPacketListener implements HydraPacketListener {
         LOGGER.log(Level.INFO, "\n---PACKET-LISTENER OUTPUT---");
 
         // Process received packet
-        LOGGER.log(Level.INFO, String.format("Received from client: %s%n", examplePacket));
+        LOGGER.log(Level.INFO, String.format("Received from client: %s\n", examplePacket));
 
         // Send response
         session.send(new ExamplePacket("This is a response", new String[]{"This", "is", "a", "response"}));
@@ -57,7 +57,7 @@ public class ExampleServerPacketListener implements HydraPacketListener {
     public void onSampleSerializationPacket(ExampleSerializationPacket exampleSerializationPacket, Session session) {
         LOGGER.log(Level.INFO, "\n---PACKET-LISTENER OUTPUT---");
 
-        LOGGER.log(Level.INFO, String.format("Received from client: %s%n", exampleSerializationPacket));
+        LOGGER.log(Level.INFO, String.format("Received from client: %s\n", exampleSerializationPacket));
 
         session.close();
         LOGGER.log(Level.INFO, "\nSession closed!");
@@ -68,7 +68,7 @@ public class ExampleServerPacketListener implements HydraPacketListener {
     public void onStandardPacket(StandardPacket standardPacket, Session session) {
         LOGGER.log(Level.INFO, "\n---PACKET-LISTENER OUTPUT---");
 
-        LOGGER.log(Level.INFO, String.format("Received from client using the StandardPacket: %s%n", standardPacket));
+        LOGGER.log(Level.INFO, String.format("Received from client using the StandardPacket: %s\n", standardPacket));
 
         session.close();
         LOGGER.log(Level.INFO, "\nSession closed!");

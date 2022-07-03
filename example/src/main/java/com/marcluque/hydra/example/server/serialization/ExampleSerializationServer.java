@@ -39,7 +39,7 @@ public class ExampleSerializationServer {
         if (server.isActive()) {
             LOGGER.log(Level.INFO, "Server is online!");
             // Returns the local address of the server that was set in the constructor
-            LOGGER.log(Level.INFO, String.format("Socket address: %s%n", server.getLocalAddress()));
+            LOGGER.log(Level.INFO, String.format("Socket address: %s\n", server.getLocalAddress()));
         }
     }
 }
