@@ -22,6 +22,8 @@ public class UDPServer {
 
     private static final Logger LOGGER = LogManager.getLogger(UDPServer.class.getName());
 
+    private UDPServer() {}
+
     public static class Builder {
 
         private String host;

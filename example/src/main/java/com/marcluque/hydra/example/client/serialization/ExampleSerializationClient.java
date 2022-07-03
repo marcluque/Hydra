@@ -47,7 +47,7 @@ public class ExampleSerializationClient {
         if (client.isConnected()) {
             session = client.getSession();
             LOGGER.log(Level.INFO, "\nClient is online!");
-            System.out.printf("Socket address: %s%n", session.getAddress());
+            LOGGER.log(Level.INFO, String.format("Socket address: %s%n", session.getAddress()));
         }
 
         // Create custom classes and necessary stuff for example serialization

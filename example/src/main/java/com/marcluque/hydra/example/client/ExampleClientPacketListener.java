@@ -28,7 +28,7 @@ public class ExampleClientPacketListener implements HydraPacketListener {
         LOGGER.log(Level.INFO, "\n---PACKET-LISTENER OUTPUT---");
 
         // Process received packet
-        System.out.printf("Received from server: %s%n", examplePacket);
+        LOGGER.log(Level.INFO, String.format("Received from server: %s%n", examplePacket));
 
         // Send response
         //session.send(new ExamplePacket("This is a response", new String[]{"This", "is", "a", "response"}));

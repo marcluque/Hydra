@@ -55,7 +55,7 @@ public class ExampleClient {
             // Returns the session that was created for the client and its remote host
             session = client.getSession();
             LOGGER.log(Level.INFO, "\nClient is online!");
-            System.out.printf("Socket address: %s%n", session.getAddress());
+            LOGGER.log(Level.INFO, String.format("Socket address: %s%n", session.getAddress()));
         }
 
         /* Send a packet to the server via the session the client has saved */

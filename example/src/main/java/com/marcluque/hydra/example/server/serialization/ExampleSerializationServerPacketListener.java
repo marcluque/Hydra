@@ -25,7 +25,7 @@ public class ExampleSerializationServerPacketListener implements HydraPacketList
     public void onSampleSerializationPacket(ExampleSerializationPacket exampleSerializationPacket, Session session) {
         LOGGER.log(Level.INFO, "\n---PACKET-LISTENER OUTPUT---");
 
-        System.out.printf("Received from client: %s%n", exampleSerializationPacket);
+        LOGGER.log(Level.INFO, String.format("Received from client: %s%n", exampleSerializationPacket));
 
         session.close();
         LOGGER.log(Level.INFO, "\nSession closed!");

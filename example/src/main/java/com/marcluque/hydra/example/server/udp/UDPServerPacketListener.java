@@ -24,14 +24,14 @@ public class UDPServerPacketListener implements HydraPacketListener {
     @PacketHandler
     public void onExampleUDPPacket(ExampleUDPPacket exampleUDPPacket, UDPSession session) {
         LOGGER.log(Level.INFO, "\n---PACKET-LISTENER OUTPUT---");
-        System.out.printf("Received from client using the ExampleUDPPacket: %s%nSession: %s", exampleUDPPacket, session);
+        LOGGER.log(Level.INFO, String.format("Received from client using the ExampleUDPPacket: %s%nSession: %s", exampleUDPPacket, session));
 
         session.send(new ExampleUDPPacket("Received!", session.getSender()));
 
-        System.out.printf("Session: %s%n", session);
-        System.out.printf("Session active: %s%n", session.isActive());
-        System.out.printf("Sender address: %s%n", session.getSender());
-        System.out.printf("Channel: %s%n%n", session.getChannel());
+        LOGGER.log(Level.INFO, String.format("Session: %s%n", session));
+        LOGGER.log(Level.INFO, String.format("Session active: %s%n", session.isActive()));
+        LOGGER.log(Level.INFO, String.format("Sender address: %s%n", session.getSender()));
+        LOGGER.log(Level.INFO, String.format("Channel: %s%n%n", session.getChannel()));
 
         // session.close();
         // LOGGER.log(Level.INFO, "\nSession closed!");
