@@ -1,7 +1,6 @@
 package com.marcluque.hydra.shared.protocol.impl;
 
 import com.marcluque.hydra.shared.handler.Session;
-import com.marcluque.hydra.shared.handler.impl.HydraSession;
 import com.marcluque.hydra.shared.handler.impl.UDPSession;
 import com.marcluque.hydra.shared.handler.listener.HydraSessionConsumer;
 import com.marcluque.hydra.shared.handler.listener.HydraSessionListener;

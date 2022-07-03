@@ -5,7 +5,6 @@ import com.marcluque.hydra.client.HydraClient;
 import com.marcluque.hydra.example.shared.chat.MessagePacket;
 import com.marcluque.hydra.example.shared.chat.ServerPacket;
 import com.marcluque.hydra.shared.handler.Session;
-import com.marcluque.hydra.shared.handler.impl.UDPSession;
 import com.marcluque.hydra.shared.handler.listener.HydraSessionListener;
 import io.netty.channel.ChannelOption;
 import org.apache.logging.log4j.Level;

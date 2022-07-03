@@ -1,6 +1,5 @@
 package com.marcluque.hydra.client.udp;
 
-import com.marcluque.hydra.client.Client;
 import com.marcluque.hydra.shared.handler.impl.UDPSession;
 import com.marcluque.hydra.shared.protocol.Protocol;
 import io.netty.bootstrap.Bootstrap;
