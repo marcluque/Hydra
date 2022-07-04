@@ -126,7 +126,7 @@ public class HydraProtocol implements Protocol {
         }
     }
 
-    private <T> void explain_NPE(T packet, NullPointerException e) {
+    private <T> void explainNPE(T packet, NullPointerException e) {
         LOGGER.log(Level.WARN, e);
 
         StringBuilder error = new StringBuilder("%n%nThe following packets are registered, but do not have a listener:%n");
@@ -154,7 +154,7 @@ public class HydraProtocol implements Protocol {
         } catch (IllegalAccessException | InvocationTargetException e) {
             LOGGER.log(Level.WARN, e);
         } catch (NullPointerException e) {
-            explain_NPE(packet, e);
+            explainNPE(packet, e);
         }
     }
 
@@ -169,7 +169,7 @@ public class HydraProtocol implements Protocol {
         } catch (IllegalAccessException | InvocationTargetException e) {
             LOGGER.log(Level.WARN, e);
         } catch (NullPointerException e) {
-            explain_NPE(packet, e);
+            explainNPE(packet, e);
         }
     }
 

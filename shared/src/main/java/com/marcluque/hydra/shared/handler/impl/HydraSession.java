@@ -53,7 +53,7 @@ public class HydraSession extends SimpleChannelInboundHandler<Packet> implements
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        LOGGER.log(Level.WARN, "{}%n", cause);
+        LOGGER.log(Level.WARN, cause);
     }
 
     @Override
