@@ -1,6 +1,6 @@
 package com.marcluque.hydra.client;
 
-import com.marcluque.hydra.HydraBasicTest;
+import com.marcluque.hydra.HydraBasicTCPTest;
 import com.marcluque.hydra.shared.FinishedPacket;
 import com.marcluque.hydra.shared.Logger;
 import com.marcluque.hydra.shared.handler.Session;
@@ -22,9 +22,9 @@ public class TestClientPacketListener implements HydraPacketListener {
         Assertions.assertTrue(session.isConnected());
         Logger.logSuccess(String.format("Phase %d done!", finishedPacket.getNumber()));
 
-        synchronized (HydraBasicTest.LOCK) {
-            HydraBasicTest.phaseFinished = true;
-            HydraBasicTest.LOCK.notify();
+        synchronized (HydraBasicTCPTest.LOCK) {
+            HydraBasicTCPTest.phaseFinished = true;
+            HydraBasicTCPTest.LOCK.notify();
         }
     }
 

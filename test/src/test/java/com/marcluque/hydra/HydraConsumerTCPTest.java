@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-public class HydraConsumerTest {
+public class HydraConsumerTCPTest {
 
     private static HydraTCPServer server;
 
@@ -39,7 +39,7 @@ public class HydraConsumerTest {
     void testAll() {
         System.out.println("---------------------------");
         System.out.println("Testing consumer functionality");
-        System.out.println("---------------------------%n");
+        System.out.println("---------------------------");
 
         // Phase 1 (epoll=false, connectAfterSetup=false)
         Logger.logInfo("Starting phase 1...");
@@ -47,7 +47,7 @@ public class HydraConsumerTest {
         testServer();
         testClient(1);
         shutdown();
-        HydraBasicTest.phaseFinished = false;
+        HydraBasicTCPTest.phaseFinished = false;
         clientConnected = false;
 
         Logger.printMetrics(measures);
@@ -59,7 +59,7 @@ public class HydraConsumerTest {
         testServer();
         testClient(2);
         shutdown();
-        HydraBasicTest.phaseFinished = false;
+        HydraBasicTCPTest.phaseFinished = false;
         clientConnected = false;
         Logger.printMetrics(measures);
 
@@ -88,9 +88,9 @@ public class HydraConsumerTest {
 
                     Logger.logDebug("TestClient connected!");
 
-                    synchronized(HydraBasicTest.LOCK) {
+                    synchronized(HydraBasicTCPTest.LOCK) {
                         clientConnected = true;
-                        HydraBasicTest.LOCK.notify();
+                        HydraBasicTCPTest.LOCK.notify();
                     }
                 })
                 .onDisconnected(c -> Logger.logDebug("TestClient disconnected!"))
@@ -136,9 +136,9 @@ public class HydraConsumerTest {
 
         // It's necessary to wait until Netty built the connection up entirely
         try {
-            synchronized(HydraBasicTest.LOCK) {
+            synchronized(HydraBasicTCPTest.LOCK) {
                 while(!clientConnected) {
-                    HydraBasicTest.LOCK.wait();
+                    HydraBasicTCPTest.LOCK.wait();
                 }
 
                 // When the connection is established, there is one session registered
@@ -217,9 +217,9 @@ public class HydraConsumerTest {
 
         // When "okay" is received, test is finished
         try {
-            synchronized(HydraBasicTest.LOCK) {
-                while(!HydraBasicTest.phaseFinished) {
-                    HydraBasicTest.LOCK.wait();
+            synchronized(HydraBasicTCPTest.LOCK) {
+                while(!HydraBasicTCPTest.phaseFinished) {
+                    HydraBasicTCPTest.LOCK.wait();
                 }
             }
         } catch (InterruptedException e) {

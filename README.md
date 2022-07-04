@@ -129,6 +129,11 @@ This here is an example of how to create a server socket.
 In order to make the packet system work, you have to register your created packets and listeners.
 For detailed information on how to do that and examples see the [server example](https://github.com/marcluque/Hydra/tree/master/example/src/main/java/de/marcluque/hydra/example/server).
 
+# Future features
+- [ ] Log4J configuration
+- [ ] SSL support
+- [ ] 
+
 # Javadoc
 
 The javadoc is always up-to-date and can be found on [marcluque.com/hydra/javadoc/](https://marcluque.com/hydra/javadoc/)

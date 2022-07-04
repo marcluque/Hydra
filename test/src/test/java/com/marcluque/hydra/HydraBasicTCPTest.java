@@ -24,7 +24,7 @@ import java.util.concurrent.Future;
 /**
  * Created by marcluque on 28.03.2019.
  */
-public class HydraBasicTest {
+public class HydraBasicTCPTest {
 
     private static HydraTCPServer server;
 
@@ -46,7 +46,7 @@ public class HydraBasicTest {
     void testAll() {
         System.out.println("---------------------------");
         System.out.println("Testing basic functionality");
-        System.out.println("---------------------------%n");
+        System.out.println("---------------------------");
 
         // Phase 1 (epoll=false, connectAfterSetup=false)
         Logger.logInfo("Starting phase 1...");
