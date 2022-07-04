@@ -2,8 +2,20 @@
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.marcluque/hydra/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.marcluque/hydra-all)
 [![BCH compliance](https://bettercodehub.com/edge/badge/marcluque/Hydra?branch=master)](https://marcluque.de)
-[![Build Status](https://travis-ci.com/marcluque/Hydra.svg?branch=master)](https://travis-ci.com/marcluque/Hydra)
-[![Coverage Status](https://coveralls.io/repos/github/marcluque/Hydra/badge.svg?branch=master)](https://coveralls.io/github/marcluque/Hydra?branch=master)
+[![Build Status](https://travis-ci.com/marcluque/Hydra.svg?branch=master)](https://travis-ci.com/marcluque/Hydra)  
+
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/summary/new_code?id=marcluque_Hydra)  
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=marcluque_Hydra&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=marcluque_Hydra)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=marcluque_Hydra&metric=coverage)](https://sonarcloud.io/summary/new_code?id=marcluque_Hydra)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=marcluque_Hydra&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=marcluque_Hydra)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=marcluque_Hydra&metric=bugs)](https://sonarcloud.io/summary/new_code?id=marcluque_Hydra)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=marcluque_Hydra&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=marcluque_Hydra)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=marcluque_Hydra&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=marcluque_Hydra)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=marcluque_Hydra&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=marcluque_Hydra)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=marcluque_Hydra&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=marcluque_Hydra)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=marcluque_Hydra&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=marcluque_Hydra)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=marcluque_Hydra&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=marcluque_Hydra)
+
 [![License](https://img.shields.io/badge/License-BSD%202--Clause-orange.svg)](https://opensource.org/licenses/BSD-2-Clause)
 
 ## Description

@@ -15,7 +15,6 @@ import org.apache.logging.log4j.Logger;
 import java.io.Serializable;
 import java.net.SocketAddress;
 
-
 /**
  * Created with love by marcluque on 29.09.2017.
  */
