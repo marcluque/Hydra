@@ -36,7 +36,7 @@ public class HydraBasicTest {
 
     public static boolean phaseFinished;
 
-    public static long[] measures = new long[7];
+    public static final long[] measures = new long[7];
 
     public static long globalStart;
 

@@ -29,7 +29,7 @@ public class HydraConsumerTest {
 
     private static boolean clientConnected;
 
-    public static long[] measures = new long[7];
+    public static final long[] measures = new long[7];
 
     public static long globalStart;
 

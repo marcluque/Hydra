@@ -13,7 +13,7 @@ public abstract class AbstractClientBuilder<T> {
 
     protected String host;
 
-    protected int port;
+    protected final int port;
 
     protected int workerThreads = 2;
 
@@ -25,7 +25,7 @@ public abstract class AbstractClientBuilder<T> {
 
     protected boolean useEpoll;
 
-    protected Protocol protocol;
+    protected final Protocol protocol;
 
     protected AbstractClientBuilder(int port, Protocol protocol) {
         this.port = port;
