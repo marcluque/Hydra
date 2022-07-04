@@ -126,6 +126,27 @@ public class HydraProtocol implements Protocol {
         }
     }
 
+    private <T> void explain_NPE(T packet, NullPointerException e) {
+        LOGGER.log(Level.WARN, e);
+
+        StringBuilder error = new StringBuilder("%n%nThe following packets are registered, but do not have a listener:%n");
+        for (Class<? extends Packet> p : packets.values()) {
+            if (!packetListenerMethods.containsKey(p)) {
+                error.append(" - ").append(p.getSimpleName()).append(".class").append("%n");
+            }
+        }
+        error.append("Not using a listener for a packet may cause an exception.%n");
+
+        error.append("Other important data:%n");
+        error.append("Packet: ").append(packet).append("%n");
+        error.append("Packet class: ").append(packet.getClass()).append("%n");
+        error.append("Packet listener: ").append(packetListener).append("%n");
+        error.append("Casted packet: ").append(packet.getClass().cast(packet)).append("%n");
+        error.append("Result from packetListener method search (if this is null you do not have a listener for the packet): ").append(packetListenerMethods.get(packet.getClass()));
+
+        LOGGER.log(Level.WARN, error);
+    }
+
     @Override
     public void callPacketListener(Packet packet, Session session) {
         try {
@@ -133,24 +154,7 @@ public class HydraProtocol implements Protocol {
         } catch (IllegalAccessException | InvocationTargetException e) {
             LOGGER.log(Level.WARN, e);
         } catch (NullPointerException e) {
-            LOGGER.log(Level.WARN, e);
-
-            StringBuilder error = new StringBuilder("%n%nThe following packets are registered, but do not have a listener:%n");
-            for (Class<? extends Packet> p : packets.values()) {
-                if (!packetListenerMethods.containsKey(p)) {
-                    error.append(" - ").append(p.getSimpleName()).append(".class").append("%n");
-                }
-            }
-            error.append("Not using a listener for a packet may cause an exception.%n");
-
-            error.append("Other important data:%n");
-            error.append("Packet: ").append(packet).append("%n");
-            error.append("Packet class: ").append(packet.getClass()).append("%n");
-            error.append("Packet listener: ").append(packetListener).append("%n");
-            error.append("Casted packet: ").append(packet.getClass().cast(packet)).append("%n");
-            error.append("Result from packetListener method search (if this is null you do not have a listener for the packet): ").append(packetListenerMethods.get(packet.getClass()));
-
-            LOGGER.log(Level.WARN, error);
+            explain_NPE(packet, e);
         }
     }
 
@@ -165,24 +169,7 @@ public class HydraProtocol implements Protocol {
         } catch (IllegalAccessException | InvocationTargetException e) {
             LOGGER.log(Level.WARN, e);
         } catch (NullPointerException e) {
-            LOGGER.log(Level.WARN, e);
-
-            StringBuilder error = new StringBuilder("%n%nThe following packets are registered, but do not have a listener:%n");
-            for (Class<? extends Packet> p : packets.values()) {
-                if (!packetListenerMethods.containsKey(p)) {
-                    error.append(" - ").append(p.getSimpleName()).append(".class").append("%n");
-                }
-            }
-            error.append("Not using a listener for a packet may cause an exception.%n");
-
-            error.append("Other important data:%n");
-            error.append("Packet: ").append(packet).append("%n");
-            error.append("Packet class: ").append(packet.getClass()).append("%n");
-            error.append("Packet listener: ").append(packetListener).append("%n");
-            error.append("Casted packet: ").append(packet.getClass().cast(packet)).append("%n");
-            error.append("Result from packetListener method search (if this is null you do not have a listener for the packet): ").append(packetListenerMethods.get(packet.getClass()));
-
-            LOGGER.log(Level.WARN, error);
+            explain_NPE(packet, e);
         }
     }
 
