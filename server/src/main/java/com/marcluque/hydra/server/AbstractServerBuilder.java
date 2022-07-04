@@ -1,7 +1,6 @@
 package com.marcluque.hydra.server;
 
 import com.marcluque.hydra.shared.handler.Session;
-import com.marcluque.hydra.shared.handler.listener.HydraSessionConsumer;
 import com.marcluque.hydra.shared.handler.listener.HydraSessionListener;
 import com.marcluque.hydra.shared.protocol.Protocol;
 import io.netty.channel.ChannelOption;
@@ -32,8 +31,6 @@ public abstract class AbstractServerBuilder<T> {
     protected boolean useEpoll;
 
     protected Protocol protocol;
-
-    protected HydraSessionConsumer hydraSessionConsumer;
 
     protected AbstractServerBuilder(int port, Protocol protocol) {
         this.port = port;

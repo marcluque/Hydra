@@ -50,7 +50,6 @@ public class HydraProtocol implements Protocol {
         // Register StandardPacket to be ready out of the box
         registerPacket(StandardPacket.class);
         sessionConsumer = new HydraSessionConsumer();
-        addSessionConsumer(sessionConsumer);
     }
 
     @Override
