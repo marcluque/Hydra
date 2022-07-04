@@ -1,8 +1,7 @@
 package com.marcluque.hydra.example.server.chat;
 
 import com.marcluque.hydra.example.shared.chat.ServerPacket;
-import com.marcluque.hydra.server.HydraServer;
-import com.marcluque.hydra.server.Server;
+import com.marcluque.hydra.server.tcp.TCPServer;
 import com.marcluque.hydra.shared.handler.Session;
 import com.marcluque.hydra.shared.handler.listener.HydraSessionListener;
 import io.netty.channel.ChannelOption;
@@ -23,7 +22,7 @@ public class ChatServer {
     protected static final Set<Session> SESSIONS = new HashSet<>();
 
     public static void main(String[] args) {
-        new Server.Builder("localhost", 8888, new ChatServerProtocol())
+        new TCPServer.Builder("localhost", 8888, new ChatServerProtocol())
                 .addListener(new HydraSessionListener() {
                     @Override
                     public void onConnected(Session session) {

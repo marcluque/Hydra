@@ -1,7 +1,7 @@
 package com.marcluque.hydra.example.client.serialization;
 
-import com.marcluque.hydra.client.tcp.TCPClient;
 import com.marcluque.hydra.client.tcp.HydraTCPClient;
+import com.marcluque.hydra.client.tcp.TCPClient;
 import com.marcluque.hydra.example.shared.serialization.CustomClass;
 import com.marcluque.hydra.example.shared.serialization.CustomClassExtended;
 import com.marcluque.hydra.example.shared.serialization.ExampleSerializationPacket;

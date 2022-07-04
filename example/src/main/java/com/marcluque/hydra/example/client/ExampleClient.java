@@ -1,7 +1,7 @@
 package com.marcluque.hydra.example.client;
 
-import com.marcluque.hydra.client.tcp.TCPClient;
 import com.marcluque.hydra.client.tcp.HydraTCPClient;
+import com.marcluque.hydra.client.tcp.TCPClient;
 import com.marcluque.hydra.example.shared.ExamplePacket;
 import com.marcluque.hydra.shared.handler.Session;
 import com.marcluque.hydra.shared.handler.listener.HydraSessionListener;

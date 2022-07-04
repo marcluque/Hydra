@@ -1,7 +1,7 @@
 package com.marcluque.hydra.example.server.serialization;
 
-import com.marcluque.hydra.server.HydraServer;
-import com.marcluque.hydra.server.Server;
+import com.marcluque.hydra.server.tcp.HydraTCPServer;
+import com.marcluque.hydra.server.tcp.TCPServer;
 import com.marcluque.hydra.shared.handler.Session;
 import com.marcluque.hydra.shared.handler.listener.HydraSessionListener;
 import io.netty.channel.ChannelOption;
@@ -17,7 +17,7 @@ public class ExampleSerializationServer {
     private static final Logger LOGGER = LogManager.getLogger(ExampleSerializationServer.class.getName());
 
     public static void main(String[] args) {
-        HydraServer server = new Server.Builder("localhost", 8888, new ExampleSerializationServerProtocol())
+        HydraTCPServer server = new TCPServer.Builder("localhost", 8888, new ExampleSerializationServerProtocol())
                 .bossThreads(2)
                 .workerThreads(4)
                 .childOption(ChannelOption.TCP_NODELAY, true)

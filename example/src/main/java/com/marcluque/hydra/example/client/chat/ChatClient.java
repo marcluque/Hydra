@@ -1,7 +1,7 @@
 package com.marcluque.hydra.example.client.chat;
 
-import com.marcluque.hydra.client.tcp.TCPClient;
 import com.marcluque.hydra.client.tcp.HydraTCPClient;
+import com.marcluque.hydra.client.tcp.TCPClient;
 import com.marcluque.hydra.example.shared.chat.MessagePacket;
 import com.marcluque.hydra.example.shared.chat.ServerPacket;
 import com.marcluque.hydra.shared.handler.Session;

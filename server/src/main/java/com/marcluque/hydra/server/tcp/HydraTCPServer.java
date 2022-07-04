@@ -1,4 +1,4 @@
-package com.marcluque.hydra.server;
+package com.marcluque.hydra.server.tcp;
 
 import com.marcluque.hydra.shared.handler.Session;
 import com.marcluque.hydra.shared.protocol.Protocol;
@@ -18,7 +18,7 @@ import java.util.Set;
  * For an example of how to work with the server, visit
  * <a href="https://github.com/marcluque/Hydra/tree/master/server/src/test/java/server">server example</a>.
  */
-public class HydraServer {
+public class HydraTCPServer {
 
     private final Channel channel;
 
@@ -26,7 +26,7 @@ public class HydraServer {
 
     private final EventLoopGroup[] loopGroups;
 
-    public HydraServer(Channel channel, Protocol protocol, EventLoopGroup[] loopGroups) {
+    public HydraTCPServer(Channel channel, Protocol protocol, EventLoopGroup[] loopGroups) {
         this.channel = channel;
         this.protocol = protocol;
         this.loopGroups = loopGroups;

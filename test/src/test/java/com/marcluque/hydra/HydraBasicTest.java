@@ -1,11 +1,11 @@
 package com.marcluque.hydra;
 
-import com.marcluque.hydra.client.tcp.TCPClient;
-import com.marcluque.hydra.client.tcp.HydraTCPClient;
 import com.marcluque.hydra.client.TestClientProtocol;
-import com.marcluque.hydra.server.HydraServer;
-import com.marcluque.hydra.server.Server;
+import com.marcluque.hydra.client.tcp.HydraTCPClient;
+import com.marcluque.hydra.client.tcp.TCPClient;
 import com.marcluque.hydra.server.TestServerProtocol;
+import com.marcluque.hydra.server.tcp.HydraTCPServer;
+import com.marcluque.hydra.server.tcp.TCPServer;
 import com.marcluque.hydra.shared.ArrayPacket;
 import com.marcluque.hydra.shared.FinishedPacket;
 import com.marcluque.hydra.shared.Logger;
@@ -26,7 +26,7 @@ import java.util.concurrent.Future;
  */
 public class HydraBasicTest {
 
-    private static HydraServer server;
+    private static HydraTCPServer server;
 
     private static HydraTCPClient client;
 
@@ -81,7 +81,7 @@ public class HydraBasicTest {
     }
 
     public static void init(boolean connectAfterSetup, boolean epoll) {
-        server = new Server.Builder("localhost", 8888, new TestServerProtocol())
+        server = new TCPServer.Builder("localhost", 8888, new TestServerProtocol())
                 .useEpoll(epoll)
                 .bossThreads(4)
                 .workerThreads(2)
