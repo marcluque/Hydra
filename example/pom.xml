@@ -46,6 +46,7 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.5</version>
                 <configuration>
+                    <!-- This configuration makes the plugin skip this module for report generation -->
                     <skip>true</skip>
                 </configuration>
             </plugin>
