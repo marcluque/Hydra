@@ -9,5 +9,4 @@ languages:
       - .*/test/java/com/marcluque/hydra/.*\.java
 
 exclude:
-- .*/Packet\.java
 - /example/.*

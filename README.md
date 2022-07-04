@@ -1,7 +1,7 @@
 ![default-cropped](https://user-images.githubusercontent.com/33261455/177036138-fef7d692-fd8a-470f-af8a-6808eed476d8.svg)
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.marcluque/hydra/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.marcluque/hydra-all)
-[![BCH compliance](https://bettercodehub.com/edge/badge/marcluque/Hydra?branch=master)](https://marcluque.de)
+[![BCH compliance](https://bettercodehub.com/edge/badge/marcluque/Hydra?branch=master)](https://bettercodehub.com/)
 [![Build Status](https://travis-ci.com/marcluque/Hydra.svg?branch=master)](https://travis-ci.com/marcluque/Hydra)  
 
 [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/summary/new_code?id=marcluque_Hydra)  
@@ -32,7 +32,7 @@ In case you would like to have an in-depth introduction to Hydra, please take a 
 The wiki takes you step-by-step through the setup of a server and a client. Furthermore, the wiki features example usages,
 like a [simple chat application](https://github.com/marcluque/Hydra/wiki/Building-a-simple-chat-application) and a [key-value store](https://github.com/marcluque/Hydra/wiki/Building-a-small-key-value-store).
 
-# Quantitative benefits over raw netty
+# Quantitative benefits over netty
 ### Netty code for server setup:
 ```java
 EventLoopGroup bossGroup = new NioEventLoopGroup(1);
