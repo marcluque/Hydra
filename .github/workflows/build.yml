@@ -1,4 +1,4 @@
-name: Build
+name: Sonarcloud Analysis
 on:
   push:
     branches:
@@ -7,7 +7,7 @@ on:
     types: [opened, synchronize, reopened]
 jobs:
   build:
-    name: Build
+    name: Sonarcloud Analysis
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
