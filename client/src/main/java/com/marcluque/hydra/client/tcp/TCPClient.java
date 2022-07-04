@@ -1,6 +1,6 @@
 package com.marcluque.hydra.client.tcp;
 
-import com.marcluque.hydra.client.HydraAbstractClientBuilder;
+import com.marcluque.hydra.client.AbstractClientBuilder;
 import com.marcluque.hydra.shared.initializer.HydraChannelInitializer;
 import com.marcluque.hydra.shared.protocol.Protocol;
 import io.netty.bootstrap.Bootstrap;
@@ -27,7 +27,7 @@ public class TCPClient {
 
     private TCPClient() {}
 
-    public static class TCPClientBuilder extends HydraAbstractClientBuilder<HydraTCPClient> {
+    public static class TCPClientBuilder extends AbstractClientBuilder<HydraTCPClient> {
 
         public TCPClientBuilder(String host, int port, Protocol protocol) {
             super(port, protocol);

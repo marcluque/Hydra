@@ -9,7 +9,7 @@ import io.netty.util.AttributeKey;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class HydraAbstractClientBuilder<T> {
+public abstract class AbstractClientBuilder<T> {
 
     protected String host;
 
@@ -27,7 +27,7 @@ public abstract class HydraAbstractClientBuilder<T> {
 
     protected Protocol protocol;
 
-    protected HydraAbstractClientBuilder(int port, Protocol protocol) {
+    protected AbstractClientBuilder(int port, Protocol protocol) {
         this.port = port;
         this.protocol = protocol;
     }
@@ -38,7 +38,7 @@ public abstract class HydraAbstractClientBuilder<T> {
      *
      * @param host host the server will be bound to.
      */
-    public HydraAbstractClientBuilder<T> host(String host) {
+    public AbstractClientBuilder<T> host(String host) {
         this.host = host;
         return this;
     }
@@ -50,7 +50,7 @@ public abstract class HydraAbstractClientBuilder<T> {
      *
      * @param workerThreads the amount of worker threads for the client
      */
-    public HydraAbstractClientBuilder<T> workerThreads(int workerThreads) {
+    public AbstractClientBuilder<T> workerThreads(int workerThreads) {
         this.workerThreads = workerThreads;
         return this;
     }
@@ -63,7 +63,7 @@ public abstract class HydraAbstractClientBuilder<T> {
      *
      * @see <a href="https://netty.io/4.1/api/io/netty/channel/ChannelOption.html">Channel options</a>
      */
-    public <S> HydraAbstractClientBuilder<T> option(ChannelOption<S> channelOption, S value) {
+    public <S> AbstractClientBuilder<T> option(ChannelOption<S> channelOption, S value) {
         options.put(channelOption, value);
         return this;
     }
@@ -74,7 +74,7 @@ public abstract class HydraAbstractClientBuilder<T> {
      * @param attributeKey the attribute key that is supposed to be stored in the map.
      * @param value the value that is supposed to be mapped to the given attribute key.
      */
-    public <S> HydraAbstractClientBuilder<T> attribute(AttributeKey<S> attributeKey, S value) {
+    public <S> AbstractClientBuilder<T> attribute(AttributeKey<S> attributeKey, S value) {
         attributeKeys.put(attributeKey, value);
         return this;
     }
@@ -86,7 +86,7 @@ public abstract class HydraAbstractClientBuilder<T> {
      *
      * @param connectAfterSetup determines whether the client connects instantly or just when 'connect()' method is called
      */
-    public HydraAbstractClientBuilder<T> connectAfterSetup(boolean connectAfterSetup) {
+    public AbstractClientBuilder<T> connectAfterSetup(boolean connectAfterSetup) {
         this.connectAfterSetup = connectAfterSetup;
         return this;
     }
@@ -97,7 +97,7 @@ public abstract class HydraAbstractClientBuilder<T> {
      *
      * @param useEpoll sets whether epoll should be used or not
      */
-    public HydraAbstractClientBuilder<T> useEpoll(boolean useEpoll) {
+    public AbstractClientBuilder<T> useEpoll(boolean useEpoll) {
         this.useEpoll = useEpoll;
         return this;
     }
@@ -110,7 +110,7 @@ public abstract class HydraAbstractClientBuilder<T> {
      *
      * @param sessionListener this method takes an instance of the session listener interface HydraSessionListener.
      */
-    public HydraAbstractClientBuilder<T> addSessionListener(HydraSessionListener sessionListener) {
+    public AbstractClientBuilder<T> addSessionListener(HydraSessionListener sessionListener) {
         protocol.addSessionListener(sessionListener);
         return this;
     }

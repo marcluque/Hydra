@@ -1,6 +1,6 @@
 package com.marcluque.hydra.client.udp;
 
-import com.marcluque.hydra.client.HydraAbstractClientBuilder;
+import com.marcluque.hydra.client.AbstractClientBuilder;
 import com.marcluque.hydra.shared.handler.impl.UDPSession;
 import com.marcluque.hydra.shared.protocol.Protocol;
 import io.netty.bootstrap.Bootstrap;
@@ -22,7 +22,7 @@ public class UDPClient {
 
     private UDPClient() {}
 
-    public static class UDPClientBuilder extends HydraAbstractClientBuilder<HydraUDPClient> {
+    public static class UDPClientBuilder extends AbstractClientBuilder<HydraUDPClient> {
 
         public UDPClientBuilder(int port, Protocol protocol) {
             super(port, protocol);
