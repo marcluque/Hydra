@@ -21,7 +21,7 @@ public class PacketEncoder extends MessageToMessageEncoder<Packet> {
 
     @Override
     protected void encode(ChannelHandlerContext context, Packet packet, List<Object> out) {
-        ByteBuf byteBuf = context.alloc().buffer();
+        ByteBuf byteBuf = context.alloc().directBuffer();
         byteBuf.writeByte(protocol.getPacketId(packet));
         packet.write(byteBuf);
         out.add(byteBuf);
