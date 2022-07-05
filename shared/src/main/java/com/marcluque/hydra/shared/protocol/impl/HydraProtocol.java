@@ -57,23 +57,29 @@ public class HydraProtocol implements Protocol {
         try {
             return packets.get(id).getDeclaredConstructor().newInstance();
         } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
-            LOGGER.log(Level.WARN, "Packet {}.class might hasn't got an empty constructor!%n%n",
-                    packets.get(id).getSimpleName());
-            LOGGER.log(Level.WARN, e);
+            LOGGER.log(Level.FATAL, e);
+            throw new IllegalStateException(String.format("Packet %s.class might hasn't got an empty constructor!%n%n", packets.get(id).getSimpleName()));
         } catch (NullPointerException e) {
-            String errMessage = "Packet with id %s is not in the packets registry.%n" +
-                                "Packets registry: " + packets + "%n" +
-                                "Entry for Packet id %s: " + packets.get(id);
-            LOGGER.log(Level.WARN, errMessage, id);
-            LOGGER.log(Level.WARN, e);
+            String errMessage = "Packet with id %d is not in the packet registry.%n" +
+                                "Packet registry: " + packets;
+            LOGGER.log(Level.FATAL, errMessage, id);
+            LOGGER.log(Level.FATAL, e);
+            throw new IllegalStateException(String.format(errMessage, id));
         }
-
-        return null;
     }
 
     @Override
     public byte getPacketId(Packet packet) {
-        return packetBytes.get(packet.getClass());
+        try {
+            return packetBytes.get(packet.getClass());
+        } catch (NullPointerException e) {
+            String errMessage = "Packet of class "
+                    + packet.getClass().getSimpleName()
+                    + " is not in the packet registry. Packet registry: " + packets;
+            LOGGER.log(Level.FATAL, errMessage);
+            LOGGER.log(Level.FATAL, e);
+            throw new IllegalStateException(errMessage);
+        }
     }
 
     @Override
@@ -135,8 +141,8 @@ public class HydraProtocol implements Protocol {
                 error.append(" - ").append(p.getSimpleName()).append(".class").append("%n");
             }
         }
-        error.append("Not using a listener for a packet may cause an exception.%n");
 
+        error.append("Not using a listener for a packet may cause an exception.%n");
         error.append("Other important data:%n");
         error.append("Packet: ").append(packet).append("%n");
         error.append("Packet class: ").append(packet.getClass()).append("%n");
