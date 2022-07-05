@@ -132,7 +132,6 @@ For detailed information on how to do that and examples see the [server example]
 # Future features
 - [ ] Log4J configuration
 - [ ] SSL support
-- [ ] 
 
 # Javadoc
 
