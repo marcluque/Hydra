@@ -58,6 +58,30 @@ public class CustomClass {
         this.customClassExtended = customClassExtended;
     }
 
+    public String getTestString() {
+        return testString;
+    }
+
+    public int getTestInt() {
+        return testInt;
+    }
+
+    public String[] getTestStringArray() {
+        return testStringArray;
+    }
+
+    public List<String> getTestStringList() {
+        return testStringList;
+    }
+
+    public Object getTestObject() {
+        return testObject;
+    }
+
+    public CustomClassExtended getCustomClassExtended() {
+        return customClassExtended;
+    }
+
     @Override
     public String toString() {
         return "CustomClass{" +

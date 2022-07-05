@@ -6,18 +6,20 @@ import com.marcluque.hydra.client.tcp.TCPClient;
 import com.marcluque.hydra.server.TestServerProtocol;
 import com.marcluque.hydra.server.tcp.HydraTCPServer;
 import com.marcluque.hydra.server.tcp.TCPServer;
-import com.marcluque.hydra.shared.ArrayPacket;
-import com.marcluque.hydra.shared.FinishedPacket;
-import com.marcluque.hydra.shared.Logger;
-import com.marcluque.hydra.shared.TestPacket;
+import com.marcluque.hydra.shared.*;
 import com.marcluque.hydra.shared.handler.Session;
 import com.marcluque.hydra.shared.handler.listener.HydraSessionListener;
+import com.marcluque.hydra.shared.protocol.Protocol;
+import com.marcluque.hydra.shared.serialization.CustomClass;
+import com.marcluque.hydra.shared.serialization.CustomClassExtended;
+import com.marcluque.hydra.shared.serialization.SerializationPacket;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
+import io.netty.util.ResourceLeakDetector;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -30,13 +32,15 @@ public class HydraBasicTCPTest {
 
     private static HydraTCPClient client;
 
+    private static Protocol clientProtocol;
+
     public static final Object LOCK = new Object();
 
     private static boolean clientConnected;
 
     public static boolean phaseFinished;
 
-    public static final long[] measures = new long[7];
+    public static final List<Measurement> MEASUREMENTS = new ArrayList<>();
 
     public static long globalStart;
 
@@ -56,8 +60,7 @@ public class HydraBasicTCPTest {
         shutdown();
         phaseFinished = false;
         clientConnected = false;
-
-        Logger.printMetrics(measures);
+        Logger.flushMetrics(MEASUREMENTS);
 
         // Phase 2 (epoll=false, connectAfterSetup=true)
         System.out.printf("%n%n");
@@ -68,7 +71,7 @@ public class HydraBasicTCPTest {
         shutdown();
         phaseFinished = false;
         clientConnected = false;
-        Logger.printMetrics(measures);
+        Logger.flushMetrics(MEASUREMENTS);
 
         // Phase 3 (epoll=true, connectAfterSetup=true)
         System.out.printf("%n%n");
@@ -77,7 +80,7 @@ public class HydraBasicTCPTest {
         testServer();
         testClient(3);
         shutdown();
-        Logger.printMetrics(measures);
+        Logger.flushMetrics(MEASUREMENTS);
     }
 
     public static void init(boolean connectAfterSetup, boolean epoll) {
@@ -93,7 +96,9 @@ public class HydraBasicTCPTest {
                     public void onConnected(Session session) {
                         // Measure time the client takes to connect to server
                         globalEnd = System.nanoTime();
-                        measures[1] = globalEnd - globalStart;
+                        var measurement = new Measurement("%s[MEASUREMENT] Connection client: %s%d ns = %d µs = %d ms%n",
+                                globalEnd - globalStart);
+                        MEASUREMENTS.add(measurement);
 
                         Logger.logDebug("TestClient connected!");
 
@@ -179,7 +184,12 @@ public class HydraBasicTCPTest {
         /*
          * String test (number = 0)
          */
-        client.send(new TestPacket(0, "Test"));
+        ChannelFuture channelFuture = client.send(new TestPacket(0, "Test"));
+        try {
+            channelFuture.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         Logger.logInfo(String.format("Phase %d: Test 0", phase));
 
 
@@ -188,10 +198,17 @@ public class HydraBasicTCPTest {
          */
         long start = System.nanoTime();
         for (int i = 0; i < 1000; i++) {
-            client.send(new TestPacket(1, "Test" + i));
+            ChannelFuture f = client.send(new TestPacket(1, "Test" + i));
+            try {
+                f.await();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
         long end = System.nanoTime();
-        measures[2] = end - start;
+        var measurement = new Measurement("%s[MEASUREMENT] Packets (n=1000, size_packet=10 byte): %s%d ns = %d µs = %d ms%n",
+                end - start);
+        MEASUREMENTS.add(measurement);
         Logger.logInfo(String.format("Phase %d: Test 1", phase));
 
 
@@ -203,9 +220,16 @@ public class HydraBasicTCPTest {
             list.add(String.format("test%d", i));
         }
         start = System.nanoTime();
-        client.send(new TestPacket(2, list));
+        channelFuture = client.send(new TestPacket(2, list));
+        try {
+            channelFuture.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         end = System.nanoTime();
-        measures[3] = end - start;
+        measurement = new Measurement("%s[MEASUREMENT] String-List (n=1000, size_string=5 byte): %s%d ns = %d µs = %d ms%n",
+                end - start);
+        MEASUREMENTS.add(measurement);
         Logger.logInfo(String.format("Phase %d: Test 2", phase));
 
 
@@ -217,16 +241,58 @@ public class HydraBasicTCPTest {
             testArray[i] = String.format("test%d", i);
         }
         start = System.nanoTime();
-        client.send(new ArrayPacket(testArray));
+        channelFuture = client.send(new ArrayPacket(testArray));
+        try {
+            channelFuture.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         end = System.nanoTime();
-        measures[4] = end - start;
+        measurement = new Measurement("%s[MEASUREMENT] String-Array (n=1000, size_string=5 byte): %s%d ns = %d µs = %d ms%n",
+                end - start);
+        MEASUREMENTS.add(measurement);
         Logger.logInfo(String.format("Phase %d: Array Test", phase));
+
+
+        /*
+         * serialization test
+         */
+        CustomClassExtended customClassExtended = new CustomClassExtended("testStringExtended",
+                UUID.fromString("1ce41de2-659e-4949-9482-c5de92c2ad6c"),
+                Long.MAX_VALUE,
+                String.class);
+        for (int i = 0; i < 1000; i++) {
+            testArray[i] = String.format("test%d", i);
+        }
+        CustomClass customClass = new CustomClass("testString",
+                Integer.MAX_VALUE,
+                testArray,
+                Arrays.asList(testArray),
+                new Vector<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)),
+                customClassExtended);
+        start = System.nanoTime();
+        channelFuture = client.send(new SerializationPacket(customClass));
+        try {
+            channelFuture.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        end = System.nanoTime();
+        measurement = new Measurement("%s[MEASUREMENT] Serialization of custom class: %s%d ns = %d µs = %d ms%n",
+                end - start);
+        MEASUREMENTS.add(measurement);
+        Logger.logInfo(String.format("Phase %d: Serialization Test", phase));
 
 
         /*
          * Finish test
          */
-        client.send(new FinishedPacket(phase));
+        channelFuture = client.send(new FinishedPacket(phase));
+        try {
+            channelFuture.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
 
         // When "okay" is received, test is finished
@@ -250,7 +316,9 @@ public class HydraBasicTCPTest {
         try {
             closingFuture.get();
             long end = System.nanoTime();
-            measures[5] = end - start;
+            var measurement = new Measurement("%s[MEASUREMENT] Shutdown client: %s%d ns = %d µs = %d ms%n",
+                    end - start);
+            MEASUREMENTS.add(measurement);
             Logger.logDebug("Client shut down!");
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
@@ -274,8 +342,9 @@ public class HydraBasicTCPTest {
                 closingFutures[i].get();
 
                 long end = System.nanoTime();
-                measures[6] = end - start;
-
+                var measurement = new Measurement("%s[MEASUREMENT] Shutdown server: %s%d ns = %d µs = %d ms%n",
+                        end - start);
+                MEASUREMENTS.add(measurement);
                 Logger.logDebug("Server thread group " + i + " shut down!");
             }
         } catch (InterruptedException | ExecutionException e) {

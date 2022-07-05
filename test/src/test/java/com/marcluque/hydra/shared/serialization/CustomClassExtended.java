@@ -40,6 +40,22 @@ public class CustomClassExtended {
         this.testClass = testClass;
     }
 
+    public String getTestStringExtended() {
+        return testStringExtended;
+    }
+
+    public UUID getTestUUID() {
+        return testUUID;
+    }
+
+    public long getTestLong() {
+        return testLong;
+    }
+
+    public Class<?> getTestClass() {
+        return testClass;
+    }
+
     @Override
     public String toString() {
         return "CustomClassExtended{" +
