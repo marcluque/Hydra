@@ -6,9 +6,9 @@
 
     <groupId>com.marcluque</groupId>
     <artifactId>hydra</artifactId>
-    <packaging>pom</packaging>
     <version>1.6.5</version>
-    
+    <packaging>pom</packaging>
+
     <modules>
         <module>test</module>
         <module>client</module>
@@ -20,8 +20,12 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
         <sonar.organization>marcluque</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.coverage.jacoco.xmlReportPaths>${maven.multiModuleProjectDirectory}/test/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
 
     <name>hydra</name>
@@ -183,14 +187,6 @@
                                 <id>prepare-agent</id>
                                 <goals>
                                     <goal>prepare-agent</goal>
-                                </goals>
-                            </execution>
-
-                            <execution>
-                                <id>jacoco-report-aggregate</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>report-aggregate</goal>
                                 </goals>
                             </execution>
                         </executions>
