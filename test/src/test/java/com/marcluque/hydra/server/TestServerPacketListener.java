@@ -41,7 +41,7 @@ public class TestServerPacketListener implements HydraPacketListener {
         CustomClassExtended customClassExtended = new CustomClassExtended("testStringExtended",
                 UUID.fromString("1ce41de2-659e-4949-9482-c5de92c2ad6c"),
                 Long.MAX_VALUE,
-                String.class);
+                String.class, null);
 
         testCustomClass = new CustomClass("testString",
                 Integer.MAX_VALUE,
@@ -81,6 +81,7 @@ public class TestServerPacketListener implements HydraPacketListener {
         Assertions.assertEquals(expectedCustomClass.getTestStringList().toArray(),
                 actualCustomClass.getTestStringList().toArray());
         Assertions.assertEquals(expectedCustomClass.getTestObject(), actualCustomClass.getTestObject());
+
         CustomClassExtended expectedCustomClassExtended = expectedCustomClass.getCustomClassExtended();
         CustomClassExtended actualCustomClassExtended = actualCustomClass.getCustomClassExtended();
         Assertions.assertEquals(expectedCustomClassExtended.getTestStringExtended(),

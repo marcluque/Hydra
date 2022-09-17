@@ -260,7 +260,7 @@ public class HydraBasicTCPTest {
         CustomClassExtended customClassExtended = new CustomClassExtended("testStringExtended",
                 UUID.fromString("1ce41de2-659e-4949-9482-c5de92c2ad6c"),
                 Long.MAX_VALUE,
-                String.class);
+                String.class, null);
         for (int i = 0; i < 1000; i++) {
             testArray[i] = String.format("test%d", i);
         }
@@ -282,6 +282,46 @@ public class HydraBasicTCPTest {
                 end - start);
         MEASUREMENTS.add(measurement);
         Logger.logInfo(String.format("Phase %d: Serialization Test", phase));
+
+        /*
+         * serialization test (depth=100)
+         */
+//        CustomClass current;
+//        customClass = new CustomClass("testString" + 0,
+//                0,
+//                testArray,
+//                Arrays.asList(testArray),
+//                new Vector<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)),
+//                null);
+//        current = customClass;
+//
+//        for (int i = 0; i < 100; i++) {
+//            customClass = new CustomClass("testString" + (i + 1),
+//                    i + 1,
+//                    testArray,
+//                    Arrays.asList(testArray),
+//                    new Vector<>(),
+//                    null);
+//            customClassExtended = new CustomClassExtended("testStringExtended" + i,
+//                    UUID.fromString("1ce41de2-659e-4949-9482-c5de92c2ad6c"),
+//                    i,
+//                    String.class, customClass);
+//            current.setCustomClassExtended(customClassExtended);
+//            current = customClass;
+//        }
+//
+//        start = System.nanoTime();
+//        channelFuture = client.send(new SerializationPacket(customClass));
+//        try {
+//            channelFuture.await();
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+//        end = System.nanoTime();
+//        measurement = new Measurement("%s[MEASUREMENT] Serialization of custom class: %s%d ns = %d µs = %d ms%n",
+//                end - start);
+//        MEASUREMENTS.add(measurement);
+//        Logger.logInfo(String.format("Phase %d: Serialization Test", phase));
 
 
         /*

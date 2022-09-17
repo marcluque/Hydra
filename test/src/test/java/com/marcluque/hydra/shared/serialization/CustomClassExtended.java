@@ -15,13 +15,24 @@ public class CustomClassExtended {
 
     private Class<?> testClass;
 
+    private CustomClass customClass;
+
     public CustomClassExtended() {}
 
-    public CustomClassExtended(String testStringExtended, UUID testUUID, long testLong, Class<?> testClass) {
+    public CustomClassExtended(String testStringExtended, UUID testUUID, long testLong, Class<?> testClass, CustomClass customClass) {
         this.testStringExtended = testStringExtended;
         this.testUUID = testUUID;
         this.testLong = testLong;
         this.testClass = testClass;
+        this.customClass = customClass;
+    }
+
+    public CustomClassExtended(CustomClassExtended customClassExtended) {
+        this.testStringExtended = customClassExtended.getTestStringExtended();
+        this.testUUID = customClassExtended.getTestUUID();
+        this.testLong = customClassExtended.getTestLong();
+        this.testClass = customClassExtended.getTestClass();
+        this.customClass = customClassExtended.getCustomClass();
     }
 
     public void setTestStringExtended(String testStringExtended) {
@@ -40,6 +51,10 @@ public class CustomClassExtended {
         this.testClass = testClass;
     }
 
+    public void setCustomClass(CustomClass customClass) {
+        this.customClass = customClass;
+    }
+
     public String getTestStringExtended() {
         return testStringExtended;
     }
@@ -56,6 +71,10 @@ public class CustomClassExtended {
         return testClass;
     }
 
+    public CustomClass getCustomClass() {
+        return customClass;
+    }
+
     @Override
     public String toString() {
         return "CustomClassExtended{" +
@@ -63,6 +82,7 @@ public class CustomClassExtended {
                 ", testUUID=" + testUUID +
                 ", testLong=" + testLong +
                 ", testClass=" + testClass +
+                ", customClass=" + customClass +
                 '}';
     }
 }

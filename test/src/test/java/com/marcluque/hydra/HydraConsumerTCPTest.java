@@ -222,7 +222,7 @@ public class HydraConsumerTCPTest {
         CustomClassExtended customClassExtended = new CustomClassExtended("testStringExtended",
                 UUID.fromString("1ce41de2-659e-4949-9482-c5de92c2ad6c"),
                 Long.MAX_VALUE,
-                String.class);
+                String.class, null);
         for (int i = 0; i < 1000; i++) {
             testArray[i] = String.format("test%d", i);
         }

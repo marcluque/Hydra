@@ -31,6 +31,15 @@ public class CustomClass {
         this.customClassExtended = customClassExtended;
     }
 
+    public CustomClass(CustomClass customClass) {
+        this.testString = customClass.getTestString();
+        this.testInt = customClass.getTestInt();
+        this.testStringArray = customClass.getTestStringArray();
+        this.testStringList = customClass.getTestStringList();
+        this.testObject = customClass.getTestObject();
+        this.customClassExtended = customClass.getCustomClassExtended();
+    }
+
     public void setTestString(String testString) {
         this.testString = testString;
     }
